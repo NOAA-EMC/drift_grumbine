@@ -1,0 +1,40 @@
+Changes from v3.0.0 to v3.0.2
+
+Directories with changes:
+notes
+sorc
+scripts
+jobs
+sms
+
+More Detail -- initial round prior to starting significant work on the ensembles:
+
+Move version notes to 'notes' directory
+
+sorc/seaice_sicedrft.fd:
+  sk2setup.f -- explicit file open now, test for whether there is indeed an ice edge file to use, and print message if not.
+  sicedrft.inc -- update parameters for higher resolution ice edges and GFS inputs.
+  sicedrft.f  -- minor change to output sequencing
+  makefile    -- change to using 'BASE' to reference path to libraries
+
+sorc/seaice_preaverage.cd:
+  makefile    -- change to using 'BASE' to reference path to libraries
+
+sorc/makeall.sh
+  add seaice_postaverage.cd (for computing ensemble averages)
+
+sorc/seaice_postaverage.Cd:
+  NEW -- average output of each ensemble run.  Format for distribution.
+
+
+scripts:
+  exseaice_drift.sh.ecf -- test for presence of sea ice edge analysis, use if there is one, error output message if not
+
+sms:
+  sms.fake -- change to new version number and developer path
+  runup.sh -- update paths and dates
+
+jobs:
+  JSEAICE_DRIFT -- update paths for developer COMIN, COMINice_analy
+  deleted JSEAICE_DRIFT.canned, JSEAICE_DRIFT.save
+

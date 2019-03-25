@@ -1,0 +1,66 @@
+Version 3.0.0:
+
+Source code changes:
+seaice_preaverage: (prepare the input -- 12 hour average winds)
+  change to quarter-degree output from 1 degree
+    -- current nominal GFS resolution
+    -- approx target drift model resolution
+    -- add gfs_quarter class inline (in analogy to old mrf1deg)
+  add more agressive management of flag values from input files
+  makefile drops unused reference to w3lib
+
+seaice_sicedrft: (model)
+  uice     -- adds a debug output of max, min velocities
+  skpoints -- adds IMPLICIT none declaration (no effect)
+  sk2setup -- substantial changes in order to
+     read in the new ice edge files
+  sk2out   -- save dir, dist to vectors and pass to kmlout 
+  kmlout   -- new, kml pushpin display of drifts
+  gridset  -- new, provide lat-longs for a ps grid
+  sicedrift.inc -- change dlat, dlon to 1/4 degree, add parameters for
+     gridset to compute its locations
+  sicedrft.f    -- add variables for grid locations, call to gridset,
+     add calls to movice with grid's drifts, write out unformatted 
+     binary to unit 92
+  makefile      -- change case of name to lower, compiler change from 
+     xlf_r to ncepxlf
+
+     
+  
+fixed file changes:
+None
+
+Jobs, scripts:
+Change base name from MRF_ICEDRFT1 to seaice_drift
+
+versions:
+New, for Environmental Equivalence
+
+sms:
+New, for Environmental Equivalence
+
+
+
+Implementation notes:
+
+directories that should be deleted:
+/nwprod/sorc/seaice_sicedrft.fd
+/nwprod/sorc/seaice_preaverage.cd
+
+files that should be deleted:
+/nwprod/fix/
+  seaice_com.ipasaiji.npoc.antarc
+  seaice_com.ipasaiji.npoc.arctic
+  seaice_forecast.points
+  seaice_quote
+  akpoints
+
+/nwprod/jobs/JMRF_ICEDRFT1.sms.prod
+/nwprod/scripts/exmrf_icedrft1.sh.sms
+/nwprod/exec/seaice_preaverage
+/nwprod/exec/seaice_sicedrft
+
+Build the executables by going to seaice_drift_v3.0.0/sorc/
+  and executing makeall.sh
+Move them to exec directory
+Changes as needed for sms, jobs scripts

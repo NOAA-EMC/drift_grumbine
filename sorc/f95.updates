@@ -1,0 +1,5 @@
+use intrinsic subroutine date_and_time rather than function DATE()
+change character*N declarations to character(N) or character(len=N)
+  --  CHARACTER(len=*) for assumed length
+
+
