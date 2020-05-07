@@ -114,11 +114,6 @@ export USHsice=$HOMEsice/ush
 export utilscript=$UTILROOT/ush
 export utilexec=$UTILROOT/exec
 export utilparm=$UTILROOT/parm 
-#export HOMEutil=/nwprod/util
-#export EXECutil=$HOMEutil/exec
-#export FIXutil=$HOMEutil/fix
-#export PARMutil=$HOMEutil/parm
-#export USHutil=$HOMEutil/ush
 
 ##############################
 # Run setup to initialize working directory and utility scripts

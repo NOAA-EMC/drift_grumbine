@@ -48,14 +48,17 @@ ln -sf alpha     fort.90
 #-----------------------------------------------------
 #get the ice line points
 #-----------------------------------------------------
+# For sidfex: get the drifter target locations
+python3 $USHsice/targets.py
+ln -sf seaice_edge.t00z.txt fort.48
 
-if [ -f $COMINice_analy/seaice_edge.t00z.txt ] ; then
-  cp $COMINice_analy/seaice_edge.t00z.txt .
-  ln -sf seaice_edge.t00z.txt fort.48
-else
-  echo Running with reference ice edge
-  cp $FIXsice/seaice_edge.t00z.txt fort.48
-fi
+#if [ -f $COMINice_analy/seaice_edge.t00z.txt ] ; then
+#  cp $COMINice_analy/seaice_edge.t00z.txt .
+#  ln -sf seaice_edge.t00z.txt fort.48
+#else
+#  echo Running with reference ice edge
+#  cp $FIXsice/seaice_edge.t00z.txt fort.48
+#fi
 
 #-----------------------------------------------------
 #units for the gfs data
@@ -181,6 +184,7 @@ ln -sf fort.64 alaska.tran
 #Distribute the output
 #-----------------------------------------------------
 if [ $SENDCOM = "YES" ] ; then
+#somewhere around here, SIDFEX upload 
   cp ops.out            $COMOUT/global.$PDY
   cp ak.out             $COMOUT/alaska.$PDY
   cp seaice_drift_*.kml $COMOUT

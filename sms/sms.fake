@@ -6,7 +6,7 @@ set -xe
 #module load prod_util
 #module load grib_util
 
-export cyc=00
+export cyc=${cyc:-00}
 export envir=developer
 export code_ver=v4.0.3
 export job=seaice_drift
