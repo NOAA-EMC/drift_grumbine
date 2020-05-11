@@ -147,13 +147,14 @@ else
 #  export COMIN=/u/Robert.Grumbine/onoscrub/gefs/${PDY}/pgrb2a_bc/
   export COMIN=${COMROOThps}/naefs/prod/gefs.${PDY}/$cyc/pgrb2a_bc
   export COMINice_analy=${COMROOTp2}/omb/prod/sice.${PDYm1}
+  export PYTHONPATH=~/para/mmablib/ice_scoring/sidfex/:~/para/mmablib/mmablib/py/
 fi
 
 if [ ! -d $COMIN ] ; then
   echo Could not find the input directory $COMIN exiting
   exit 1
 fi
-export COMOUT=$COMbase/${RUN}.${PDY}
+export COMOUT=$COMbase/${RUN}.${PDY}${cyc}
 
 mkdir -m 775 -p $COMOUT
 mkdir -m 775 -p $pcom
@@ -180,4 +181,4 @@ postmsg "$jlogfile" "$msg"
 date
 
 cd $BASEDIR
-rm -rf $DATA
+#rm -rf $DATA

@@ -173,6 +173,9 @@ postmsg "$jlogfile" "$msg"
 time $EXECsice/seaice_reformat  >> $pgmout 2>> errfile
 err=$?; export err; err_chk
 
+#Generate SIDFEX forecast files
+time python3 $USHsice/sidfex.py
+
 #copy to old names:
 ln -sf fort.60 fl.out
 ln -sf fort.61 ops.out

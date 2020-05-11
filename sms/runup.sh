@@ -27,7 +27,7 @@ tag=20200501
 end=`date +"%Y%m%d" `
 while [ $tag -le $end ]
 do
-  export cyc=00
+  export cyc=12
   export PDY=$tag
   export PDYm1=$tagm
 
