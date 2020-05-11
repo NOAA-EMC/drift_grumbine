@@ -21,13 +21,13 @@ module list
 #export HOMEpmb=/gpfs/tp2/nco/ops/nwprod/util
 cd /u/Robert.Grumbine/para/drift/sms/
 
-#set -xe
-tagm=20200430
-tag=20200501
+set -xe
+tagm=20200510
+tag=20200511
 end=`date +"%Y%m%d" `
 while [ $tag -le $end ]
 do
-  export cyc=12
+  export cyc=00
   export PDY=$tag
   export PDYm1=$tagm
 

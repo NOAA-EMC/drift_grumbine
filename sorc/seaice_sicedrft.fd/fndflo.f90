@@ -22,8 +22,7 @@
 !C      cells.  Also flovel and movice.
       DO k = 1, npts
         IF (x(k) .LT. long1) THEN
-          IF (x(k) .LT. long1 - 0.5) PRINT *,'Floe too far west. x= ',
-     1            k,x(k)
+          IF (x(k) .LT. long1 - 0.5) PRINT *,'Floe too far west. x= ', k,x(k)
           xt = 360.+x(k)
           IF (xt .GE. long1 .AND. xt .LE. long2) THEN
             PRINT *,'Wrapping floe around grid',xt

@@ -18,10 +18,8 @@
 
 
 !Print out the kml header file information
-      WRITE (unit,8999) 
-     1        "<?xml version=""1.0"" encoding=""UTF-8""?>"
-      WRITE (unit,8998) 
-     1        "<kml xmlns=""http://earth.google.com/kml/2.2"">"
+      WRITE (unit,8999) "<?xml version=""1.0"" encoding=""UTF-8""?>"
+      WRITE (unit,8998) "<kml xmlns=""http://earth.google.com/kml/2.2"">"
       WRITE (unit,*) "<Document>"
 
       WRITE (unit,*) "<Folder>"

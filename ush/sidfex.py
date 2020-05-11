@@ -11,16 +11,16 @@ import const
 from skiles import *
 
 #----------------------------------------
-if (os.path.exists('forecast.points')) :
-  refpts = skiles2_points('forecast.points') 
+if (os.path.exists('seaice_forecast.points')) :
+  refpts = skiles2_points('seaice_forecast.points') 
 else:
-  print("Could not find forecast.points file")
+  print("Could not find seaice_forecast.points file")
   exit(1)
 
-if (os.path.exists('fcstin')) :
-  fin = open('fcstin','r')
+if (os.path.exists('seaice_edge.t00z.txt')) :
+  fin = open('seaice_edge.t00z.txt','r')
 else:
-  print("could not find fcstin file")
+  print("could not find seaice_edge.t00z.txt file")
   exit(1)
 
 individual = False
@@ -56,16 +56,27 @@ while not (x == ''):
   if (x == ''):
     break
 
+  print("x = ",x)
   words = x.split()
-  TargetID=words[0]
-  InitYear=words[1]
-  hour   = words[2]
-  minute = words[3]
-  DOY = words[4]
-  lat = words[5]
-  lon = words[6]
+#Old version:
+#  TargetID=words[0]
+#  InitYear=words[1]
+#  hour   = words[2]
+#  minute = words[3]
+#  DOY = words[4]
+#  lat = words[5]
+#  lon = words[6]
+#New, targettable, version:
+  lat = words[0]
+  lon = words[1]
+  TargetID = words[2]
+  InitYear = int(float(words[3]))
+  tmpd = float(words[4])
+  tmp2 = datetime.timedelta(seconds=tmpd*86400.)
+  DOY  = int(tmpd)
+  print(InitYear, tmpd, tmp2, DOY)
 
-  sidfex_name = sidfex_base+GroupID+'_'+MethodID+'_'+TargetID+'_'+InitYear+'-'+DOY+'_'+"{0:03d}".format(EnsMemNum)+'.txt'
+  sidfex_name = sidfex_base+GroupID+'_'+MethodID+'_'+TargetID+'_'+"{:4d}".format(InitYear)+'-'+"{0:03d}".format(DOY)+'_'+"{0:03d}".format(EnsMemNum)+'.txt'
   if ( not os.path.exists(sidfex_name) ):
     date8 = datetime.date(int(InitYear)-1,12,31) + datetime.timedelta(float(DOY))
     do_fcst = True
@@ -77,9 +88,11 @@ while not (x == ''):
 #-----------------------------------------------------------
   #reading in a forecast file:
   day = int(float(DOY))
+#should handle cycle, too:
   date8 = datetime.date(int(InitYear)-1,12,31) + datetime.timedelta(float(DOY))
-  fcst_name = 'sk2.'+date8.strftime("%Y%m%d")
-  fcst_name = fcst_path + fcst_name
+#  fcst_name = 'sk2.'+date8.strftime("%Y%m%d")
+#  fcst_name = fcst_path + fcst_name
+  fcst_name = 'fort.61' # running inline with production
   if ( not os.path.exists(fcst_name)):
     fcst_path = '/u/Robert.Grumbine/noscrub/com/mmab/developer/seaice_drift.'
     fcst_name = fcst_path+date8.strftime("%Y%m%d")+'/global.'+date8.strftime("%Y%m%d")
