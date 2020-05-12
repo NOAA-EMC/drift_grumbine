@@ -26,7 +26,7 @@ fi
 export BASE=${BASE:-/u/Robert.Grumbine/para/mmablib}
 
 export FC=ifort
-export FOPTS='-O2 -std08'
+export FOPTS='-O2 -std90'
 export LIBS='-L $(BASE)/$(mmablib_ver)/ $(W3NCO_LIB4) $(W3EMC_LIB4) $(BACIO_LIB4)'
 
 #Common to all systems:
