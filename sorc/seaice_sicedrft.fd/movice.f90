@@ -72,42 +72,42 @@
 !CD            PRINT *,'wrapping around ',xt
             x(k) = xt
            ELSE
-            PRINT *,'Resetting to ',long1
+!CD            PRINT *,'Resetting to ',long1
             x(k) = long1
           ENDIF
           dx(k) = x(k)-x0(k)
         ENDIF
         IF (x(k) .GT. long2) THEN
           IF (x(k) .GT. long2 + dlon/2.) &
-             PRINT *,'Extrapolated longitude too far east. ',k,x(k)
+!CD             PRINT *,'Extrapolated longitude too far east. ',k,x(k)
           xt = AMOD(x(k),360.)
           IF (xt .GE. long1 .AND. xt .LT. long2) THEN
 !            PRINT *,'Wrapping around ',xt
             x(k) = xt
            ELSE
-            PRINT *,'Resetting to ',long2
+!CD            PRINT *,'Resetting to ',long2
             x(k) = long2
           ENDIF
           dx(k) = x(k)-x0(k)
         ENDIF
         IF (y(k) .LT. lat1) THEN
-          PRINT *,'Extrapolated latitude too far south. ',k,y(k)
-          PRINT *,'Resetting to ',lat1
+!CD          PRINT *,'Extrapolated latitude too far south. ',k,y(k)
+!CD          PRINT *,'Resetting to ',lat1
           y(k) = lat1
           dy(k) = y(k)-y0(k)
         ENDIF
         IF (y(k) .GT. lat2) THEN
-          PRINT *,'Extrapolated latitude too far north. ',k,y(k)
+!CD          PRINT *,'Extrapolated latitude too far north. ',k,y(k)
           IF (lat2 .EQ. 90.) THEN
-            PRINT *,'Resetting to ',180.-y(k)
-            PRINT *,'trying to fix floe longitude ',k,x(k)
+!CD            PRINT *,'Resetting to ',180.-y(k)
+!CD            PRINT *,'trying to fix floe longitude ',k,x(k)
             y(k)  = 180.-y(k)
             dy(k) = y(k)-y0(k)
             x(k)  = x(k)-180.
             dx(k) = x(k)-x0(k)
             GO TO 9200
            ELSE
-            PRINT *,'resetting to lat2 ',lat2
+!CD            PRINT *,'resetting to lat2 ',lat2
             y(k) = lat2
             dy(k) = y(k)-y0(k)
           ENDIF

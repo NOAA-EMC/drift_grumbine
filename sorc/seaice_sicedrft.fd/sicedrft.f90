@@ -144,8 +144,8 @@
         CALL convert(grid_lon0, grid_lat0, grid_dx, grid_dy, grid_lon, grid_lat, nx*ny, dir, dist) 
         WRITE (92) dir
         WRITE (92) dist
-        PRINT *,'max dir dist ',maxval(dir), maxval(dist)
-        PRINT *,'min dir dist ',minval(dir), minval(dist)
+!CD        PRINT *,'max dir dist ',maxval(dir), maxval(dist)
+!CD        PRINT *,'min dir dist ',minval(dir), minval(dist)
 
  1000 CONTINUE
 

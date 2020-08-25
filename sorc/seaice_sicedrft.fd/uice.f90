@@ -50,7 +50,7 @@
  2110   CONTINUE
  2100 CONTINUE
 
-      PRINT *,'debug max, min u, v ',MAXVAL(ui), MINVAL(ui), MAXVAL(vi), MINVAL(vi)
+!CD      PRINT *,'debug max, min u, v ',MAXVAL(ui), MINVAL(ui), MAXVAL(vi), MINVAL(vi)
 
       RETURN
       END

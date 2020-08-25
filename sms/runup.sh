@@ -29,8 +29,8 @@ export SMSBIN=/u/Robert.Grumbine/para/${job}.${code_ver}/sms/
 cd /u/Robert.Grumbine/para/drift/sms/
 
 set -xe
-tagm=20200519
-tag=20200520
+tagm=20200823
+tag=20200824
 end=`date +"%Y%m%d" `
 while [ $tag -le $end ]
 do
