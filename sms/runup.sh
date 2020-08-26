@@ -29,8 +29,8 @@ export SMSBIN=/u/Robert.Grumbine/para/${job}.${code_ver}/sms/
 cd /u/Robert.Grumbine/para/drift/sms/
 
 set -xe
-tagm=20200823
-tag=20200824
+tagm=20200822
+tag=20200823
 end=`date +"%Y%m%d" `
 while [ $tag -le $end ]
 do
@@ -39,7 +39,7 @@ do
   export PDYm1=$tagm
 
   if [ ! -d /u/Robert.Grumbine/noscrub/com/mmab/developer/seaice_drift.${tag}${cyc} ] ; then
-    #time ./sms.fake > sms.${tag}${cyc}
+    #Now call J job, which will call the ex
     time /u/Robert.Grumbine/para/${job}.${code_ver}/jobs/JSEAICE_DRIFT > sms.${tag}${cyc}
   fi
 
@@ -47,7 +47,3 @@ do
   tag=`expr $tag + 1`
   tag=`/u/Robert.Grumbine/bin/dtgfix3 $tag`
 done
-
-set -xe
-
-#Now call J job, which will call the ex
