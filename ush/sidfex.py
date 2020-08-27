@@ -5,7 +5,10 @@ import datetime
 from math import *
 import numpy as np
 
-# Note, behaving as python2
+#Arguments:
+#  seaice edge file (points to forecast / share on sidfex)
+#  sidfex output directory ($COMOUT_sidfex)
+
 #----------------------------------------
 import const
 from skiles import *
@@ -17,23 +20,25 @@ else:
   print("Could not find seaice_forecast.points file")
   exit(1)
 
-if (os.path.exists('seaice_edge.t00z.txt')) :
-  fin = open('seaice_edge.t00z.txt','r')
+if (os.path.exists(sys.argv[1])):
+  fin = open(sys.argv[1],'r')
 else:
   print("could not find seaice_edge.t00z.txt file")
   exit(1)
 
 individual = False
-if (os.path.exists('/Volumes/Data') ):
-  fcst_path = '/Volumes/Data/model_output/polar/'
-  sidfex_base = '/Volumes/ncep/sidfex/out/'
-elif (os.path.exists('/gpfs/dell2') ):
-  fcst_path = '/u/Robert.Grumbine/noscrub/drift/ascii/fcsts/'
-  sidfex_base = '/u/Robert.Grumbine/rgdev/sidfex/out/'
-  #fcst_path = '/u/Robert.Grumbine/noscrub/com/mmab/developer/seaice_drift.'
-else:
-  print("no known system to work with!")
-  exit(1)
+sidfex_base = sys.argv[2]
+fcst_path = "./"
+#if (os.path.exists('/Volumes/Data') ):
+#  fcst_path = '/Volumes/Data/model_output/polar/'
+#  sidfex_base = '/Volumes/ncep/sidfex/out/'
+#elif (os.path.exists('/gpfs/dell2') ):
+#  fcst_path = '/u/Robert.Grumbine/noscrub/drift/ascii/fcsts/'
+#  sidfex_base = '/u/Robert.Grumbine/rgdev/sidfex/out/'
+#  #fcst_path = '/u/Robert.Grumbine/noscrub/com/mmab/developer/seaice_drift.'
+#else:
+#  print("no known system to work with!")
+#  exit(1)
 
 if ( not os.path.exists(sidfex_base) ):
   x = os.system('mkdir -p '+sidfex_base)

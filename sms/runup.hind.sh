@@ -19,6 +19,7 @@ module load python/3.6.3
 # Show what happened:
 module list
 
+#From the sms.fake:
 #export HOMEpmb=/gpfs/tp2/nco/ops/nwprod/util
 export cyc=${cyc:-00}
 export envir=developer
@@ -32,6 +33,7 @@ set -xe
 tagm=20200822
 tag=20200823
 end=`date +"%Y%m%d" `
+end=20200824
 while [ $tag -le $end ]
 do
   export cyc=00
@@ -40,8 +42,8 @@ do
 
   if [ ! -d /u/Robert.Grumbine/noscrub/com/mmab/developer/seaice_drift.${tag}${cyc} ] ; then
     #Now call J job, which will call the ex
-    export KEEPDATA="NO"
-    time /u/Robert.Grumbine/para/${job}.${code_ver}/jobs/JSEAICE_DRIFT > sms.${tag}${cyc}
+    export KEEPDATA="YES"
+    time /u/Robert.Grumbine/para/${job}.${code_ver}/jobs/JSEAICE_DRIFT.hind > sms.${tag}${cyc}
   fi
 
   tagm=$tag

@@ -4,7 +4,6 @@
 # Preliminary data setup step
 ########################################
 
-set -xa
 # #### 06/25/2003 ###################
 # SET SHELL PROCESSING VARIABLES
 # ###################################
@@ -24,7 +23,7 @@ export cycle=t${cyc}z
 
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
   #NCO
-  export BASEDIR=/tmpnwprd
+  export BASEDIR=${DATAROOT:-/tmpnwprd1}
 else
   #developer
   export BASEDIR=/gpfs/dell2/ptmp/wx21rg
@@ -41,9 +40,9 @@ export TMPDIR=$DATA
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
   #NCO
   if [ "$envir" = 'prod' ] ; then
-    export jlogfile=/com/logs/jlogfiles/jlogfile.${job}.$$
+    export jlogfile=$DATA/jlogfile.${job}.$$
   else
-    export jlogfile=/com/logs/${envir}/jlogfile
+    export jlogfile=$DATA/jlogfile
   fi
 else
   #developer
@@ -95,13 +94,13 @@ export RUN=seaice_drift
 #Path to home directory:
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
   #NCO
-  export HOMEbase=/nw${envir}
+  export HOMEbase=${HOMEseaice_drift}
 else
   #dev
-  export HOMEbase=/u/Robert.Grumbine/para
+  export HOMEbase=/u/Robert.Grumbine/para/drift
 fi
 
-export HOMEsice=$HOMEbase/seaice_drift.${code_ver}
+export HOMEsice=$HOMEbase
 export EXECsice=$HOMEsice/exec
 export FIXsice=$HOMEsice/fix
 export PARMsice=$HOMEsice/parm
@@ -124,29 +123,27 @@ sh $utilscript/setup.sh
 # Run setpdy and initialize PDY variables
 ##############################
 #export PDY=20121022
-sh $utilscript/setpdy.sh
+sh setpdy.sh
 . ./PDY
 
 ##############################################
 # Define COM directories
 ##############################################
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
-  export COMbase=${COMROOTp2}/${NET}/${envir}
-  export pcom=/pcom/$RUN
-  #export COMIN=/com2/gens/prod/gefs.$PDY/$cyc/pgrb2a_bc
-  #export COMIN=/gpfs/hps/nco/ops/com/naefs/prod/gefs.$PDY/$cyc/pgrb2a_bc
-  export COMIN=${COMROOThps}/naefs/prod/gfs.${PDY}
-  export COMINice_analy=/com2/omb/prod/sice.${PDYm1}
+  export COMbase=${COMROOT}/${NET}/${envir}
+  export COMIN=${COMIN:-$(compath.py /naefs/prod/gefs.${PDY})/$cyc/pgrb2a_bc}
+  export COMINice_analy=${COMINice_analy:-$(compath.py /omb/prod/sice.${PDYm1})}
 else
   export COMbase=/u/Robert.Grumbine/noscrub/com/${NET}/${envir}/
   export pcom=/u/Robert.Grumbine/noscrub/pcom/$RUN/
 
-  export COMINice_analy=${COMROOTp2}/omb/prod/sice.${PDYm1}
-  # For hindcast thinned runs
-  export COMIN=/u/Robert.Grumbine/noscrub/gefs/
+  export COMINice_analy=${COMROOT}/omb/prod/sice.${PDYm1}
   # For NRT runs
   export COMIN=${COMIN:-$(compath.py /naefs/prod/gefs.${PDY})/$cyc/pgrb2ap5_bc}
+  # For hindcast thinned runs 
+  export COMIN=/u/Robert.Grumbine/noscrub/gefs/
 
+  #for python:
   export PYTHONPATH=~/para/mmablib/ice_scoring/sidfex/:~/para/mmablib/mmablib/py/
 fi
 
@@ -154,11 +151,11 @@ if [ ! -d $COMIN ] ; then
   echo Could not find the input directory $COMIN exiting
   exit 1
 fi
-export COMOUT=$COMbase/${RUN}.${PDY}${cyc}
+export COMOUT=$COMbase/${RUN}.${PDY}
 export COMOUT_sidfex=$COMbase/sidfex
 
-mkdir -m 775 -p $COMOUT
 mkdir -m 775 -p $COMOUT_sidfex
+mkdir -m 775 -p $COMOUT
 mkdir -m 775 -p $pcom
 
 msg="HAS BEGUN on `hostname`"
@@ -168,8 +165,8 @@ env
 
 ##############################################
 # Execute the script
-set -e
-sh $HOMEsice/scripts/exseaice_drift.sh.ecf
+#set -e
+sh $HOMEsice/scripts/thinned_rerun.sh
 export err=$?
 err_chk
 ##############################################
@@ -183,6 +180,14 @@ postmsg "$jlogfile" "$msg"
 date
 
 cd $BASEDIR
+
+##############################################
+# print exec I/O output
+##############################################
+if [ -e "$pgmout" ] ; then
+  cat $pgmout
+fi
+
 ##############################################
 # Remove temp directories
 ##############################################
@@ -190,3 +195,4 @@ if [ "$KEEPDATA" != "YES" ] ; then
   rm -rf $DATA
 fi
 
+date
