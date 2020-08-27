@@ -23,7 +23,7 @@ else:
 if (os.path.exists(sys.argv[1])):
   fin = open(sys.argv[1],'r')
 else:
-  print("could not find seaice_edge.t00z.txt file")
+  print("could not find seaice_edge.t00z.txt file",sys.argv[1])
   exit(1)
 
 individual = False
@@ -81,7 +81,7 @@ while not (x == ''):
   DOY  = int(tmpd)
   print(InitYear, tmpd, tmp2, DOY)
 
-  sidfex_name = sidfex_base+GroupID+'_'+MethodID+'_'+TargetID+'_'+"{:4d}".format(InitYear)+'-'+"{0:03d}".format(DOY)+'_'+"{0:03d}".format(EnsMemNum)+'.txt'
+  sidfex_name = sidfex_base+'/'+GroupID+'_'+MethodID+'_'+TargetID+'_'+"{:4d}".format(InitYear)+'-'+"{0:03d}".format(DOY)+'_'+"{0:03d}".format(EnsMemNum)+'.txt'
   if ( not os.path.exists(sidfex_name) ):
     date8 = datetime.date(int(InitYear)-1,12,31) + datetime.timedelta(float(DOY))
     do_fcst = True

@@ -30,10 +30,10 @@ export SMSBIN=/u/Robert.Grumbine/para/${job}.${code_ver}/sms/
 cd /u/Robert.Grumbine/para/drift/sms/
 
 set -xe
-tagm=20200822
-tag=20200823
+tagm=20200601
+tag=20200602
 end=`date +"%Y%m%d" `
-end=20200824
+end=20200609
 while [ $tag -le $end ]
 do
   export cyc=00
@@ -42,7 +42,8 @@ do
 
   if [ ! -d /u/Robert.Grumbine/noscrub/com/mmab/developer/seaice_drift.${tag}${cyc} ] ; then
     #Now call J job, which will call the ex
-    export KEEPDATA="YES"
+    #export KEEPDATA="YES"
+    export KEEPDATA="NO"
     time /u/Robert.Grumbine/para/${job}.${code_ver}/jobs/JSEAICE_DRIFT.hind > sms.${tag}${cyc}
   fi
 

@@ -117,7 +117,7 @@ export utilparm=$UTILROOT/parm
 ##############################
 # Run setup to initialize working directory and utility scripts
 ##############################
-sh $utilscript/setup.sh
+#sh $utilscript/setup.sh
 
 ##############################
 # Run setpdy and initialize PDY variables
@@ -151,7 +151,7 @@ if [ ! -d $COMIN ] ; then
   echo Could not find the input directory $COMIN exiting
   exit 1
 fi
-export COMOUT=$COMbase/${RUN}.${PDY}
+export COMOUT=$COMbase/${RUN}.${PDY}$cyc
 export COMOUT_sidfex=$COMbase/sidfex
 
 mkdir -m 775 -p $COMOUT_sidfex

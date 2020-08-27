@@ -48,17 +48,18 @@ ln -sf alpha     fort.90
 #-----------------------------------------------------
 #get the ice line points
 #-----------------------------------------------------
-set -xe
+#set -xe
 # For sidfex: get the drifter target locations
 YY=`echo $PDY | cut -c1-4`
 MM=`echo $PDY | cut -c5-6`
 DD=`echo $PDY | cut -c7-8`
 HH=$cyc
+#Forecast -- create from sidfex targets file
 #python3 $USHsice/targets.py $YY $MM $DD $HH
 #ln -sf seaice_edge.t00z.txt.${PDY}$HH  fort.48
-
 #RG: hindcast -- link from archive
-ln -sf /u/Robert.Grumbine/para/KKKK/seaice_edge.t00z.txt.${PDY}$HH  fort.48
+ln -sf /u/Robert.Grumbine/para/drift/fix/${YY}/seaice_edge.t00z.txt.${PDY}$HH  fort.48
+ln -sf /u/Robert.Grumbine/para/drift/fix/${YY}/seaice_edge.t00z.txt.${PDY}$HH  .
 
 #if [ -f $COMINice_analy/seaice_edge.t00z.txt ] ; then
 #  cp $COMINice_analy/seaice_edge.t00z.txt .
@@ -121,16 +122,16 @@ do
 
     $WGRIB2 wind${mem}.$h1 > index
 
-    grep 'UGRD:10 m above ground:' index | $WGRIB2 -i wind${mem}.$h1  -order we:ns -bin tmpu.${mem}.$h1.$PDY
-    grep 'VGRD:10 m above ground:' index | $WGRIB2 -i wind${mem}.$h1  -order we:ns -bin tmpv.${mem}.$h1.$PDY
+    grep 'UGRD:10 m above ground:' index | $WGRIB2 -i wind${mem}.$h1  -order we:ns -bin tmpu.${mem}.$h1.$PDY > /dev/null 2> /dev/null
+    grep 'VGRD:10 m above ground:' index | $WGRIB2 -i wind${mem}.$h1  -order we:ns -bin tmpv.${mem}.$h1.$PDY > /dev/null 2> /dev/null
 
     $WGRIB2 wind${mem}.$h2 > index
-    grep 'UGRD:10 m above ground:' index | $WGRIB2 -i wind${mem}.$h2  -order we:ns -bin tmpu.${mem}.$h2.$PDY
-    grep 'VGRD:10 m above ground:' index | $WGRIB2 -i wind${mem}.$h2  -order we:ns -bin tmpv.${mem}.$h2.$PDY
+    grep 'UGRD:10 m above ground:' index | $WGRIB2 -i wind${mem}.$h2  -order we:ns -bin tmpu.${mem}.$h2.$PDY > /dev/null 2> /dev/null
+    grep 'VGRD:10 m above ground:' index | $WGRIB2 -i wind${mem}.$h2  -order we:ns -bin tmpv.${mem}.$h2.$PDY > /dev/null 2> /dev/null
 
     #preaverage appends the info:
-    time $EXECsice/seaice_preaverage u.averaged.${mem}.$PDY tmpu.${mem}.$h1.$PDY tmpu.${mem}.${h2}.$PDY
-    time $EXECsice/seaice_preaverage v.averaged.${mem}.$PDY tmpv.${mem}.$h1.$PDY tmpv.${mem}.${h2}.$PDY
+    $EXECsice/seaice_preaverage u.averaged.${mem}.$PDY tmpu.${mem}.$h1.$PDY tmpu.${mem}.${h2}.$PDY
+    $EXECsice/seaice_preaverage v.averaged.${mem}.$PDY tmpv.${mem}.$h1.$PDY tmpv.${mem}.${h2}.$PDY
 
     mem=`expr $mem + 1`
     if [ $mem -lt 10 ] ; then

@@ -118,7 +118,7 @@ export utilparm=$UTILROOT/parm
 ##############################
 # Run setup to initialize working directory and utility scripts
 ##############################
-sh $utilscript/setup.sh
+#sh $utilscript/setup.sh
 
 ##############################
 # Run setpdy and initialize PDY variables
