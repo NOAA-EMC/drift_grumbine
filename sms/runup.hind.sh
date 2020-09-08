@@ -1,7 +1,17 @@
-#!/bin/sh --login
+#!/bin/bash --login
+#BSUB -J drift1905
+#BSUB -q "dev"
+#BSUB -P RTO-T2O
+#BSUB -W 5:59
+#BSUB -o drift.out.%J
+#BSUB -e drift.err.%J
+#BSUB -R "affinity[core(1)]"
+#BSUB -R "rusage[mem=128]"
 
 #set -x
 set -e
+
+#. $MODULESHOME/init/bash
 
 module purge
 # Phase 3
@@ -29,11 +39,12 @@ export SMSBIN=/u/Robert.Grumbine/para/${job}.${code_ver}/sms/
 
 cd /u/Robert.Grumbine/para/drift/sms/
 
-set -xe
-tagm=20200601
-tag=20200602
+#set -xe
+set -x
+tagm=20190516
+tag=20190517
 end=`date +"%Y%m%d" `
-end=20200609
+end=20190531
 while [ $tag -le $end ]
 do
   export cyc=00
