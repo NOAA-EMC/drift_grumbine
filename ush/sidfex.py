@@ -119,7 +119,7 @@ while not (x == ''):
     f.write( 'MethodID: '+str(MethodID)+'\n' )
     f.write( 'TargetID: '+str(TargetID)+'\n' )
     f.write( 'InitYear: '+str(InitYear)+'\n' )
-    f.write( 'InitDayOfYear: '+str(DOY)+'\n' )
+    f.write( 'InitDayOfYear: '+"{0:03d}".format(DOY)+'\n' )
     f.write( 'InitLat: '+str(lat)+'\n' )
     f.write( 'InitLon: '+str(lon)+'\n' )
     f.write( 'EnsMemNum: '+"{0:03d}".format(EnsMemNum)+'\n' )
