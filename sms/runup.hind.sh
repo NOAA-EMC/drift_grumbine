@@ -39,26 +39,26 @@ export SMSBIN=/u/Robert.Grumbine/para/${job}.${code_ver}/sms/
 
 cd /u/Robert.Grumbine/para/drift/sms/
 
-#set -xe
 set -x
-tagm=20190516
-tag=20190517
-end=`date +"%Y%m%d" `
-end=20190531
-while [ $tag -le $end ]
+tag=`date +"%Y%m%d" `
+tagm=`expr $tag - 1`
+
+days=0
+while [ $days -lt 8 ]
 do
   export cyc=00
   export PDY=$tag
   export PDYm1=$tagm
 
-  if [ ! -d /u/Robert.Grumbine/noscrub/com/mmab/developer/seaice_drift.${tag}${cyc} ] ; then
+  #if [ ! -d /u/Robert.Grumbine/noscrub/com/mmab/developer/seaice_drift.${tag}${cyc} ] ; then
     #Now call J job, which will call the ex
     #export KEEPDATA="YES"
     export KEEPDATA="NO"
     time /u/Robert.Grumbine/para/${job}.${code_ver}/jobs/JSEAICE_DRIFT.hind > sms.${tag}${cyc}
-  fi
+  #fi
 
-  tagm=$tag
-  tag=`expr $tag + 1`
-  tag=`/u/Robert.Grumbine/bin/dtgfix3 $tag`
+  days=`expr $days + 1`
+  tag=$tagm
+  tagm=`expr $tagm - 1`
+  tagm=`/u/Robert.Grumbine/bin/dtgfix3 $tagm`
 done
