@@ -1,8 +1,8 @@
 #!/bin/bash --login
-#BSUB -J drift1905
+#BSUB -J drift_catchalld
 #BSUB -q "dev"
 #BSUB -P RTO-T2O
-#BSUB -W 5:59
+#BSUB -W 6:59
 #BSUB -o drift.out.%J
 #BSUB -e drift.err.%J
 #BSUB -R "affinity[core(1)]"
@@ -38,44 +38,16 @@ export job=seaice_drift
 export SMSBIN=/u/Robert.Grumbine/para/${job}.${code_ver}/sms/
 
 cd /u/Robert.Grumbine/para/drift/sms/
-dayback=8 #how many days to go back for late data
 
+#set -xe
 set -x
-tag=`date +"%Y%m%d" `
-tagm=`expr $tag - 1`
-
-# Run the drifter history tables and put in fix/$yy
-cd /u/Robert.Grumbine/para/drift/ush/
-dawn=$tag
-days=0
-while [ $days -lt $dayback ]
-do
-  dawn=`expr $dawn - 1`
-  dawn=`/u/Robert.Grumbine/bin/dtgfix3 $dawn`
-  days=`expr $days + 1`
-done
-yy=`echo $dawn | cut -c1-4`
-mm=`echo $dawn | cut -c5-6`
-dd=`echo $dawn | cut -c7-8`
-mm=`expr $mm + 0`  #do this to strip the leading 0 if any
-dd=`expr $dd + 0`  
-if [ -f SIDFEx_targettable.txt ] ; then
-  rm *.txt
-fi
-python3 hist2.py $yy $mm $dd $cyc
-
-if [ -d ../fix/$yy ] ; then
-  mv seaice_edge* ../fix/$yy
-else
-  mkdir -p ../fix/$yy
-  mv seaice_edge* ../fix/$yy
-fi
-
-
-# Now do the run-up from today back 'dayback' days
-cd /u/Robert.Grumbine/para/drift/sms/
-days=0
-while [ $days -lt $dayback ]
+#tagm=20190516
+#tag=20190517
+tagm=20200831
+tag=20200901
+end=`date +"%Y%m%d" `
+#end=20200831
+while [ $tag -le $end ]
 do
   export cyc=00
   export PDY=$tag
@@ -88,8 +60,7 @@ do
     time /u/Robert.Grumbine/para/${job}.${code_ver}/jobs/JSEAICE_DRIFT.hind > sms.${tag}${cyc}
   #fi
 
-  days=`expr $days + 1`
-  tag=$tagm
-  tagm=`expr $tagm - 1`
-  tagm=`/u/Robert.Grumbine/bin/dtgfix3 $tagm`
+  tagm=$tag
+  tag=`expr $tag + 1`
+  tag=`/u/Robert.Grumbine/bin/dtgfix3 $tag`
 done
