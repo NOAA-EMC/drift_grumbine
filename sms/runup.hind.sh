@@ -35,9 +35,9 @@ export cyc=${cyc:-00}
 export envir=developer
 export code_ver=v4.0.3
 export job=seaice_drift
-export SMSBIN=/u/Robert.Grumbine/para/${job}.${code_ver}/sms/
+export SMSBIN=/u/Robert.Grumbine/rgdev/${job}.${code_ver}/sms/
 
-cd /u/Robert.Grumbine/para/drift/sms/
+cd /u/Robert.Grumbine/rgdev/drift/sms/
 dayback=8 #how many days to go back for late data
 
 set -x
@@ -45,7 +45,7 @@ tag=`date +"%Y%m%d" `
 tagm=`expr $tag - 1`
 
 # Run the drifter history tables and put in fix/$yy
-cd /u/Robert.Grumbine/para/drift/ush/
+cd /u/Robert.Grumbine/rgdev/drift/ush/
 dawn=$tag
 days=0
 while [ $days -lt $dayback ]
@@ -73,7 +73,7 @@ fi
 
 
 # Now do the run-up from today back 'dayback' days
-cd /u/Robert.Grumbine/para/drift/sms/
+cd /u/Robert.Grumbine/rgdev/drift/sms/
 days=0
 while [ $days -lt $dayback ]
 do
@@ -85,7 +85,7 @@ do
     #Now call J job, which will call the ex
     #export KEEPDATA="YES"
     export KEEPDATA="NO"
-    time /u/Robert.Grumbine/para/${job}.${code_ver}/jobs/JSEAICE_DRIFT.hind > sms.${tag}${cyc}
+    time /u/Robert.Grumbine/rgdev/${job}.${code_ver}/jobs/JSEAICE_DRIFT.hind > sms.${tag}${cyc}
   #fi
 
   days=`expr $days + 1`

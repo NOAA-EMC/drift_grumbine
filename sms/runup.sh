@@ -24,9 +24,9 @@ export cyc=${cyc:-00}
 export envir=developer
 export code_ver=v4.0.3
 export job=seaice_drift
-export SMSBIN=/u/Robert.Grumbine/para/${job}.${code_ver}/sms/
+export SMSBIN=/u/Robert.Grumbine/rgdev/${job}.${code_ver}/sms/
 
-cd /u/Robert.Grumbine/para/drift/sms/
+cd /u/Robert.Grumbine/rgdev/drift/sms/
 
 set -xe
 tagm=20200830
@@ -41,7 +41,7 @@ do
   if [ ! -d /u/Robert.Grumbine/noscrub/com/mmab/developer/seaice_drift.${tag}${cyc} ] ; then
     #Now call J job, which will call the ex
     export KEEPDATA="NO"
-    time /u/Robert.Grumbine/para/${job}.${code_ver}/jobs/JSEAICE_DRIFT > sms.${tag}${cyc}
+    time /u/Robert.Grumbine/rgdev/${job}.${code_ver}/jobs/JSEAICE_DRIFT > sms.${tag}${cyc}
   fi
 
   tagm=$tag

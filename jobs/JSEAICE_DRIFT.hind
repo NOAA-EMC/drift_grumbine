@@ -144,7 +144,7 @@ else
   export COMIN=/u/Robert.Grumbine/noscrub/gefs/
 
   #for python:
-  export PYTHONPATH=~/para/mmablib/ice_scoring/sidfex/:~/para/mmablib/mmablib/py/
+  export PYTHONPATH=~/rgdev/ice_scoring/sidfex/:~/rgdev/mmablib/py/
 fi
 
 if [ ! -d $COMIN ] ; then
