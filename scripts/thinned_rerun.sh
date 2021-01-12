@@ -17,6 +17,8 @@
 
 cd $DATA
 
+echo zzz in thinned rerun
+
 ########################################
 #set -x
 msg="HAS BEGUN!"
@@ -48,18 +50,18 @@ ln -sf alpha     fort.90
 #-----------------------------------------------------
 #get the ice line points
 #-----------------------------------------------------
-set -xe
+set -x
 # For sidfex: get the drifter target locations
 YY=`echo $PDY | cut -c1-4`
 MM=`echo $PDY | cut -c5-6`
 DD=`echo $PDY | cut -c7-8`
 HH=$cyc
 #Forecast -- create from sidfex targets file
-python3 $USHsice/targets.py $YY $MM $DD $HH
-ln -sf seaice_edge.t00z.txt.${PDY}$HH  fort.48
+#python3 $USHsice/targets.py $YY $MM $DD $HH
+#ln -sf seaice_edge.t00z.txt.${PDY}$HH  fort.48
 #RG: hindcast -- link from archive
-#ln -sf /u/Robert.Grumbine/para/drift/fix/${YY}/seaice_edge.t00z.txt.${PDY}$HH  fort.48
-#ln -sf /u/Robert.Grumbine/para/drift/fix/${YY}/seaice_edge.t00z.txt.${PDY}$HH  .
+ln -sf /u/Robert.Grumbine/rgdev/drift/fix/${YY}/seaice_edge.t00z.txt.${PDY}$HH  fort.48
+ln -sf /u/Robert.Grumbine/rgdev/drift/fix/${YY}/seaice_edge.t00z.txt.${PDY}$HH  .
 
 #if [ -f $COMINice_analy/seaice_edge.t00z.txt ] ; then
 #  cp $COMINice_analy/seaice_edge.t00z.txt .
@@ -69,7 +71,7 @@ ln -sf seaice_edge.t00z.txt.${PDY}$HH  fort.48
 #  cp $FIXsice/seaice_edge.t00z.txt fort.48
 #fi
 
-set +x
+#set +x
 
 #-----------------------------------------------------
 #units for the gfs data
@@ -141,7 +143,7 @@ do
   done
 done
 
-echo done with pre-averaging
+echo zzz done with pre-averaging
 
 #-------------------------- loop over each member for forecast
 for mem in 01 02 03 04 05 06 07 08 09 10 11 \
@@ -170,7 +172,7 @@ do
   rm *.kml
 
 done
-echo done with running ensemble members
+echo zzz done with running ensemble members
 
 #-----------------------------------------------------
 #NEW (2 June 2014) Down average to best guess from ensemble
@@ -178,23 +180,29 @@ echo done with running ensemble members
 #Blend the ensemble members down to a best guess
 msg="pgm seaice_midpoints has begun"
 postmsg "$jlogfile" "$msg"
+echo zzz about to do midpoints
 time $EXECsice/seaice_midpoints fort.60.* fl.out ak.out >> $pgmout 2>> errfile
 err=$?; export err; err_chk
 
 #Reformat for distribution
-rm *.kml
+#rm *.kml
 #ln -sf fl.out fort.31
 cp fl.out fort.31
 msg="pgm seaice_reformat has begun"
 postmsg "$jlogfile" "$msg"
 time $EXECsice/seaice_reformat  >> $pgmout 2>> errfile
 err=$?; export err; err_chk
+echo zzz should have fort.61, try ls:
+ls -l fort.61
+cp fort.61 global.$PDY
 
 #Generate SIDFEX forecast files
+echo time python3 $USHsice/sidfex.py seaice_edge.t00z.txt.${PDY}$HH $COMOUT_sidfex
 time python3 $USHsice/sidfex.py seaice_edge.t00z.txt.${PDY}$HH $COMOUT_sidfex
 #upload -- 
 $USHsice/sidfex.sh
 
+exit
 
 #copy to old names:
 ln -sf fort.60 fl.out

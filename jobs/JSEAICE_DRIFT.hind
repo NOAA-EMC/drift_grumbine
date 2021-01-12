@@ -97,7 +97,7 @@ if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; the
   export HOMEbase=${HOMEseaice_drift}
 else
   #dev
-  export HOMEbase=/u/Robert.Grumbine/para/drift
+  export HOMEbase=/u/Robert.Grumbine/rgdev/drift
 fi
 
 export HOMEsice=$HOMEbase
@@ -148,7 +148,7 @@ else
 fi
 
 if [ ! -d $COMIN ] ; then
-  echo Could not find the input directory $COMIN exiting
+  echo zzz Could not find the input directory $COMIN exiting
   exit 1
 fi
 export COMOUT=$COMbase/${RUN}.${PDY}$cyc
@@ -166,6 +166,7 @@ env
 ##############################################
 # Execute the script
 #set -e
+echo zzz about to call thinned rerun
 sh $HOMEsice/scripts/thinned_rerun.sh
 export err=$?
 err_chk

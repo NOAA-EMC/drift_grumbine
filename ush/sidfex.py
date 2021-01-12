@@ -100,7 +100,7 @@ while not (x == ''):
   fcst_name = 'fort.61' # running inline with production
   if ( not os.path.exists(fcst_name)):
     fcst_path = '/u/Robert.Grumbine/noscrub/com/mmab/developer/seaice_drift.'
-    fcst_name = fcst_path+date8.strftime("%Y%m%d")+'/global.'+date8.strftime("%Y%m%d")
+    fcst_name = fcst_path+date8.strftime("%Y%m%d")+'00/global.'+date8.strftime("%Y%m%d")
     if ( not os.path.exists(fcst_name)):
       print("could not find "+fcst_name)
  

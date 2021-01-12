@@ -98,7 +98,7 @@ if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; the
   export HOMEbase=/nw${envir}
 else
   #dev
-  export HOMEbase=/u/Robert.Grumbine/para
+  export HOMEbase=/u/Robert.Grumbine/rgdev
 fi
 
 export HOMEsice=$HOMEbase/seaice_drift.${code_ver}
@@ -147,7 +147,7 @@ else
   # For NRT runs
   export COMIN=${COMIN:-$(compath.py /naefs/prod/gefs.${PDY})/$cyc/pgrb2ap5_bc}
 
-  export PYTHONPATH=~/para/mmablib/ice_scoring/sidfex/:~/para/mmablib/mmablib/py/
+  export PYTHONPATH=~/rgdev/ice_scoring/sidfex/:~/rgdev/mmablib/py/
 fi
 
 if [ ! -d $COMIN ] ; then
