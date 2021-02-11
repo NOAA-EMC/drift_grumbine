@@ -202,7 +202,7 @@ time python3 $USHsice/sidfex.py seaice_edge.t00z.txt.${PDY}$HH $COMOUT_sidfex
 #upload -- 
 $USHsice/sidfex.sh
 
-exit
+#exit
 
 #copy to old names:
 ln -sf fort.60 fl.out
