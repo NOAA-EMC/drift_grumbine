@@ -84,7 +84,7 @@ else
   fi
 fi
 
-export NET=omb
+export NET=mmab
 export RUN=seaice_drift
 
 #################################################
@@ -137,7 +137,7 @@ else
   export COMbase=/u/Robert.Grumbine/noscrub/com/${NET}/${envir}/
   export pcom=/u/Robert.Grumbine/noscrub/pcom/$RUN/
 
-  export COMINice_analy=${COMROOT}/omb/prod/sice.${PDYm1}
+  export COMINice_analy=${COMROOT}/mmab/prod/sice.${PDYm1}
   # For NRT runs
   export COMIN=${COMIN:-$(compath.py /naefs/prod/gefs.${PDY})/$cyc/pgrb2ap5_bc}
   # For hindcast thinned runs 

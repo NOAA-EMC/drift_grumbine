@@ -85,7 +85,7 @@ else
   fi
 fi
 
-export NET=omb
+export NET=mmab
 export RUN=seaice_drift
 
 #################################################
@@ -141,7 +141,7 @@ else
   export COMbase=/u/Robert.Grumbine/noscrub/com/${NET}/${envir}/
   export pcom=/u/Robert.Grumbine/noscrub/pcom/$RUN/
 
-  export COMINice_analy=${COMROOTp2}/omb/prod/sice.${PDYm1}
+  export COMINice_analy=${COMROOTp2}/mmab/prod/sice.${PDYm1}
   # For hindcast thinned runs
   export COMIN=/u/Robert.Grumbine/noscrub/gefs/
   # For NRT runs
