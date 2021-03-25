@@ -13,20 +13,26 @@ if [ $? -ne 0 ] ; then
   export MMAB_VER=v3.5.0
 else
 #on a system with module software, such as wcoss
-  module purge
-  #Phase3
-  module load EnvVars/1.0.2 ips/18.0.1.163
-  module load w3nco/2.0.6 impi/18.0.1 w3emc/2.3.0
-  module load bufr/11.2.0 bacio/2.0.2
-  echo in makeall.sh loaded modules:
-  module list
+#phase3   module purge
+#phase3   #Phase3
+#phase3   module load EnvVars/1.0.2 ips/18.0.1.163
+#phase3   module load w3nco/2.0.6 impi/18.0.1 w3emc/2.3.0
+#phase3   module load bufr/11.2.0 bacio/2.0.2
+#phase3   echo in makeall.sh loaded modules:
+#acorn   module list
+  module load envvar/1.0
+  module load cpe-intel
+  module load intel/19.1.3.304
+  module load intel/19.1.3.304/cray-mpich/8.1.2
+  module load w3nco/2.4.1
+  module load w3emc/2.7.3
 fi
 
 #theia: export BASE=${BASE:-/home/Robert.Grumbine/save}
-export BASE=${BASE:-/u/Robert.Grumbine/para/mmablib}
+export BASE=${BASE:-/u/Robert.Grumbine/save/mmablib}
 
-export FC=ifort
-export FOPTS='-O2 -std90'
+export FC=ftn
+export FOPTS='-O2 '
 export LIBS='-L $(BASE)/$(mmablib_ver)/ $(W3NCO_LIB4) $(W3EMC_LIB4) $(BACIO_LIB4)'
 
 #Common to all systems:
@@ -37,7 +43,7 @@ echo mmablib_ver = $mmablib_ver
 
 #Items to specify for platforms/compilers/...
 export SHELL='/bin/sh'
-export CC=g++
+export CC=CC
 export COPTS='-O2 -Wall -DLINUX'
 
 export JORG=NP21
@@ -51,4 +57,7 @@ do
   cd ..
 done
 
+if [ ! -d ../exec ] ; then
+  mkdir ../exec
+fi
 mv */seaice_* ../exec 

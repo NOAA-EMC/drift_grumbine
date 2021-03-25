@@ -13,7 +13,7 @@ JORG=	NP21
 #FC=ifort
 #FOPTS=	
 #LIBS=-L/Users/rmg3/usrlocal/mmab/v3.5.0/ -L/Volumes/ncep/nceplibs/ -lombf_4  -lw3emc_4 -lw3nco_4 
-#LIBS=-L/Users/rmg3/usrlocal/mmab/v3.5.0/ -L/Volumes/ncep/nceplibs/ -lombf_4  
+#LIBS=-L/Users/rmg3/usrlocal/mmab/v3.5.0/ -L/Volumes/ncep/nceplibs/ 
 LOPTS=
 OBJS= sicedrft.o uice.o movice.o fndflo.o getwin.o flovel.o sk2setup.o \
         gridset.o sk2out.o kmlout.o
