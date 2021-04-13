@@ -27,7 +27,7 @@ if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; the
   export BASEDIR=/tmpnwprd
 else
   #developer
-  export BASEDIR=/gpfs/dell2/ptmp/wx21rg
+  export BASEDIR=~/save/scratch
 fi
 
 export DATA=$BASEDIR/${job}.${pid}
@@ -98,10 +98,10 @@ if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; the
   export HOMEbase=/nw${envir}
 else
   #dev
-  export HOMEbase=/u/Robert.Grumbine/para
+  export HOMEbase=${HOMEbase:-/u/Robert.Grumbine/para}
 fi
 
-export HOMEsice=$HOMEbase/seaice_drift.${code_ver}
+export HOMEsice=$HOMEbase/save/seaice_drift.${code_ver}
 export EXECsice=$HOMEsice/exec
 export FIXsice=$HOMEsice/fix
 export PARMsice=$HOMEsice/parm
@@ -112,13 +112,9 @@ export USHsice=$HOMEsice/ush
 ###################################
 #Requires prod_util module to be established
 export utilscript=$UTILROOT/ush
+export utilbin=$UTILROOT/bin
 export utilexec=$UTILROOT/exec
 export utilparm=$UTILROOT/parm 
-#export HOMEutil=/nwprod/util
-#export EXECutil=$HOMEutil/exec
-#export FIXutil=$HOMEutil/fix
-#export PARMutil=$HOMEutil/parm
-#export USHutil=$HOMEutil/ush
 
 ##############################
 # Run setup to initialize working directory and utility scripts
@@ -129,7 +125,7 @@ sh $utilscript/setup.sh
 # Run setpdy and initialize PDY variables
 ##############################
 #export PDY=20121022
-sh $utilscript/setpdy.sh
+sh $utilbin/setpdy.sh
 . ./PDY
 
 ##############################################
@@ -138,20 +134,18 @@ sh $utilscript/setpdy.sh
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
   export COMbase=${COMROOTp2}/${NET}/${envir}
   export pcom=/pcom/$RUN
-  #export COMIN=/com2/gens/prod/gefs.$PDY/$cyc/pgrb2a_bc
-  #export COMIN=/gpfs/hps/nco/ops/com/naefs/prod/gefs.$PDY/$cyc/pgrb2a_bc
   export COMIN=${COMROOThps}/naefs/prod/gfs.${PDY}
   export COMINice_analy=/com2/omb/prod/sice.${PDYm1}
 else
-  export COMbase=/u/Robert.Grumbine/noscrub/com/${NET}/${envir}/
-  export pcom=/u/Robert.Grumbine/noscrub/pcom/$RUN/
+  export COMbase=${HOMEbase}/save/com/${NET}/${envir}/
+  export pcom=${HOMEbase}/save/pcom/$RUN/
 
   #export COMIN=${COMROOTp2}/gens/prod/gefs.$PDY/$cyc/pgrb2a_bc
   #export COMIN=/gpfs/hps/nco/ops/com/naefs/prod/gefs.$PDY/$cyc/pgrb2a_bc
 #  export COMIN=/u/Robert.Grumbine/noscrub/com/gens/prod/gefs/gefs.${PDY}/$cyc/pgrb2a_bc/
 #  export COMIN=/u/Robert.Grumbine/onoscrub/gefs/${PDY}/pgrb2a_bc/
-  export COMIN=${COMROOThps}/naefs/prod/gefs.${PDY}/$cyc/pgrb2a_bc
-  export COMINice_analy=${COMROOTp2}/omb/prod/sice.${PDYm1}
+  export COMIN=${HOMEbase}/save/com/gefs.${PDY}/$cyc/pgrb2ap5_bc
+  export COMINice_analy=${HOMEbase}/save/com/sice.${PDYm1}
 fi
 
 if [ ! -d $COMIN ] ; then

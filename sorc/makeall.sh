@@ -20,12 +20,15 @@ else
 #phase3   module load bufr/11.2.0 bacio/2.0.2
 #phase3   echo in makeall.sh loaded modules:
 #acorn   module list
+  source /apps/prod/lmodules/startLmod
+  module avail 2> avail.1
   module load envvar/1.0
-  module load cpe-intel
+  module load PrgEnv-intel/8.0.0
   module load intel/19.1.3.304
-  module load intel/19.1.3.304/cray-mpich/8.1.2
+  module load intel/19.1.3.304/cray-mpich/8.1.4
   module load w3nco/2.4.1
-  module load w3emc/2.7.3
+  module list
+  module avail 2> avail.2
 fi
 
 #theia: export BASE=${BASE:-/home/Robert.Grumbine/save}
