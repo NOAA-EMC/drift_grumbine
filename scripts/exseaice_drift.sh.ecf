@@ -161,10 +161,10 @@ msg="pgm seaice_midpoints has begun"
 postmsg "$jlogfile" "$msg"
 time $EXECsice/seaice_midpoints fort.60.* fl.out ak.out >> $pgmout 2>> errfile
 err=$?; export err; err_chk
+echo debug midpoints:
+ls -ls fl.out ak.out
 
 #Reformat for distribution
-rm *.kml
-#ln -sf fl.out fort.31
 cp fl.out fort.31
 msg="pgm seaice_reformat has begun"
 postmsg "$jlogfile" "$msg"

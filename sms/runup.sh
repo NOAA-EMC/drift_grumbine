@@ -1,6 +1,6 @@
 #!/bin/sh --login
 
-#set -x
+#set -xe
 set -e
 
 # Phase 3
@@ -29,7 +29,7 @@ module list
 export HOMEbase=/lfs/h1/emc/couple/noscrub/Robert.Grumbine
 cd $HOMEbase/save/drift/sms/
 
-#set -xe
+set -xe
 tagm=20210324
 tag=20210325
 end=`date +"%Y%m%d" `
