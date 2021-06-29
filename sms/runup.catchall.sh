@@ -41,12 +41,10 @@ cd /u/Robert.Grumbine/rgdev/drift/sms/
 
 #set -xe
 set -x
-#tagm=20190516
-#tag=20190517
-tagm=20210110
-tag=20210111
+tagm=20210620
+tag=20210621
 end=`date +"%Y%m%d" `
-#end=20210109
+
 while [ $tag -le $end ]
 do
   export cyc=00
