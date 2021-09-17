@@ -24,7 +24,7 @@ export cycle=t${cyc}z
 
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
   #NCO
-  export BASEDIR=/tmpnwprd
+  export BASEDIR=/lfs/f1/ops/$envir/tmp/
 else
   #developer
   export BASEDIR=/u/Robert.Grumbine/save/scratch
@@ -41,9 +41,11 @@ export TMPDIR=$DATA
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
   #NCO
   if [ "$envir" = 'prod' ] ; then
-    export jlogfile=/com/logs/jlogfiles/jlogfile.${job}.$$
+    #export jlogfile=/com/logs/jlogfiles/jlogfile.${job}.$$
+    export jlogfile=""
   else
-    export jlogfile=/com/logs/${envir}/jlogfile
+    #export jlogfile=/com/logs/${envir}/jlogfile
+    export jlogfile=""
   fi
 else
   #developer
