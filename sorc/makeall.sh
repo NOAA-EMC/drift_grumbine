@@ -20,12 +20,14 @@ else
 #phase3   module load bufr/11.2.0 bacio/2.0.2
 #phase3   echo in makeall.sh loaded modules:
 #acorn   module list
-  source /apps/prod/lmodules/startLmod
+  #source /apps/prod/lmodules/startLmod
+  module purge
   module avail 2> avail.1
   module load envvar/1.0
-  module load PrgEnv-intel/8.0.0
+  module load PrgEnv-intel/8.1.0
   module load intel/19.1.3.304
-  module load intel/19.1.3.304/cray-mpich/8.1.4
+  module load craype
+  module load cray-mpich/8.1.7
   module load w3nco/2.4.1
   module list
   module avail 2> avail.2
@@ -36,13 +38,14 @@ export BASE=${BASE:-/u/Robert.Grumbine/save/mmablib}
 
 export FC=ftn
 export FOPTS='-O2 '
-export LIBS='-L $(BASE)/$(mmablib_ver)/ $(W3NCO_LIB4) $(W3EMC_LIB4) $(BACIO_LIB4)'
 
 #Common to all systems:
-export mmablib_ver=${mmablib_ver:-v3.5.0}
+export mmablib_ver=${mmablib_ver:-""}
 export INCDIR='$(BASE)/$(mmablib_ver)/include'
 echo BASE = $BASE
 echo mmablib_ver = $mmablib_ver
+
+export LIBS='-L $(BASE)/$(mmablib_ver)/ $(W3NCO_LIB4) $(W3EMC_LIB4) $(BACIO_LIB4)'
 
 #Items to specify for platforms/compilers/...
 export SHELL='/bin/sh'
