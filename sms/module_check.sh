@@ -1,9 +1,11 @@
 module purge
-for f in EnvVars prod_envir python ips impi bacio bufr grib_util prod_util util_shared w3emc w3nco
+for f in envvars EnvVars prod_envir python ips impi bacio bufr grib_util prod_util util_shared w3emc w3nco
 do
   module spider $f 2>> spider.out
   module avail $f 2>> avail.out
 done
+
+exit
 
 module load EnvVars/1.0.3
 module load prod_envir/1.1.0 

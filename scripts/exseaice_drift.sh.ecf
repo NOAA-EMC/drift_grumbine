@@ -1,4 +1,4 @@
-#!/bin/ksh 
+#!/bin/ksh
 ########################################################### 
 # Sea ice drift forecast model control script for
 # Arctic and Antarctic.

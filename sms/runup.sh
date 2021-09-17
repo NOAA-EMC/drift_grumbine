@@ -15,13 +15,13 @@ set -e
 # Acorn
 #source /apps/prod/lmodules/startLmod
 module purge
-module load envvar
+module load envvar/1.0
 module load intel/19.1.3.304
-module load craype
+module load craype//2.7.8
 module load cray-mpich/8.1.7
-module load prod_envir
-module load prod_util
-module load wgrib2
+module load prod_envir/2.0.5
+module load prod_util/2.0.8
+module load wgrib2/2.0.8
 
 # -- to check on a module's usage: module spider $m 
 # Show what happened:

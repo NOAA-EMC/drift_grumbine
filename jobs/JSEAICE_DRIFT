@@ -107,6 +107,8 @@ export FIXsice=$HOMEsice/fix
 export PARMsice=$HOMEsice/parm
 export USHsice=$HOMEsice/ush
 
+source $HOMEsice/versions/run.ver
+
 ###################################
 # Set up the UTILITIES
 ###################################
@@ -117,15 +119,10 @@ export utilexec=$UTILROOT/exec
 export utilparm=$UTILROOT/parm 
 
 ##############################
-# Run setup to initialize working directory and utility scripts
-##############################
-#sh $utilscript/setup.sh
-
-##############################
 # Run setpdy and initialize PDY variables
 ##############################
 #export PDY=20121022
-sh $utilscript/setpdy.sh
+$utilscript/setpdy.sh
 . ./PDY
 
 ##############################################
@@ -165,7 +162,7 @@ env
 ##############################################
 # Execute the script
 set -e
-sh $HOMEsice/scripts/exseaice_drift.sh.ecf
+$HOMEsice/scripts/exseaice_drift.sh.ecf
 export err=$?
 err_chk
 ##############################################
