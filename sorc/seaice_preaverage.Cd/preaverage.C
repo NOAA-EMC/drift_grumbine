@@ -134,8 +134,8 @@ int main(int argc, char *argv[]) {
 
   avg /= (argc - 2);
 
-  printf("winds max, min, average, rms: %f %f %f %f\n",avg.gridmax(), avg.gridmin(),
-          avg.average(), avg.rms() );
+  //CDprintf("winds max, min, average, rms: %f %f %f %f\n",avg.gridmax(), avg.gridmin(),
+  //CD        avg.average(), avg.rms() );
   fout = fopen(argv[1],"a");
   avg.ftnout(fout);
   fclose(fout);

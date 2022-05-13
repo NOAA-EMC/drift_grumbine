@@ -27,6 +27,9 @@ $(CMD):	$(OBJS) $(OBJS90)
 	$(FC) $(LOPTS) $(OBJS) $(OBJS90) $(LIBS) -lombf_4  -o $(CMD)
 
 $(OBJS):	makefile $(INCS) 
+.f90.o:
+	$(FC) -c $(FOPTS) $<
+
 .f.o:
 	$(FC) -c $(FOPTS) $<
 

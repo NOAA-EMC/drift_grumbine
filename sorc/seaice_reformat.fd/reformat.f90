@@ -31,8 +31,7 @@
       OPEN(31, FORM="FORMATTED", STATUS="OLD")
  
 ! Read in skiles point locations:
-      OPEN(47,FILE="seaice_forecast.points",FORM="FORMATTED",
-     1              STATUS="OLD")
+      OPEN(47,FILE="seaice_forecast.points",FORM="FORMATTED", STATUS="OLD")
       DO i = 1, 207
         READ(47, *) skpt(i), y0(i), x0(i)
       ENDDO
