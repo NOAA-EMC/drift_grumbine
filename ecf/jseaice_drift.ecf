@@ -1,0 +1,32 @@
+#PBS -N seaice_drift_%CYC%
+#PBS -j oe
+#PBS -S /bin/bash
+#PBS -q %QUEUE%
+#PBS -A %PROJ:ICE%-%PROJENVIR%
+#PBS -l walltime=01:00:00
+#PBS -l place=shared,select=1:ncpus=1:mem=1GB
+#PBS -l debug=true
+
+model=seaice_drift
+
+%include <head.h>
+%include <envir-p1.h>
+
+export cyc=%CYC%
+
+################################################
+## modules load 
+################################################
+module load intel/${intel_ver:?}
+module load wgrib2/${wgrib2_ver:?}
+
+module list
+
+${HOMEseaice_drift}/jobs/JSEAICE_DRIFT
+
+%include <tail.h>
+%manual
+######################################################################
+PURPOSE:  To execute the job that produces the 180-384 hrs of MRF forecast.
+######################################################################
+%end
