@@ -17,8 +17,10 @@
 
 cd $DATA
 
+echo zzz in thinned rerun
+
 ########################################
-set +x
+#set -x
 msg="HAS BEGUN!"
 postmsg "$jlogfile" "$msg"
 ###########################
@@ -48,13 +50,18 @@ ln -sf alpha     fort.90
 #-----------------------------------------------------
 #get the ice line points
 #-----------------------------------------------------
+set -x
 # For sidfex: get the drifter target locations
 YY=`echo $PDY | cut -c1-4`
 MM=`echo $PDY | cut -c5-6`
 DD=`echo $PDY | cut -c7-8`
 HH=$cyc
-python3 $USHsice/targets.py $YY $MM $DD $HH
-ln -sf seaice_edge.t00z.txt.${PDY}$HH  fort.48
+#Forecast -- create from sidfex targets file
+#python3 $USHsice/targets.py $YY $MM $DD $HH
+#ln -sf seaice_edge.t00z.txt.${PDY}$HH  fort.48
+#RG: hindcast -- link from archive
+ln -sf /u/Robert.Grumbine/rgdev/drift/fix/${YY}/seaice_edge.t00z.txt.${PDY}$HH  fort.48
+ln -sf /u/Robert.Grumbine/rgdev/drift/fix/${YY}/seaice_edge.t00z.txt.${PDY}$HH  .
 
 #if [ -f $COMINice_analy/seaice_edge.t00z.txt ] ; then
 #  cp $COMINice_analy/seaice_edge.t00z.txt .
@@ -63,6 +70,8 @@ ln -sf seaice_edge.t00z.txt.${PDY}$HH  fort.48
 #  echo Running with reference ice edge
 #  cp $FIXsice/seaice_edge.t00z.txt fort.48
 #fi
+
+#set +x
 
 #-----------------------------------------------------
 #units for the gfs data
@@ -82,9 +91,15 @@ do
     rm $fn
   fi
 done
-base=$COMIN
 
 #Construct averages for 10m winds
+base=$COMIN
+if [ ! -f ${base}/winds.${PDY}.tar ] ; then
+  echo no archive file for ${PDY}, exiting
+  exit 0
+fi
+tar xf ${base}/winds.${PDY}.tar
+
 for hr in 0 12 24 36 48  60  72  84  96 108 120 132 144 156 168 180 192 204 216 \
                     228 240 252 264 276 288 300 312 324 336 348 360 372
 do
@@ -103,36 +118,36 @@ do
     h2=0$h2;
   fi
 
-  for mem in gep01 gep02 gep03 gep04 gep05 gep06 gep07 gep08 gep09 gep10 gep11 gep12 gep13 gep14 gep15 gep16 gep17 gep18 gep19 gep20
+  export mem=01
+  while [ $mem -le 20 ]
   do
 
-    $WGRIB2 ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1  > index
+    $WGRIB2 wind${mem}.$h1 > index
 
-    grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1 -order we:ns -bin tmpu.${mem}.$h1.$PDY > /dev/null 2> /dev/null
-    grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1 -order we:ns -bin tmpv.${mem}.$h1.$PDY > /dev/null 2> /dev/null
+    grep 'UGRD:10 m above ground:' index | $WGRIB2 -i wind${mem}.$h1  -order we:ns -bin tmpu.${mem}.$h1.$PDY > /dev/null 2> /dev/null
+    grep 'VGRD:10 m above ground:' index | $WGRIB2 -i wind${mem}.$h1  -order we:ns -bin tmpv.${mem}.$h1.$PDY > /dev/null 2> /dev/null
 
-    $WGRIB2 ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 > index
-    grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 -order we:ns -bin tmpu.${mem}.$h2.$PDY > /dev/null 2> /dev/null
-    grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 -order we:ns -bin tmpv.${mem}.$h2.$PDY > /dev/null 2> /dev/null
+    $WGRIB2 wind${mem}.$h2 > index
+    grep 'UGRD:10 m above ground:' index | $WGRIB2 -i wind${mem}.$h2  -order we:ns -bin tmpu.${mem}.$h2.$PDY > /dev/null 2> /dev/null
+    grep 'VGRD:10 m above ground:' index | $WGRIB2 -i wind${mem}.$h2  -order we:ns -bin tmpv.${mem}.$h2.$PDY > /dev/null 2> /dev/null
 
     #preaverage appends the info:
     $EXECsice/seaice_preaverage u.averaged.${mem}.$PDY tmpu.${mem}.$h1.$PDY tmpu.${mem}.${h2}.$PDY
     $EXECsice/seaice_preaverage v.averaged.${mem}.$PDY tmpv.${mem}.$h1.$PDY tmpv.${mem}.${h2}.$PDY
+
+    mem=`expr $mem + 1`
+    if [ $mem -lt 10 ] ; then
+      mem=0$mem
+    fi
+
   done
 done
 
-## The averaging is done inside the program, with single input of (appended) winds for each member
-#for mem in gep01 gep02 gep03 gep04 gep05 gep06 gep07 gep08 gep09 gep10 gep11 gep12 gep13 gep14 gep15 gep16 gep17 gep18 gep19 gep20
-#do
-#  time $EXECsice/seaice_preaverage u.averaged.${mem}.$PDY tmpu.${mem}.$PDY
-#  time $EXECsice/seaice_preaverage v.averaged.${mem}.$PDY tmpv.${mem}.$PDY
-#done
-
-echo done with pre-averaging
+echo zzz done with pre-averaging
 
 #-------------------------- loop over each member for forecast
-for mem in gep01 gep02 gep03 gep04 gep05 gep06 gep07 gep08 gep09 gep10 gep11 \
-           gep12 gep13 gep14 gep15 gep16 gep17 gep18 gep19 gep20
+for mem in 01 02 03 04 05 06 07 08 09 10 11 \
+           12 13 14 15 16 17 18 19 20
 do
   ln -sf u.averaged.${mem}.$PDY fort.11
   ln -sf v.averaged.${mem}.$PDY fort.12
@@ -157,7 +172,7 @@ do
   rm *.kml
 
 done
-echo done with running ensemble members
+echo zzz done with running ensemble members
 
 #-----------------------------------------------------
 #NEW (2 June 2014) Down average to best guess from ensemble
@@ -165,22 +180,29 @@ echo done with running ensemble members
 #Blend the ensemble members down to a best guess
 msg="pgm seaice_midpoints has begun"
 postmsg "$jlogfile" "$msg"
+echo zzz about to do midpoints
 time $EXECsice/seaice_midpoints fort.60.* fl.out ak.out >> $pgmout 2>> errfile
 err=$?; export err; err_chk
 
 #Reformat for distribution
-rm *.kml
+#rm *.kml
 #ln -sf fl.out fort.31
 cp fl.out fort.31
 msg="pgm seaice_reformat has begun"
 postmsg "$jlogfile" "$msg"
 time $EXECsice/seaice_reformat  >> $pgmout 2>> errfile
 err=$?; export err; err_chk
+echo zzz should have fort.61, try ls:
+ls -l fort.61
+cp fort.61 global.$PDY
 
 #Generate SIDFEX forecast files
+echo time python3 $USHsice/sidfex.py seaice_edge.t00z.txt.${PDY}$HH $COMOUT_sidfex
 time python3 $USHsice/sidfex.py seaice_edge.t00z.txt.${PDY}$HH $COMOUT_sidfex
 #upload -- 
 $USHsice/sidfex.sh
+
+#exit
 
 #copy to old names:
 ln -sf fort.60 fl.out
@@ -193,12 +215,11 @@ ln -sf fort.64 alaska.tran
 #Distribute the output
 #-----------------------------------------------------
 if [ $SENDCOM = "YES" ] ; then
-#somewhere around here, SIDFEX upload 
   cp ops.out            $COMOUT/global.$PDY
   cp ak.out             $COMOUT/alaska.$PDY
   cp seaice_drift_*.kml $COMOUT
-  cp grid_ds.gep??      $COMOUT
-  cp fort.61.gep??      $COMOUT
+  cp grid_ds.??      $COMOUT
+  cp fort.61.??      $COMOUT
   cp global.tran $COMOUT/global.tran.$PDY
   cp alaska.tran $COMOUT/alaska.tran.$PDY
   cp global.tran $pcom/global.tran.${cycle}
@@ -219,11 +240,11 @@ fi
 
 #####################################################################
 # GOOD RUN
-set +x
+#set +x
 echo "**************$job COMPLETED NORMALLY "
 echo "**************$job COMPLETED NORMALLY "
 echo "**************$job COMPLETED NORMALLY "
-set -x
+#set -x
 #####################################################################
 
 #################################

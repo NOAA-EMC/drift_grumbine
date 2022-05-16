@@ -1,7 +1,17 @@
-#!/bin/sh --login
+#!/bin/bash --login
+#BSUB -J drift_catchalld
+#BSUB -q "dev"
+#BSUB -P RTO-T2O
+#BSUB -W 6:59
+#BSUB -o drift.out.%J
+#BSUB -e drift.err.%J
+#BSUB -R "affinity[core(1)]"
+#BSUB -R "rusage[mem=128]"
 
 #set -x
 set -e
+
+#. $MODULESHOME/init/bash
 
 module purge
 # Phase 3
@@ -19,6 +29,7 @@ module load python/3.6.3
 # Show what happened:
 module list
 
+#From the sms.fake:
 #export HOMEpmb=/gpfs/tp2/nco/ops/nwprod/util
 export cyc=${cyc:-00}
 export envir=developer
@@ -28,21 +39,24 @@ export SMSBIN=/u/Robert.Grumbine/rgdev/${job}.${code_ver}/sms/
 
 cd /u/Robert.Grumbine/rgdev/drift/sms/
 
-set -xe
-tagm=20200830
-tag=20200831
+#set -xe
+set -x
+tagm=20210620
+tag=20210621
 end=`date +"%Y%m%d" `
+
 while [ $tag -le $end ]
 do
   export cyc=00
   export PDY=$tag
   export PDYm1=$tagm
 
-  if [ ! -d /u/Robert.Grumbine/noscrub/com/mmab/developer/seaice_drift.${tag}${cyc} ] ; then
+  #if [ ! -d /u/Robert.Grumbine/noscrub/com/mmab/developer/seaice_drift.${tag}${cyc} ] ; then
     #Now call J job, which will call the ex
+    #export KEEPDATA="YES"
     export KEEPDATA="NO"
-    time /u/Robert.Grumbine/rgdev/${job}.${code_ver}/jobs/JSEAICE_DRIFT > sms.${tag}${cyc}
-  fi
+    time /u/Robert.Grumbine/rgdev/${job}.${code_ver}/jobs/JSEAICE_DRIFT.hind > sms.${tag}${cyc}
+  #fi
 
   tagm=$tag
   tag=`expr $tag + 1`

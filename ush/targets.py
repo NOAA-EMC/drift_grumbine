@@ -2,6 +2,7 @@
 
 #Python3 -- important to add urllib.request, decode
 import os
+import sys
 import re
 import urllib
 import urllib.request
@@ -22,10 +23,11 @@ else :
    fin = open('SIDFEx_targettable.txt','r')
 
 alpha = datetime.datetime(2020, 1, 1)
-beta = alpha.now()
+beta = datetime.datetime(int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4]) )
 dt = timedelta(seconds=3600*(3+6)) #first 3 are for time window, 
-                                   #the 6 are because GFS finishes 5 hours past nominal UTC cycle time
-fout = open('seaice_edge.t00z.txt','w')
+                                   #the 6 are because GFS finishes 5 hours 
+                                   #   past nominal UTC cycle time
+fout = open('seaice_edge.t00z.txt'+sys.argv[1]+sys.argv[2]+sys.argv[3]+sys.argv[4],'w')
 
 #20 = length of header
 i = 0

@@ -4,7 +4,6 @@
 # Preliminary data setup step
 ########################################
 
-set -xa
 # #### 06/25/2003 ###################
 # SET SHELL PROCESSING VARIABLES
 # ###################################
@@ -24,10 +23,10 @@ export cycle=t${cyc}z
 
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
   #NCO
-  export BASEDIR=/tmpnwprd
+  export BASEDIR=${DATAROOT:-/tmpnwprd1}
 else
   #developer
-  export BASEDIR=/ptmpd2/wx21rg
+  export BASEDIR=/gpfs/dell2/ptmp/wx21rg
 fi
 
 export DATA=$BASEDIR/${job}.${pid}
@@ -41,9 +40,9 @@ export TMPDIR=$DATA
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
   #NCO
   if [ "$envir" = 'prod' ] ; then
-    export jlogfile=/com/logs/jlogfiles/jlogfile.${job}.$$
+    export jlogfile=$DATA/jlogfile.${job}.$$
   else
-    export jlogfile=/com/logs/${envir}/jlogfile
+    export jlogfile=$DATA/jlogfile
   fi
 else
   #developer
@@ -85,7 +84,7 @@ else
   fi
 fi
 
-export NET=omb
+export NET=mmab
 export RUN=seaice_drift
 
 #################################################
@@ -95,13 +94,13 @@ export RUN=seaice_drift
 #Path to home directory:
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
   #NCO
-  export HOMEbase=/nw${envir}
+  export HOMEbase=${HOMEseaice_drift}
 else
   #dev
-  export HOMEbase=/u/Robert.Grumbine/save
+  export HOMEbase=/u/Robert.Grumbine/rgdev/drift
 fi
 
-export HOMEsice=$HOMEbase/seaice_drift.${code_ver}
+export HOMEsice=$HOMEbase
 export EXECsice=$HOMEsice/exec
 export FIXsice=$HOMEsice/fix
 export PARMsice=$HOMEsice/parm
@@ -110,46 +109,52 @@ export USHsice=$HOMEsice/ush
 ###################################
 # Set up the UTILITIES
 ###################################
-export HOMEutil=/nwprod/util
-export EXECutil=$HOMEutil/exec
-export FIXutil=$HOMEutil/fix
-export PARMutil=$HOMEutil/parm
-export USHutil=$HOMEutil/ush
+#Requires prod_util module to be established
+export utilscript=$UTILROOT/ush
+export utilexec=$UTILROOT/exec
+export utilparm=$UTILROOT/parm 
 
 ##############################
 # Run setup to initialize working directory and utility scripts
 ##############################
-sh $USHutil/setup.sh
+#sh $utilscript/setup.sh
 
 ##############################
 # Run setpdy and initialize PDY variables
 ##############################
 #export PDY=20121022
-sh $USHutil/setpdy.sh
-. ${DATA}/PDY
+sh setpdy.sh
+. ./PDY
 
 ##############################################
 # Define COM directories
 ##############################################
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
-  export COMbase=${COMROOTp2}/${NET}/${envir}
-  export pcom=/pcom/$RUN
-  #export COMIN=/com2/gens/prod/gefs.$PDY/$cyc/pgrb2a_bc
-  export COMIN=/gpfs/hps/nco/ops/com/naefs/prod/gefs.$PDY/$cyc/pgrb2a_bc
-  export COMINice_analy=/com2/omb/prod/sice.${PDYm1}
+  export COMbase=${COMROOT}/${NET}/${envir}
+  export COMIN=${COMIN:-$(compath.py /naefs/prod/gefs.${PDY})/$cyc/pgrb2a_bc}
+  export COMINice_analy=${COMINice_analy:-$(compath.py /omb/prod/sice.${PDYm1})}
 else
   export COMbase=/u/Robert.Grumbine/noscrub/com/${NET}/${envir}/
   export pcom=/u/Robert.Grumbine/noscrub/pcom/$RUN/
 
-  #export COMIN=${COMROOTp2}/gens/prod/gefs.$PDY/$cyc/pgrb2a_bc
-  #export COMIN=/u/Robert.Grumbine/onoscrub/gefs/${PDY}/pgrb2a_bc/
-  export COMIN=/gpfs/hps/nco/ops/com/naefs/prod/gefs.$PDY/$cyc/pgrb2a_bc
+  export COMINice_analy=${COMROOT}/mmab/prod/sice.${PDYm1}
+  # For NRT runs
+  export COMIN=${COMIN:-$(compath.py /naefs/prod/gefs.${PDY})/$cyc/pgrb2ap5_bc}
+  # For hindcast thinned runs 
+  export COMIN=/u/Robert.Grumbine/noscrub/gefs/
 
-  export COMINice_analy=${COMROOTp2}/omb/prod/sice.${PDYm1}
+  #for python:
+  export PYTHONPATH=~/rgdev/ice_scoring/sidfex/:~/rgdev/mmablib/py/
 fi
 
-export COMOUT=$COMbase/${RUN}.${PDY}
+if [ ! -d $COMIN ] ; then
+  echo zzz Could not find the input directory $COMIN exiting
+  exit 1
+fi
+export COMOUT=$COMbase/${RUN}.${PDY}$cyc
+export COMOUT_sidfex=$COMbase/sidfex
 
+mkdir -m 775 -p $COMOUT_sidfex
 mkdir -m 775 -p $COMOUT
 mkdir -m 775 -p $pcom
 
@@ -160,10 +165,11 @@ env
 
 ##############################################
 # Execute the script
-set -e
-sh $HOMEsice/scripts/exseaice_drift.sh.ecf
+#set -e
+echo zzz about to call thinned rerun
+sh $HOMEsice/scripts/thinned_rerun.sh
 export err=$?
-$DATA/err_chk
+err_chk
 ##############################################
 
 cat $pgmout
@@ -175,4 +181,19 @@ postmsg "$jlogfile" "$msg"
 date
 
 cd $BASEDIR
-rm -rf $DATA
+
+##############################################
+# print exec I/O output
+##############################################
+if [ -e "$pgmout" ] ; then
+  cat $pgmout
+fi
+
+##############################################
+# Remove temp directories
+##############################################
+if [ "$KEEPDATA" != "YES" ] ; then
+  rm -rf $DATA
+fi
+
+date

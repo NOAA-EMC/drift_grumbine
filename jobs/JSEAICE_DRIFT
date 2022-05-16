@@ -85,7 +85,7 @@ else
   fi
 fi
 
-export NET=omb
+export NET=mmab
 export RUN=seaice_drift
 
 #################################################
@@ -98,7 +98,7 @@ if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; the
   export HOMEbase=/nw${envir}
 else
   #dev
-  export HOMEbase=/u/Robert.Grumbine/para
+  export HOMEbase=/u/Robert.Grumbine/rgdev
 fi
 
 export HOMEsice=$HOMEbase/seaice_drift.${code_ver}
@@ -114,16 +114,11 @@ export USHsice=$HOMEsice/ush
 export utilscript=$UTILROOT/ush
 export utilexec=$UTILROOT/exec
 export utilparm=$UTILROOT/parm 
-#export HOMEutil=/nwprod/util
-#export EXECutil=$HOMEutil/exec
-#export FIXutil=$HOMEutil/fix
-#export PARMutil=$HOMEutil/parm
-#export USHutil=$HOMEutil/ush
 
 ##############################
 # Run setup to initialize working directory and utility scripts
 ##############################
-sh $utilscript/setup.sh
+#sh $utilscript/setup.sh
 
 ##############################
 # Run setpdy and initialize PDY variables
@@ -146,21 +141,24 @@ else
   export COMbase=/u/Robert.Grumbine/noscrub/com/${NET}/${envir}/
   export pcom=/u/Robert.Grumbine/noscrub/pcom/$RUN/
 
-  #export COMIN=${COMROOTp2}/gens/prod/gefs.$PDY/$cyc/pgrb2a_bc
-  #export COMIN=/gpfs/hps/nco/ops/com/naefs/prod/gefs.$PDY/$cyc/pgrb2a_bc
-#  export COMIN=/u/Robert.Grumbine/noscrub/com/gens/prod/gefs/gefs.${PDY}/$cyc/pgrb2a_bc/
-#  export COMIN=/u/Robert.Grumbine/onoscrub/gefs/${PDY}/pgrb2a_bc/
-  export COMIN=${COMROOThps}/naefs/prod/gefs.${PDY}/$cyc/pgrb2a_bc
-  export COMINice_analy=${COMROOTp2}/omb/prod/sice.${PDYm1}
+  export COMINice_analy=${COMROOTp2}/mmab/prod/sice.${PDYm1}
+  # For hindcast thinned runs
+  export COMIN=/u/Robert.Grumbine/noscrub/gefs/
+  # For NRT runs
+  export COMIN=${COMIN:-$(compath.py /naefs/prod/gefs.${PDY})/$cyc/pgrb2ap5_bc}
+
+  export PYTHONPATH=~/rgdev/ice_scoring/sidfex/:~/rgdev/mmablib/py/
 fi
 
 if [ ! -d $COMIN ] ; then
   echo Could not find the input directory $COMIN exiting
   exit 1
 fi
-export COMOUT=$COMbase/${RUN}.${PDY}
+export COMOUT=$COMbase/${RUN}.${PDY}${cyc}
+export COMOUT_sidfex=$COMbase/sidfex
 
 mkdir -m 775 -p $COMOUT
+mkdir -m 775 -p $COMOUT_sidfex
 mkdir -m 775 -p $pcom
 
 msg="HAS BEGUN on `hostname`"
@@ -185,4 +183,10 @@ postmsg "$jlogfile" "$msg"
 date
 
 cd $BASEDIR
-rm -rf $DATA
+##############################################
+# Remove temp directories
+##############################################
+if [ "$KEEPDATA" != "YES" ] ; then
+  rm -rf $DATA
+fi
+
