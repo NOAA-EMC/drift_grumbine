@@ -15,22 +15,31 @@ else
 #on a system with module software, such as wcoss
   module purge
   #Phase3
-  module load EnvVars/1.0.2 ips/18.0.1.163
-  module load w3nco/2.0.6 impi/18.0.1 w3emc/2.3.0
-  module load bufr/11.2.0 bacio/2.0.2
+  #module load EnvVars/1.0.2 ips/18.0.1.163
+  #module load w3nco/2.0.6 impi/18.0.1 w3emc/2.3.0
+  #module load bufr/11.2.0 bacio/2.0.2
+  #wcoss2
+  module load envvar/1.0
+  module load PrgEnv-intel/8.2.0
+  module load intel/19.1.3.304
+  module load w3nco/2.4.1
+  module load bufr/11.6.0
+  module load bacio/2.4.1
   echo in makeall.sh loaded modules:
   module list
   export FC=ifort
   export FOPTS='-O2 -std90'
-  export LIBS='-L $(BASE)/$(mmablib_ver)/ $(W3NCO_LIB4) $(W3EMC_LIB4) $(BACIO_LIB4)'
+  export BASE=${BASE:-/u/Robert.Grumbine/rgdev/mmablib}
+  export LIBS='-L $(BASE)/ $(W3NCO_LIB4) $(W3EMC_LIB4) $(BACIO_LIB4)'
 fi
 
 #theia/hera: export BASE=${BASE:-/home/Robert.Grumbine/save}
 export BASE=${BASE:-/u/Robert.Grumbine/para/mmablib}
 
 #Common to all systems:
-export mmablib_ver=${mmablib_ver:-v3.5.0}
-export INCDIR='$(BASE)/$(mmablib_ver)/include'
+export mmablib_ver=${mmablib_ver:-""}
+export MMAB_INC='$(BASE)/$(mmablib_ver)/include'
+export MMAB_LIBF4=$BASE/$mmablib_ver/libombf_4.a
 echo BASE = $BASE
 echo mmablib_ver = $mmablib_ver
 
@@ -43,7 +52,7 @@ export JORG=NP21
 export JPROG=GRUMBINE
 
 #Building:
-for d in seaice_preaverage.Cd seaice_sicedrft.fd seaice_ensblend.Cd seaice_reformat.fd
+for d in seaice_preaverage.Cd seaice_sicedrft.fd seaice_reformat.fd seaice_ensblend.Cd
 do
   cd $d 
   make -i
