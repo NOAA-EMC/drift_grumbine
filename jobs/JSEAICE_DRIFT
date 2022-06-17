@@ -98,7 +98,7 @@ if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; the
   export HOMEbase=/nw${envir}
 else
   #dev
-  export HOMEbase=/u/Robert.Grumbine/rgdev
+  export HOMEbase=$HOME/rgdev
 fi
 
 export HOMEsice=$HOMEbase/seaice_drift.${code_ver}
@@ -138,12 +138,12 @@ if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; the
   export COMIN=${COMROOThps}/naefs/prod/gfs.${PDY}
   export COMINice_analy=/com2/omb/prod/sice.${PDYm1}
 else
-  export COMbase=/u/Robert.Grumbine/noscrub/com/${NET}/${envir}/
-  export pcom=/u/Robert.Grumbine/noscrub/pcom/$RUN/
+  export COMbase=$HOME/noscrub/com/${NET}/${envir}/
+  export pcom=$HOME/noscrub/pcom/$RUN/
 
   export COMINice_analy=${COMROOTp2}/mmab/prod/sice.${PDYm1}
   # For hindcast thinned runs
-  export COMIN=/u/Robert.Grumbine/noscrub/gefs/
+  export COMIN=$HOME/noscrub/gefs/
   # For NRT runs
   export COMIN=${COMIN:-$(compath.py /naefs/prod/gefs.${PDY})/$cyc/pgrb2ap5_bc}
 

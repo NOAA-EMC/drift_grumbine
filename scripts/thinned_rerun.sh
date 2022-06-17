@@ -60,8 +60,8 @@ HH=$cyc
 #python3 $USHsice/targets.py $YY $MM $DD $HH
 #ln -sf seaice_edge.t00z.txt.${PDY}$HH  fort.48
 #RG: hindcast -- link from archive
-ln -sf /u/Robert.Grumbine/rgdev/drift/fix/${YY}/seaice_edge.t00z.txt.${PDY}$HH  fort.48
-ln -sf /u/Robert.Grumbine/rgdev/drift/fix/${YY}/seaice_edge.t00z.txt.${PDY}$HH  .
+ln -sf $HOME/rgdev/drift/fix/${YY}/seaice_edge.t00z.txt.${PDY}$HH  fort.48
+ln -sf $HOME/rgdev/drift/fix/${YY}/seaice_edge.t00z.txt.${PDY}$HH  .
 
 #if [ -f $COMINice_analy/seaice_edge.t00z.txt ] ; then
 #  cp $COMINice_analy/seaice_edge.t00z.txt .

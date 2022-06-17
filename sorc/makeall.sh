@@ -29,12 +29,12 @@ else
   module list
   export FC=ifort
   export FOPTS='-O2 -std90'
-  export BASE=${BASE:-/u/Robert.Grumbine/rgdev/mmablib}
+  export BASE=${BASE:-$HOME/rgdev/mmablib}
   export LIBS='-L $(BASE)/ $(W3NCO_LIB4) $(W3EMC_LIB4) $(BACIO_LIB4)'
 fi
 
-#theia/hera: export BASE=${BASE:-/home/Robert.Grumbine/save}
-export BASE=${BASE:-/u/Robert.Grumbine/para/mmablib}
+#theia/hera: export BASE=${BASE:-$HOME/save}
+export BASE=${BASE:-$HOME/para/mmablib}
 
 #Common to all systems:
 export mmablib_ver=${mmablib_ver:-""}
