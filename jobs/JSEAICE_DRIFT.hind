@@ -165,7 +165,7 @@ env
 
 ##############################################
 # Execute the script
-#set -e
+set -e
 echo zzz about to call thinned rerun
 sh $HOMEsice/scripts/thinned_rerun.sh
 export err=$?

@@ -50,26 +50,26 @@ ln -sf alpha     fort.90
 #-----------------------------------------------------
 #get the ice line points
 #-----------------------------------------------------
-set -x
+set -xe
 # For sidfex: get the drifter target locations
 YY=`echo $PDY | cut -c1-4`
 MM=`echo $PDY | cut -c5-6`
 DD=`echo $PDY | cut -c7-8`
 HH=$cyc
 #Forecast -- create from sidfex targets file
-#python3 $USHsice/targets.py $YY $MM $DD $HH
-#ln -sf seaice_edge.t00z.txt.${PDY}$HH  fort.48
+python3 $USHsice/targets.py $YY $MM $DD $HH
+ln -sf seaice_edge.t00z.txt.${PDY}$HH  fort.48
 #RG: hindcast -- link from archive
 ln -sf $HOME/rgdev/drift/fix/${YY}/seaice_edge.t00z.txt.${PDY}$HH  fort.48
 ln -sf $HOME/rgdev/drift/fix/${YY}/seaice_edge.t00z.txt.${PDY}$HH  .
 
-#if [ -f $COMINice_analy/seaice_edge.t00z.txt ] ; then
-#  cp $COMINice_analy/seaice_edge.t00z.txt .
-#  ln -sf seaice_edge.t00z.txt fort.48
-#else
-#  echo Running with reference ice edge
-#  cp $FIXsice/seaice_edge.t00z.txt fort.48
-#fi
+if [ -f $COMINice_analy/seaice_edge.t00z.txt ] ; then
+  cp $COMINice_analy/seaice_edge.t00z.txt .
+  ln -sf seaice_edge.t00z.txt fort.48
+else
+  echo Running with reference ice edge
+  cp $FIXsice/seaice_edge.t00z.txt fort.48
+fi
 
 #set +x
 
@@ -100,6 +100,7 @@ if [ ! -f ${base}/winds.${PDY}.tar ] ; then
 fi
 tar xf ${base}/winds.${PDY}.tar
 
+set -xe
 for hr in 0 12 24 36 48  60  72  84  96 108 120 132 144 156 168 180 192 204 216 \
                     228 240 252 264 276 288 300 312 324 336 348 360 372
 do
@@ -122,6 +123,7 @@ do
   while [ $mem -le 20 ]
   do
 
+    echo zzz $h1 $h2 $WGRIB2 wind${mem}.$h1 
     $WGRIB2 wind${mem}.$h1 > index
 
     grep 'UGRD:10 m above ground:' index | $WGRIB2 -i wind${mem}.$h1  -order we:ns -bin tmpu.${mem}.$h1.$PDY > /dev/null 2> /dev/null
@@ -144,6 +146,7 @@ do
 done
 
 echo zzz done with pre-averaging
+#exit
 
 #-------------------------- loop over each member for forecast
 for mem in 01 02 03 04 05 06 07 08 09 10 11 \

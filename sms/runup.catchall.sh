@@ -26,19 +26,27 @@ module purge
 ##for sidfex
 #module load python/3.6.3
 ## Wcoss2
+module load craype-x86-rome
+module load libfabric/1.11.0.0
+module load craype-network-ofi
+module load envvar/1.0
+
 module load PrgEnv-intel/8.2.0
 module load intel/19.1.3.304
-module load netcdf/4.7.4
-module load prod_envir/2.0.6
+#module load netcdf/4.7.4
+#module load prod_envir/2.0.6
 module load prod_util/2.0.13
-module load libjpeg/9c
-module load grib_util/1.2.4
+#module load libjpeg/9c
+#module load grib_util/1.2.4
+module load wgrib2/2.0.8
 #for sidfex
 module load python/3.8.6
 
 # -- to check on a module's usage: module spider $m 
 # Show what happened:
 module list
+which $WGRIB2
+echo zzz `which $WGRIB2`
 
 #From the sms.fake:
 #export HOMEpmb=/gpfs/tp2/nco/ops/nwprod/util
@@ -52,8 +60,8 @@ cd $HOME/rgdev/drift/sms/
 
 #set -xe
 set -x
-tagm=20220410
-tag=20220411
+tagm=20220601
+tag=20220630
 end=`date +"%Y%m%d" `
 
 end=$tag

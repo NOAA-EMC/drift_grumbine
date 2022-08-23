@@ -34,7 +34,7 @@ else
 fi
 
 #theia/hera: export BASE=${BASE:-$HOME/save}
-export BASE=${BASE:-$HOME/para/mmablib}
+export BASE=${BASE:-$HOME/rgdev/mmablib}
 
 #Common to all systems:
 export mmablib_ver=${mmablib_ver:-""}
