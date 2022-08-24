@@ -27,7 +27,7 @@ if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; the
   export BASEDIR=/tmpnwprd
 else
   #developer
-  export BASEDIR=/gpfs/dell2/ptmp/wx21rg
+  export BASEDIR=/lfs/h2/emc/ptmp/wx21rg/
 fi
 
 export DATA=$BASEDIR/${job}.${pid}
@@ -143,11 +143,12 @@ else
 
   export COMINice_analy=${COMROOTp2}/mmab/prod/sice.${PDYm1}
   # For hindcast thinned runs
-  export COMIN=$HOME/noscrub/gefs/
+  # export COMIN=$HOME/noscrub/gefs/
   # For NRT runs
-  export COMIN=${COMIN:-$(compath.py /naefs/prod/gefs.${PDY})/$cyc/pgrb2ap5_bc}
+  #   look under $COMROOT if needed
+  export COMIN=${COMIN:-$(compath.py -e prod /naefs/v6.1/gefs.${PDY})/$cyc/pgrb2ap5_bc}
 
-  export PYTHONPATH=~/rgdev/ice_scoring/sidfex/:~/rgdev/mmablib/py/
+  export PYTHONPATH=$HOME/rgdev/ice_scoring/sidfex/:$HOME/rgdev/mmablib/py/
 fi
 
 if [ ! -d $COMIN ] ; then
@@ -189,4 +190,3 @@ cd $BASEDIR
 if [ "$KEEPDATA" != "YES" ] ; then
   rm -rf $DATA
 fi
-

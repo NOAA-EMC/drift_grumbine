@@ -60,11 +60,11 @@ cd $HOME/rgdev/drift/sms/
 
 #set -xe
 set -x
-tagm=20220601
-tag=20220630
+tagm=20220819
+tag=20220820
 end=`date +"%Y%m%d" `
-
 end=$tag
+end=20220820
 
 while [ $tag -le $end ]
 do
@@ -74,8 +74,8 @@ do
 
   #if [ ! -d $HOME/noscrub/com/mmab/developer/seaice_drift.${tag}${cyc} ] ; then
     #Now call J job, which will call the ex
-    #export KEEPDATA="YES"
-    export KEEPDATA="NO"
+    export KEEPDATA="YES"
+    #export KEEPDATA="NO"
     #time $HOME/rgdev/${job}.${code_ver}/jobs/JSEAICE_DRIFT.hind > sms.${tag}${cyc}
     time $HOME/rgdev/drift/jobs/JSEAICE_DRIFT.hind > sms.${tag}${cyc}
   #fi
