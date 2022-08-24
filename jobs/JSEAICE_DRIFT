@@ -148,7 +148,7 @@ else
   #   look under $COMROOT if needed
   export COMIN=${COMIN:-$(compath.py -e prod /naefs/v6.1/gefs.${PDY})/$cyc/pgrb2ap5_bc}
 
-  export PYTHONPATH=$HOME/rgdev/ice_scoring/sidfex/:$HOME/rgdev/mmablib/py/
+  export PYTHONPATH=$PYTHONPATH:$HOME/rgdev/ice_scoring/sidfex/:$HOME/rgdev/mmablib/py/
 fi
 
 if [ ! -d $COMIN ] ; then
