@@ -84,6 +84,7 @@ do
 done
 base=$COMIN
 
+set +x
 #Construct averages for 10m winds
 for hr in 0 12 24 36 48  60  72  84  96 108 120 132 144 156 168 180 192 204 216 \
                     228 240 252 264 276 288 300 312 324 336 348 360 372
@@ -106,14 +107,14 @@ do
   for mem in gep01 gep02 gep03 gep04 gep05 gep06 gep07 gep08 gep09 gep10 gep11 gep12 gep13 gep14 gep15 gep16 gep17 gep18 gep19 gep20
   do
 
-    $WGRIB2 ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1  > index
+    $WGRIB2 ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h1  > index
 
-    grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1 -order we:ns -bin tmpu.${mem}.$h1.$PDY > /dev/null 2> /dev/null
-    grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1 -order we:ns -bin tmpv.${mem}.$h1.$PDY > /dev/null 2> /dev/null
+    grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h1 -order we:ns -bin tmpu.${mem}.$h1.$PDY > /dev/null 2> /dev/null
+    grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h1 -order we:ns -bin tmpv.${mem}.$h1.$PDY > /dev/null 2> /dev/null
 
-    $WGRIB2 ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 > index
-    grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 -order we:ns -bin tmpu.${mem}.$h2.$PDY > /dev/null 2> /dev/null
-    grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 -order we:ns -bin tmpv.${mem}.$h2.$PDY > /dev/null 2> /dev/null
+    $WGRIB2 ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h2 > index
+    grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h2 -order we:ns -bin tmpu.${mem}.$h2.$PDY > /dev/null 2> /dev/null
+    grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h2 -order we:ns -bin tmpv.${mem}.$h2.$PDY > /dev/null 2> /dev/null
 
     #preaverage appends the info:
     $EXECsice/seaice_preaverage u.averaged.${mem}.$PDY tmpu.${mem}.$h1.$PDY tmpu.${mem}.${h2}.$PDY
@@ -128,7 +129,8 @@ done
 #  time $EXECsice/seaice_preaverage v.averaged.${mem}.$PDY tmpv.${mem}.$PDY
 #done
 
-echo done with pre-averaging
+echo zzz done with pre-averaging
+set -x
 
 #-------------------------- loop over each member for forecast
 for mem in gep01 gep02 gep03 gep04 gep05 gep06 gep07 gep08 gep09 gep10 gep11 \

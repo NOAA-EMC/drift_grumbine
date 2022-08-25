@@ -60,11 +60,11 @@ cd $HOME/rgdev/drift/sms/
 
 #set -xe
 set -x
-tagm=20220818
-tag=20220819
+tagm=20220531
+tag=20220601
 end=`date +"%Y%m%d" `
 end=$tag
-end=20220819
+end=20220630
 
 while [ $tag -le $end ]
 do
