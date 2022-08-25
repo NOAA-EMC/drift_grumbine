@@ -27,10 +27,10 @@ export SMSBIN=$HOME/rgdev/${job}.${code_ver}/sms/
 cd $HOME/rgdev/drift/sms/
 
 set -xe
-tagm=20220822
-tag=20220823
+tagm=20220824
+tag=20220825
 end=`date +"%Y%m%d" `
-end=20220825
+#end=20220825
 
 while [ $tag -le $end ]
 do
