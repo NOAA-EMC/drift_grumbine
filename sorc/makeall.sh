@@ -28,7 +28,7 @@ else
   echo in makeall.sh loaded modules:
   module list
   export FC=ifort
-  export FOPTS='-O2 -std90'
+  export FOPTS='-O2 -std95'
   export BASE=${BASE:-$HOME/rgdev/mmablib}
   export LIBS='-L $(BASE)/ $(W3NCO_LIB4) $(W3EMC_LIB4) $(BACIO_LIB4)'
 fi
