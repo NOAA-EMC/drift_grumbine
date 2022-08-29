@@ -103,7 +103,8 @@ fi
 
 export HOMEsice=$HOMEbase/seaice_drift.${code_ver}
 export EXECsice=$HOMEsice/exec
-export FIXsice=$HOMEsice/bigfix
+#export FIXsice=$HOMEsice/bigfix
+export FIXsice=$HOMEsice/fix
 export PARMsice=$HOMEsice/parm
 export USHsice=$HOMEsice/ush
 
@@ -142,7 +143,7 @@ else
   export pcom=$HOME/noscrub/pcom/$RUN/
 
   export COMINice_analy=`compath.py -e prod /seaice_analysis/v4.5.0/sice.${PDYm1}`
-  export COMINice_analy=$HOME/rgdev/drift/bigfix/
+  #export COMINice_analy=$HOME/rgdev/drift/bigfix/
   echo zzz COMINice_analy $COMINice_analy
 
   # For hindcast thinned runs
