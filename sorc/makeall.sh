@@ -52,7 +52,7 @@ export JORG=NP21
 export JPROG=GRUMBINE
 
 #Building:
-for d in seaice_preaverage.Cd seaice_sicedrft.fd seaice_reformat.fd seaice_ensblend.Cd
+for d in seaice_preaverage.Cd seaice_sicedrft.fd seaice_reformat.fd seaice_midpoints.Cd
 do
   cd $d 
   make -i
