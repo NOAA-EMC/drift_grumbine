@@ -55,7 +55,7 @@
       ENDDO
 
 !==========================================
- 9007   FORMAT (I4, 3x, 2F8.3, 2x, 2F6.1)
+ 9007   FORMAT (I5, 3x, 2F8.3, 2x, 2F6.1)
 
 !     The 1 shift is because 1 is added to fday, count before the attempt to read
       code = fday - 1

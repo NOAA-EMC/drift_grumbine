@@ -34,13 +34,14 @@ export job=seaice_drift
 export SMSBIN=$HOME/rgdev/${job}.${code_ver}/sms/
 
 cd $HOME/rgdev/drift/sms/
-dayback=90 #how many days to go back for late data
+dayback=15         #how many days to go back for late data
 
 set -x
 tag=`date +"%Y%m%d" `
 tagm=`expr $tag - 1`
-tag=20220824
-tagm=20220823
+tagm=`$HOME/bin/dtgfix3 $tagm`
+#tag=20220830
+#tagm=20220829
 
 # Run the drifter history tables and put in fix/$yy
 cd $HOME/rgdev/drift/ush/
@@ -68,6 +69,7 @@ else
   mkdir -p ../fix/$yy
   mv seaice_edge* ../fix/$yy
 fi
+
 exit
 
 

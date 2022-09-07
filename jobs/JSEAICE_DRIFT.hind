@@ -132,12 +132,13 @@ sh setpdy.sh
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
   export COMbase=${COMROOT}/${NET}/${envir}
   export COMIN=${COMIN:-$(compath.py -e prod /naefs/v6.1/gefs.${PDY})/$cyc/pgrb2ap5_bc}
-  export COMINice_analy=${COMINice_analy:-$(compath.py -e prod /seaice_analysis/v4.5/sice.${PDYm1})}
+  #export COMINice_analy=${COMINice_analy:-$(compath.py -e prod /seaice_analysis/v4.5/sice.${PDYm1})}
+  export COMINice_analy=${COMROOT}/seaice_analysis/v4.5/seaice_analysis.${PDYm1}
 else
   export COMbase=$HOME/noscrub/com/${NET}/${envir}/
   export pcom=$HOME/noscrub/pcom/$RUN/
 
-  export COMINice_analy=${COMROOT}/seaice_analysis/v4.5/sice.${PDYm1}
+  export COMINice_analy=${COMROOT}/seaice_analysis/v4.5/seaice_analysis.${PDYm1}
   # For NRT runs
   export COMIN=${COMIN:-$(compath.py -e prod /naefs/v6.1/gefs.${PDY})/$cyc/pgrb2ap5_bc}
   # For hindcast thinned runs 

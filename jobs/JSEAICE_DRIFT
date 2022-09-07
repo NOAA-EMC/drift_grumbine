@@ -103,6 +103,7 @@ fi
 
 export HOMEsice=$HOMEbase/seaice_drift.${code_ver}
 export EXECsice=$HOMEsice/exec
+#export FIXsice=$HOMEsice/bigfix
 export FIXsice=$HOMEsice/fix
 export PARMsice=$HOMEsice/parm
 export USHsice=$HOMEsice/ush
@@ -134,14 +135,16 @@ if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; the
   export COMbase=${COMROOTp2}/${NET}/${envir}
   export pcom=/pcom/$RUN
   #export COMIN=/com2/gens/prod/gefs.$PDY/$cyc/pgrb2a_bc
+  #export COMINice_analy=/com2/omb/prod/sice.${PDYm1}
   #export COMIN=/gpfs/hps/nco/ops/com/naefs/prod/gefs.$PDY/$cyc/pgrb2a_bc
   export COMIN=${COMROOThps}/naefs/prod/gfs.${PDY}
-  export COMINice_analy=/com2/omb/prod/sice.${PDYm1}
+  export COMINice_analy=`compath.py -e prod /seaice_analysis/v4.5.0/sice.${PDYm1}`
 else
   export COMbase=$HOME/noscrub/com/${NET}/${envir}/
   export pcom=$HOME/noscrub/pcom/$RUN/
 
-  export COMINice_analy=`compath.py -e prod /seaice_analysis/v4.5.0/sice.${PDYm1}`
+  export COMINice_analy=`compath.py -e prod /seaice_analysis/v4.5.0/seaice_analysis.${PDYm1}`
+  #export COMINice_analy=$HOME/rgdev/drift/bigfix/
   echo zzz COMINice_analy $COMINice_analy
 
   # For hindcast thinned runs

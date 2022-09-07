@@ -30,7 +30,7 @@ set -xe
 tagm=20220824
 tag=20220825
 end=`date +"%Y%m%d" `
-#end=20220825
+end=20220825
 
 while [ $tag -le $end ]
 do
@@ -40,7 +40,7 @@ do
 
   #if [ ! -d $HOME/noscrub/com/mmab/developer/seaice_drift.${tag}${cyc} ] ; then
     #Now call J job, which will call the ex
-    export KEEPDATA="NO"
+    export KEEPDATA="YES"
     time $HOME/rgdev/${job}.${code_ver}/jobs/JSEAICE_DRIFT > sms.${tag}${cyc}
   #fi
 
