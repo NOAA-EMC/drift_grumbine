@@ -23,8 +23,8 @@
 # directory are included, so if no exclude patterns match that file, it will be
 # transfered.
 
-com/omb/_ENVIR_/seaice_drift._PDY_/
+_COMROOT_/seaice_drift/_SHORTVER_/seaice_drift._PDY_/
 B 37
 
-com/omb/_ENVIR_/seaice_drift._PDYm1_/
+_COMROOT_/seaice_drift/_SHORTVER_/seaice_drift._PDYm1_/
 B 37

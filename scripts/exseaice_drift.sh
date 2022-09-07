@@ -100,14 +100,24 @@ do
   for mem in gep01 gep02 gep03 gep04 gep05 gep06 gep07 gep08 gep09 gep10 gep11 gep12 gep13 gep14 gep15 gep16 gep17 gep18 gep19 gep20
   do
 
-    $WGRIB2 ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h1  > index
+    #${WGRIB2:?} ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h1  > index
 
-    grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h1 -order we:ns -bin tmpu.${mem}.$h1.$PDY
-    grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h1 -order we:ns -bin tmpv.${mem}.$h1.$PDY
+    #grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h1 -order we:ns -bin tmpu.${mem}.$h1.$PDY
+    #grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h1 -order we:ns -bin tmpv.${mem}.$h1.$PDY
 
-    $WGRIB2 ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h2 > index
-    grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h2 -order we:ns -bin tmpu.${mem}.$h2.$PDY
-    grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h2 -order we:ns -bin tmpv.${mem}.$h2.$PDY
+    #${WGRIB2:?} ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h2 > index
+    #grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h2 -order we:ns -bin tmpu.${mem}.$h2.$PDY
+    #grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h2 -order we:ns -bin tmpv.${mem}.$h2.$PDY
+
+    #from WCOSS1
+    ${WGRIB2:?} ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1  > index
+
+    grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1 -order we:ns -bin tmpu.${mem}.$h1.$PDY
+    grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1 -order we:ns -bin tmpv.${mem}.$h1.$PDY
+
+    ${WGRIB2:?} ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 > index
+    grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 -order we:ns -bin tmpu.${mem}.$h2.$PDY
+    grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 -order we:ns -bin tmpv.${mem}.$h2.$PDY
 
     #preaverage appends the info:
     time $EXECsice/seaice_preaverage u.averaged.${mem}.$PDY tmpu.${mem}.$h1.$PDY tmpu.${mem}.${h2}.$PDY
@@ -186,14 +196,15 @@ if [ $SENDCOM = "YES" ] ; then
   cp ak.out             $COMOUT/alaska.$PDY
   cp seaice_drift_*.kml $COMOUT
   cp grid_ds.gep??      $COMOUT
-  cp fort.61.gep??      $COMOUT
+  #cp fort.61.gep??      $COMOUT
   cp global.tran $COMOUT/global.tran.$PDY
   cp alaska.tran $COMOUT/alaska.tran.$PDY
   cp global.tran $pcom/global.tran.${cycle}
   cp alaska.tran $pcom/alaska.tran.${cycle}
   if [ "$SENDDBN" = 'YES' ] ; then
-    $USHutil/make_ntc_bull.pl WMOHD NONE KWBC NONE alaska.tran $pcom/alaska.tran.${cycle}
-    $USHutil/make_ntc_bull.pl WMONV NONE KWBC NONE global.tran $pcom/global.tran.${cyc}.$job
+    $USHsice/make_ntc_bull.pl WMOHD NONE KWBC NONE alaska.tran $pcom/alaska.tran.${cycle}
+    #$USHsice/make_ntc_bull.pl WMONV NONE KWBC NONE global.tran $pcom/global.tran.${cyc}.$job
+    $USHsice/make_ntc_bull.pl WMONV NONE KWBC NONE global.tran $pcom/global.tran.${cyc}.ice_drift_00
     $DBNROOT/bin/dbn_alert MODEL ICE_DRIFT$SENDDBN_SUFFIX $job $COMOUT/global.$PDY
     $DBNROOT/bin/dbn_alert MODEL ICE_DRIFT$SENDDBN_SUFFIX $job $COMOUT/alaska.$PDY
     $DBNROOT/bin/dbn_alert MODEL ICE_DRIFT$SENDDBN_SUFFIX $job $COMOUT/global.tran.$PDY

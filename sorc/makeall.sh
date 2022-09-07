@@ -1,5 +1,8 @@
 #!/bin/sh
 #set -xe
+set -x
+
+. ../versions/build.ver
 
 sys=`hostname`
 
@@ -21,32 +24,36 @@ else
 #phase3   echo in makeall.sh loaded modules:
 #acorn   module list
   #source /apps/prod/lmodules/startLmod
-  module purge
-  module avail 2> avail.1
-  module load envvar/1.0
-  module load PrgEnv-intel/8.1.0
-  module load intel/19.1.3.304
-  module load craype//2.7.8
-  module load cray-mpich/8.1.7
-  module load w3nco/2.4.1
+  module reset
+  #module avail 2> avail.1
+  module load PrgEnv-intel/$PrgEnv_intel_ver
+  module load intel/$intel_ver
+  module load craype/$craype_ver
+  module load w3nco/$w3nco_ver
   module list
-  module avail 2> avail.2
+  #module avail 2> avail.2
 fi
 
+git clone https://github.com/rgrumbine/mmablib.git mmablib
+cd mmablib
+git checkout acorn
+make
+cd ..
+
 #theia: export BASE=${BASE:-/home/Robert.Grumbine/save}
-export BASE=${BASE:-/u/Robert.Grumbine/save/mmablib}
+#export BASE=${BASE:-/u/Robert.Grumbine/save/mmablib}
 
 export FC=ftn
 export FOPTS='-O2 '
 
 #Common to all systems:
 export mmablib_ver=${mmablib_ver:-""}
-export INCDIR='$(BASE)/$(mmablib_ver)/include'
+export BASE=$PWD/mmablib
+export INCDIR='$(BASE)/include'
 echo BASE = $BASE
 echo mmablib_ver = $mmablib_ver
 
-export LIBS='-L $(BASE)/$(mmablib_ver)/ $(W3NCO_LIB4) $(W3EMC_LIB4) $(BACIO_LIB4)'
-
+export LIBS='-L $(BASE)/ $(W3NCO_LIB4) $(W3EMC_LIB4) $(BACIO_LIB4)'
 #Items to specify for platforms/compilers/...
 export SHELL='/bin/sh'
 export CC=CC
