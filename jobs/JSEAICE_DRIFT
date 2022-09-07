@@ -18,19 +18,19 @@ date
 ####################################
 echo cyc is ${cyc:?}
 echo envir is ${envir:?}
-echo code_ver is ${code_ver:?} #ensure code_ver is defined
+echo seaice_drift_ver is ${seaice_drift_ver:?} #ensure code_ver is defined
 export pid=$$
 export cycle=t${cyc}z
 
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
   #NCO
-  export BASEDIR=/tmpnwprd
+  export BASEDIR=${DATAROOT:-/lfs/f1/ops/$envir/tmp/}
 else
   #developer
-  export BASEDIR=/gpfs/dell2/ptmp/wx21rg
+  export BASEDIR=/u/Robert.Grumbine/save/scratch
 fi
 
-export DATA=$BASEDIR/${job}.${pid}
+export DATA=$BASEDIR/${jobid}
 mkdir -p $DATA
 cd $DATA
 export TMPDIR=$DATA
@@ -41,9 +41,11 @@ export TMPDIR=$DATA
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
   #NCO
   if [ "$envir" = 'prod' ] ; then
-    export jlogfile=/com/logs/jlogfiles/jlogfile.${job}.$$
+    #export jlogfile=/com/logs/jlogfiles/jlogfile.${job}.$$
+    export jlogfile=""
   else
-    export jlogfile=/com/logs/${envir}/jlogfile
+    #export jlogfile=/com/logs/${envir}/jlogfile
+    export jlogfile=""
   fi
 else
   #developer
@@ -85,7 +87,7 @@ else
   fi
 fi
 
-export NET=mmab
+export NET=seaice_drift
 export RUN=seaice_drift
 
 #################################################
@@ -95,70 +97,55 @@ export RUN=seaice_drift
 #Path to home directory:
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
   #NCO
-  export HOMEbase=/nw${envir}
+  export HOMEbase=${HOMEseaice_drift}
 else
   #dev
-  export HOMEbase=/u/Robert.Grumbine/rgdev
+  export HOMEbase=${HOMEbase:-/u/Robert.Grumbine/save}
 fi
 
-export HOMEsice=$HOMEbase/seaice_drift.${code_ver}
+export HOMEsice=$HOMEbase
 export EXECsice=$HOMEsice/exec
 export FIXsice=$HOMEsice/fix
 export PARMsice=$HOMEsice/parm
 export USHsice=$HOMEsice/ush
 
-###################################
-# Set up the UTILITIES
-###################################
-#Requires prod_util module to be established
-export utilscript=$UTILROOT/ush
-export utilexec=$UTILROOT/exec
-export utilparm=$UTILROOT/parm 
-
-##############################
-# Run setup to initialize working directory and utility scripts
-##############################
-#sh $utilscript/setup.sh
-
 ##############################
 # Run setpdy and initialize PDY variables
 ##############################
 #export PDY=20121022
-sh $utilscript/setpdy.sh
+setpdy.sh
 . ./PDY
 
 ##############################################
 # Define COM directories
 ##############################################
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
-  export COMbase=${COMROOTp2}/${NET}/${envir}
-  export pcom=/pcom/$RUN
-  #export COMIN=/com2/gens/prod/gefs.$PDY/$cyc/pgrb2a_bc
-  #export COMIN=/gpfs/hps/nco/ops/com/naefs/prod/gefs.$PDY/$cyc/pgrb2a_bc
-  export COMIN=${COMROOThps}/naefs/prod/gfs.${PDY}
-  export COMINice_analy=/com2/omb/prod/sice.${PDYm1}
+  export COMbase=`compath.py ${NET}/${seaice_drift_ver?"version number missing"}`
+  err=$? err_chk
+  #export COMIN=${COMROOThps}/naefs/prod/gfs.${PDY}
+  #export COMINice_analy=/com2/omb/prod/sice.${PDYm1}
+  #export COMIN=${COMIN:-$(compath.py naefs/${naefs_ver}/gefs.${PDY}/$cyc/pgrb2ap5_bc)}
+  export COMIN=${COMIN:-$(compath.py naefs/${naefs_ver}/gefs.${PDY}/$cyc/pgrb2a_bc)} #used on WCOSS1
+  err=$? err_chk
+  export COMINice_analy=${COMINice_analy:-$(compath.py seaice_analysis/${seaice_analysis_ver}/seaice_analysis.${PDYm1})}
+  err=$? err_chk
 else
-  export COMbase=/u/Robert.Grumbine/noscrub/com/${NET}/${envir}/
-  export pcom=/u/Robert.Grumbine/noscrub/pcom/$RUN/
+  export COMbase=${HOMEbase}/save/com/${NET}/${envir}/
+  export pcom=${HOMEbase}/save/pcom/$RUN/
 
-  export COMINice_analy=${COMROOTp2}/mmab/prod/sice.${PDYm1}
-  # For hindcast thinned runs
-  export COMIN=/u/Robert.Grumbine/noscrub/gefs/
-  # For NRT runs
-  export COMIN=${COMIN:-$(compath.py /naefs/prod/gefs.${PDY})/$cyc/pgrb2ap5_bc}
-
-  export PYTHONPATH=~/rgdev/ice_scoring/sidfex/:~/rgdev/mmablib/py/
+  #export COMIN=${HOMEbase}/save/com/gefs.${PDY}/$cyc/pgrb2ap5_bc
+  #export COMINice_analy=${HOMEbase}/save/com/sice.${PDYm1}
+  export COMIN=`compath.py canned/naefs/v6.1/gefs.${PDY}/$cyc/pgrb2ap5_bc`
+  export COMINice_analy=`compath.py canned/omb/v4.4/sice.${PDYm1}`
 fi
 
 if [ ! -d $COMIN ] ; then
-  echo Could not find the input directory $COMIN exiting
-  exit 1
+  err_exit Could not find the input directory $COMIN exiting
 fi
-export COMOUT=$COMbase/${RUN}.${PDY}${cyc}
-export COMOUT_sidfex=$COMbase/sidfex
+export COMOUT=$COMbase/${RUN}.${PDY}
+export pcom=${COMOUT}/wmo
 
 mkdir -m 775 -p $COMOUT
-mkdir -m 775 -p $COMOUT_sidfex
 mkdir -m 775 -p $pcom
 
 msg="HAS BEGUN on `hostname`"
@@ -169,7 +156,7 @@ env
 ##############################################
 # Execute the script
 set -e
-sh $HOMEsice/scripts/exseaice_drift.sh.ecf
+$HOMEsice/scripts/exseaice_drift.sh
 export err=$?
 err_chk
 ##############################################
@@ -182,7 +169,6 @@ postmsg "$jlogfile" "$msg"
 ##############################
 date
 
-cd $BASEDIR
 ##############################################
 # Remove temp directories
 ##############################################
@@ -190,3 +176,4 @@ if [ "$KEEPDATA" != "YES" ] ; then
   rm -rf $DATA
 fi
 
+date
