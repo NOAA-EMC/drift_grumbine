@@ -18,5 +18,5 @@ JCODE=	sicedrft
 ################################################################################
 #This is needed for constructing input met. files:
 preaverage : preaverage.C
-	$(CC) preaverage.C $(COPTS) -I $(MMAB_INC) $(MMAB_LIBF4) -lm -lirc -lsvml -o seaice_preaverage
+	$(CC) preaverage.C $(COPTS) -I $(MMAB_INC) $(LIBS) -lombf_4 -lm -lirc -lsvml -o seaice_preaverage
 

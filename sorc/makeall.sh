@@ -48,8 +48,11 @@ export FOPTS='-O2 '
 
 #Common to all systems:
 export mmablib_ver=${mmablib_ver:-""}
+echo zzz PWD = $PWD
+echo zzz pwd = `pwd`
 export BASE=$PWD/mmablib
 export INCDIR='$(BASE)/include'
+export MMAB_INC=$INCDIR
 echo BASE = $BASE
 echo mmablib_ver = $mmablib_ver
 
