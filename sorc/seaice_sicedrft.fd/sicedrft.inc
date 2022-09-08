@@ -8,7 +8,7 @@
       PARAMETER (lat2   =  90.0 )
       PARAMETER (rlat   = lat1  )
       INTEGER maxpts
-      PARAMETER (maxpts = 360*12*4)
+      PARAMETER (maxpts = 360*12*24)
 
       REAL dlat, dlon, dt
       PARAMETER (dlat = 1./4.)

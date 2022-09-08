@@ -41,10 +41,8 @@ while not (x == ''):
   if (i >= 20 and x != '' ):
     words = x.split()
     TargetID = words[0]
-    # NaN is a fixed location, which is no longer a concern
-    if (words[2] == 'NaN'):
-      continue
-    if ( TargetID == 'POLARSTERN01' or TargetID == 'POLARSTERN02'  ): 
+    # NaN is a fixed location
+    if (words[2] == 'NaN' or TargetID == 'POLARSTERN01' or TargetID == 'POLARSTERN02'  ): 
        outfile = open(TargetID+'.txt','w')
        web = urllib.request.urlopen('https://swift.dkrz.de/v1/dkrz_0262ea1f00e34439850f3f1d71817205/SIDFEx_index/observations/'+TargetID+'.txt')
        data = web.read()

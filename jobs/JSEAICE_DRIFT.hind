@@ -26,7 +26,7 @@ if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; the
   export BASEDIR=${DATAROOT:-/tmpnwprd1}
 else
   #developer
-  export BASEDIR=/gpfs/dell2/ptmp/wx21rg
+  export BASEDIR=/lfs/h2/emc/ptmp/wx21rg
 fi
 
 export DATA=$BASEDIR/${job}.${pid}
@@ -97,7 +97,7 @@ if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; the
   export HOMEbase=${HOMEseaice_drift}
 else
   #dev
-  export HOMEbase=/u/Robert.Grumbine/rgdev/drift
+  export HOMEbase=$HOME/rgdev/drift
 fi
 
 export HOMEsice=$HOMEbase
@@ -131,20 +131,21 @@ sh setpdy.sh
 ##############################################
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
   export COMbase=${COMROOT}/${NET}/${envir}
-  export COMIN=${COMIN:-$(compath.py /naefs/prod/gefs.${PDY})/$cyc/pgrb2a_bc}
-  export COMINice_analy=${COMINice_analy:-$(compath.py /omb/prod/sice.${PDYm1})}
+  export COMIN=${COMIN:-$(compath.py -e prod /naefs/v6.1/gefs.${PDY})/$cyc/pgrb2ap5_bc}
+  #export COMINice_analy=${COMINice_analy:-$(compath.py -e prod /seaice_analysis/v4.5/sice.${PDYm1})}
+  export COMINice_analy=${COMROOT}/seaice_analysis/v4.5/seaice_analysis.${PDYm1}
 else
-  export COMbase=/u/Robert.Grumbine/noscrub/com/${NET}/${envir}/
-  export pcom=/u/Robert.Grumbine/noscrub/pcom/$RUN/
+  export COMbase=$HOME/noscrub/com/${NET}/${envir}/
+  export pcom=$HOME/noscrub/pcom/$RUN/
 
-  export COMINice_analy=${COMROOT}/mmab/prod/sice.${PDYm1}
+  export COMINice_analy=${COMROOT}/seaice_analysis/v4.5/seaice_analysis.${PDYm1}
   # For NRT runs
-  export COMIN=${COMIN:-$(compath.py /naefs/prod/gefs.${PDY})/$cyc/pgrb2ap5_bc}
+  export COMIN=${COMIN:-$(compath.py -e prod /naefs/v6.1/gefs.${PDY})/$cyc/pgrb2ap5_bc}
   # For hindcast thinned runs 
-  export COMIN=/u/Robert.Grumbine/noscrub/gefs/
+  export COMIN=$HOME/noscrub/gefs/
 
   #for python:
-  export PYTHONPATH=~/rgdev/ice_scoring/sidfex/:~/rgdev/mmablib/py/
+  export PYTHONPATH=$PYTHONPATH:$HOME/rgdev/ice_scoring/sidfex/:$HOME/rgdev/mmablib/py/
 fi
 
 if [ ! -d $COMIN ] ; then
@@ -165,7 +166,7 @@ env
 
 ##############################################
 # Execute the script
-#set -e
+set -e
 echo zzz about to call thinned rerun
 sh $HOMEsice/scripts/thinned_rerun.sh
 export err=$?

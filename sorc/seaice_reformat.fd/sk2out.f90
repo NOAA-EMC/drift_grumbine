@@ -32,8 +32,8 @@
                    hdrfxp(23),hdrnfp(38),bln(4),indx(10),old(20),new(36), &
                    line5a(42)
       INTEGER maxnewpts, maxaknewpts
-      PARAMETER (maxnewpts   = 10000)
-      PARAMETER (maxaknewpts =  2000)
+      PARAMETER (maxnewpts   = 100000)
+      PARAMETER (maxaknewpts =  20000)
       CHARACTER(1) oldpts(207,20),newpts(maxnewpts,36),akoldp(160,20), &
            km,jn,Q, aknewp(maxaknewpts,36),lf,cr,eom,blk,B,C,D,E,F,G,H, &
            jI,jJ,jk,A, jL,O,P,R,S,X,W,glbmsg(1280,31),akmsg(1280,8), &
@@ -259,8 +259,8 @@
  9001 FORMAT ('Point ',' Initial location ', '   Dir  Dist(nm)')
  9011 FORMAT ('Point ','  Dir   Dist(nm)')
 !
- 9010 FORMAT (I4,3X,2F8.3,2X,2F6.1)
- 9012 FORMAT (I4,3X,2F6.1)
+ 9010 FORMAT (I5,3X,2F8.3,2X,2F6.1)
+ 9012 FORMAT (I5,3X,2F6.1)
  9005 FORMAT (' ')
 
 !

@@ -27,7 +27,7 @@ if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; the
   export BASEDIR=/tmpnwprd
 else
   #developer
-  export BASEDIR=/gpfs/dell2/ptmp/wx21rg
+  export BASEDIR=/lfs/h2/emc/ptmp/wx21rg/
 fi
 
 export DATA=$BASEDIR/${job}.${pid}
@@ -98,11 +98,12 @@ if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; the
   export HOMEbase=/nw${envir}
 else
   #dev
-  export HOMEbase=/u/Robert.Grumbine/rgdev
+  export HOMEbase=$HOME/rgdev
 fi
 
 export HOMEsice=$HOMEbase/seaice_drift.${code_ver}
 export EXECsice=$HOMEsice/exec
+#export FIXsice=$HOMEsice/bigfix
 export FIXsice=$HOMEsice/fix
 export PARMsice=$HOMEsice/parm
 export USHsice=$HOMEsice/ush
@@ -134,20 +135,26 @@ if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; the
   export COMbase=${COMROOTp2}/${NET}/${envir}
   export pcom=/pcom/$RUN
   #export COMIN=/com2/gens/prod/gefs.$PDY/$cyc/pgrb2a_bc
+  #export COMINice_analy=/com2/omb/prod/sice.${PDYm1}
   #export COMIN=/gpfs/hps/nco/ops/com/naefs/prod/gefs.$PDY/$cyc/pgrb2a_bc
   export COMIN=${COMROOThps}/naefs/prod/gfs.${PDY}
-  export COMINice_analy=/com2/omb/prod/sice.${PDYm1}
+  export COMINice_analy=`compath.py -e prod /seaice_analysis/v4.5.0/sice.${PDYm1}`
 else
-  export COMbase=/u/Robert.Grumbine/noscrub/com/${NET}/${envir}/
-  export pcom=/u/Robert.Grumbine/noscrub/pcom/$RUN/
+  export COMbase=$HOME/noscrub/com/${NET}/${envir}/
+  export pcom=$HOME/noscrub/pcom/$RUN/
 
-  export COMINice_analy=${COMROOTp2}/mmab/prod/sice.${PDYm1}
+  export COMINice_analy=`compath.py -e prod /seaice_analysis/v4.5.0/seaice_analysis.${PDYm1}`
+  #export COMINice_analy=$HOME/rgdev/drift/bigfix/
+  echo zzz COMINice_analy $COMINice_analy
+
   # For hindcast thinned runs
-  export COMIN=/u/Robert.Grumbine/noscrub/gefs/
+  # export COMIN=$HOME/noscrub/gefs/
   # For NRT runs
-  export COMIN=${COMIN:-$(compath.py /naefs/prod/gefs.${PDY})/$cyc/pgrb2ap5_bc}
+  #   look under $COMROOT if needed
+  export COMIN=${COMIN:-$(compath.py -e prod /naefs/v6.1/gefs.${PDY}/$cyc/pgrb2ap5_bc)}
+  echo zzz COMIN = $COMIN
 
-  export PYTHONPATH=~/rgdev/ice_scoring/sidfex/:~/rgdev/mmablib/py/
+  export PYTHONPATH=$PYTHONPATH:$HOME/rgdev/ice_scoring/sidfex/:$HOME/rgdev/mmablib/py/
 fi
 
 if [ ! -d $COMIN ] ; then
@@ -189,4 +196,3 @@ cd $BASEDIR
 if [ "$KEEPDATA" != "YES" ] ; then
   rm -rf $DATA
 fi
-
