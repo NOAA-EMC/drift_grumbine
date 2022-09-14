@@ -33,7 +33,8 @@ cd ..
 
 #The ftn, CC aliases require craype
 export FC=ftn
-export FOPTS='-O2 '
+#on ifort, standard compliance is -std90, 95, 03, 08
+export FOPTS='-O2 -std95'
 
 #Common to all systems:
 export mmablib_ver=${mmablib_ver:-""}

@@ -35,20 +35,20 @@
 !       reversed from MRF standard, and runs south to north.
 !     Northern Hemisphere
       betar = pi*beta1/180.
-      DO 2000 j = nlat/2+1, nlat
-        DO 2010 i = 1, nlong
+      DO j = nlat/2+1, nlat
+        DO i = 1, nlong
           ui(i,j) = alpha1*(COS(betar)*ug(i,j)+SIN(betar)*vg(i,j))
           vi(i,j) = alpha1*(-SIN(betar)*ug(i,j)+COS(betar)*vg(i,j))
- 2010   CONTINUE
- 2000 CONTINUE
+        ENDDO
+      ENDDO
 !     Southern Hemisphere
       betar = pi*beta2/180.
-      DO 2100 j = 2, nlat/2
-        DO 2110 i = 1, nlong
+      DO j = 2, nlat/2
+        DO i = 1, nlong
           ui(i,j) = alpha2*(COS(betar)*ug(i,j)+SIN(betar)*vg(i,j))
           vi(i,j) = alpha2*(-SIN(betar)*ug(i,j)+COS(betar)*vg(i,j))
- 2110   CONTINUE
- 2100 CONTINUE
+        ENDDO
+      ENDDO
 
 !CD      PRINT *,'debug max, min u, v ',MAXVAL(ui), MINVAL(ui), MAXVAL(vi), MINVAL(vi)
 

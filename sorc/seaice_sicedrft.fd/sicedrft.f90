@@ -132,7 +132,7 @@
       WRITE (92) dist
 
       READ (*,*) nfor
-      DO 1000 i = 2, nfor
+      DO i = 2, nfor
         CALL getwin(ua, va, uunit, vunit, nlat, nlong)
 
         CALL movice(ua, va, x0, y0, x, y, dx, dy, ice_edge_pts)
@@ -147,7 +147,7 @@
 !CD        PRINT *,'max dir dist ',maxval(dir), maxval(dist)
 !CD        PRINT *,'min dir dist ',minval(dir), minval(dist)
 
- 1000 CONTINUE
+      ENDDO
 
       CLOSE(63)
       CLOSE(64)

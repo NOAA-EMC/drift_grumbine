@@ -185,12 +185,12 @@
       PRINT *,'There are ',nnpts,' points in the aggregate file.'
 
 !     Set up the initial location and drift positions.
-      DO 4000 k = 1, nnpts
+      DO k = 1, nnpts
         x0(k) = x(k)
         y0(k) = y(k)
         dx(k) = 0.0
         dy(k) = 0.0
- 4000 CONTINUE
+      ENDDO
 
       RETURN
 
