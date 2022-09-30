@@ -18,7 +18,7 @@
 cd $DATA
 
 ########################################
-set +x
+set -x
 msg="HAS BEGUN!"
 postmsg "$jlogfile" "$msg"
 ###########################
@@ -119,8 +119,8 @@ do
     #from WCOSS1
     ${WGRIB2:?} ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1  > index
 
-    grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1 -order we:ns -bin tmpu.${mem}.$h1.$PDY > /dev/null 2> /dev/null
-    grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1 -order we:ns -bin tmpv.${mem}.$h1.$PDY > /dev/null 2> /dev/null
+    grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1 -order we:ns -bin tmpu.${mem}.$h1.$PDY 
+    grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1 -order we:ns -bin tmpv.${mem}.$h1.$PDY 
 
     ${WGRIB2:?} ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 > index
     grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 -order we:ns -bin tmpu.${mem}.$h2.$PDY
