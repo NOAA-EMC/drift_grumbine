@@ -30,7 +30,8 @@
         READ (funit2,9020, END=9200, ERR=9200) header 
         READ (funit2,9020, END=9200, ERR=9200) header 
         DO i = 1, 207
-          READ (funit2, *, END=9200, ERR=9200) skpt2, dir(i,fday), dist(i,fday)
+          READ (funit2, *, END=9200, ERR=9200) skpt2, dir(i,fday), 
+     1           dist(i,fday)
           count = count + 1
         ENDDO
         i = 207
@@ -43,7 +44,8 @@
         count = count + 1
 !CD        PRINT *,'starting to loop in getfcst'
         READ (funit2,9020, END=9200, ERR=9200) header
-        READ ( header, 9007, ERR=1002) skpt2, x0(i), y0(i), dir(i,fday), dist(i,fday)
+        READ ( header, 9007, ERR=1002) skpt2, x0(i), y0(i), 
+     1           dir(i,fday), dist(i,fday)
         !WRITE (*,*) skpt2, x0(i), y0(i), dir(i,fday), dist(i,fday)
         IF (skpt2 .NE. 0) GO TO 1001
 
@@ -55,7 +57,7 @@
       ENDDO
 
 !==========================================
- 9007   FORMAT (I4, 3x, 2F8.3, 2x, 2F6.1)
+ 9007   FORMAT (I5, 3x, 2F8.3, 2x, 2F6.1)
 
 !     The 1 shift is because 1 is added to fday, count before the attempt to read
       code = fday - 1

@@ -28,49 +28,49 @@
       PARAMETER (xstl = -170.0)
       PARAMETER (ystl =  65.0 )
       PARAMETER (akrad = 2500.0)
-      CHARACTER(1) line1(21),line2(9),line3(40),line4(26),line5(41), &
-                   hdrfxp(23),hdrnfp(38),bln(4),indx(10),old(20),new(36), &
-                   line5a(42)
+      CHARACTER(1) line1(21),line2(9),line3(40),line4(26),line5(41),
+     1            hdrfxp(23),hdrnfp(38),bln(4),indx(10),old(20),new(36),
+     2            line5a(42)
       INTEGER maxnewpts, maxaknewpts
-      PARAMETER (maxnewpts   = 10000)
-      PARAMETER (maxaknewpts =  2000)
-      CHARACTER(1) oldpts(207,20),newpts(maxnewpts,36),akoldp(160,20), &
-           km,jn,Q, aknewp(maxaknewpts,36),lf,cr,eom,blk,B,C,D,E,F,G,H, &
-           jI,jJ,jk,A, jL,O,P,R,S,X,W,glbmsg(1280,31),akmsg(1280,8), &
-           ldr(40), T,z,aps,copt(17),cnpt(33)
+      PARAMETER (maxnewpts   = 100000)
+      PARAMETER (maxaknewpts =  20000)
+      CHARACTER(1) oldpts(207,20),newpts(maxnewpts,36),akoldp(160,20),
+     1     km,jn,Q, aknewp(maxaknewpts,36),lf,cr,eom,blk,B,C,D,E,F,G,H,
+     2     jI,jJ,jk,A, jL,O,P,R,S,X,W,glbmsg(1280,31),akmsg(1280,8),
+     3     ldr(40), T,z,aps,copt(17),cnpt(33)
 !
-      INTEGER k,ii,ij,ik,il,idis,idir,igtot,iputg,iatot,iputa,i,j, &
-              iy,im,id,ih,idate,jy,jm,jd,jh,jdate,left,inc1,inc2, &
-              inc3,next,ix0(npts),iy0(npts),idat(8),jdat(8),jc
+      INTEGER k,ii,ij,ik,il,idis,idir,igtot,iputg,iatot,iputa,i,j,
+     1        iy,im,id,ih,idate,jy,jm,jd,jh,jdate,left,inc1,inc2,
+     2        inc3,next,ix0(npts),iy0(npts),idat(8),jdat(8),jc
 !
-      DATA line1/'F','Z','A','K','4','1',' ','K','W','N','O',' ', &
-                 '0','0','0','0','0','0','<','<','@'/
+      DATA line1/'F','Z','A','K','4','1',' ','K','W','N','O',' ',
+     1           '0','0','0','0','0','0','<','<','@'/
       DATA line2/'I','D','M','A','K','W','<','<','@'/
-      DATA line3/'P','A','R','T',' ','P','A','A',' ','A','L','A','S', &
-                 'K','A',' ','S','E','A',' ','I','C','E',' ', &
-                 'D','R','I','F','T',' ','V','E','C','T','O','R', &
-                 'S','<','<','@'/
-      DATA LINE4/'A','M','O','S','P','H','E','R','I','C',' ','D', &
-                 'R','I','V','I','N','G',' ','O','N','L','Y','<', &
-                 '<','@'/
-      DATA LINE5/'0','0','H','R',' ','F','O','R','E','C','A','S', &
-                 'T',' ','V','T',' ','0','0','/','0','0','/','0', &
-                 '0',' ','0','0','0','0',' ','U','T','C','<','<', &
-                 '@',' ','<','<','@'/
-      DATA LINE5a/'0','0','0','H','R',' ','F','O','R','E','C','A','S', &
-                 'T',' ','V','T',' ','0','0','/','0','0','/','0', &
-                 '0',' ','0','0','0','0',' ','U','T','C','<','<', &
-                 '@',' ','<','<','@'/
-      DATA HDRFXP/'P','O','I','N','T',' ',' ','D','I','R',' ',' ', &
-                  'D','I','S','T','(','N','M',')','<','<','@'/
-      DATA HDRNFP/'P','O','I','N','T',' ','I','N','I','T','I','A', &
-                  'L',' ','L','O','C','A','T','I','O','N',' ','D', &
-                  'I','R',' ','D','I','S','T','(','N','M',')','<', &
-                  '<','@'/
-      DATA CR/'<'/,LF/'@'/,EOM/'%'/,BLK/' '/,B/'B'/,C/'C'/,D/'D'/, &
-           E/'E'/,F/'F'/,G/'G'/,H/'H'/,jI/'I'/,jJ/'J'/,A/'A'/, &
-           jL/'L'/,O/'O'/,P/'P'/,R/'R'/,X/'X'/,W/'W'/,jk/'K'/, &
-           S/'S'/,km/'M'/,jn/'N'/,Q/'Q'/,T/'T'/,z/'Z'/
+      DATA line3/'P','A','R','T',' ','P','A','A',' ','A','L','A','S',
+     1           'K','A',' ','S','E','A',' ','I','C','E',' ',
+     2           'D','R','I','F','T',' ','V','E','C','T','O','R',
+     3           'S','<','<','@'/
+      DATA LINE4/'A','M','O','S','P','H','E','R','I','C',' ','D',
+     1           'R','I','V','I','N','G',' ','O','N','L','Y','<',
+     2           '<','@'/
+      DATA LINE5/'0','0','H','R',' ','F','O','R','E','C','A','S',
+     1           'T',' ','V','T',' ','0','0','/','0','0','/','0',
+     2           '0',' ','0','0','0','0',' ','U','T','C','<','<',
+     3           '@',' ','<','<','@'/
+      DATA LINE5a/'0','0','0','H','R',' ','F','O','R','E','C','A','S',
+     1           'T',' ','V','T',' ','0','0','/','0','0','/','0',
+     2           '0',' ','0','0','0','0',' ','U','T','C','<','<',
+     3           '@',' ','<','<','@'/
+      DATA HDRFXP/'P','O','I','N','T',' ',' ','D','I','R',' ',' ',
+     1            'D','I','S','T','(','N','M',')','<','<','@'/
+      DATA HDRNFP/'P','O','I','N','T',' ','I','N','I','T','I','A',
+     1            'L',' ','L','O','C','A','T','I','O','N',' ','D',
+     2            'I','R',' ','D','I','S','T','(','N','M',')','<',
+     3            '<','@'/
+      DATA CR/'<'/,LF/'@'/,EOM/'%'/,BLK/' '/,B/'B'/,C/'C'/,D/'D'/,
+     1     E/'E'/,F/'F'/,G/'G'/,H/'H'/,jI/'I'/,jJ/'J'/,A/'A'/,
+     2     jL/'L'/,O/'O'/,P/'P'/,R/'R'/,X/'X'/,W/'W'/,jk/'K'/,
+     3     S/'S'/,km/'M'/,jn/'N'/,Q/'Q'/,T/'T'/,z/'Z'/
       DATA indx/'1','2','3','4','5','6','7','8','9','0'/
 !
       IF (MOD(time,24) .NE. 0 ) RETURN
@@ -186,7 +186,8 @@
 !
         !old dir(k) = wdir  (-dxnm, -dynm, dummy)
         !old dist(k) =  kmtonm * arcdis(x0(k),y0(k),xp,yp)
-        WRITE (60,9010) skpt(k), x0(k), y0(k), dir(k), dist(k)
+        WRITE (60,9010) skpt(k), x0(k), y0(k),
+     2  dir(k), dist(k)
 ! old 2  wdir  (-dxnm, -dynm, dummy),
 ! old 3  kmtonm * arcdis(x0(k),y0(k),xp,yp)
 !
@@ -223,7 +224,8 @@
 !old           WRITE (61,9010) skpt(k), x0(k), y0(k),
 !old     1     wdir  (-dxnm, -dynm, dummy),
 !old     2     kmtonm * arcdis(x0(k),y0(k),xp,yp)
-           WRITE (61,9010) skpt(k), x0(k), y0(k), dir(k), dist(k)
+           WRITE (61,9010) skpt(k), x0(k), y0(k),
+     1     dir(k), dist(k)
 
            idir=dir(k)+0.5 !old wdir(-dxnm,-dynm,dummy)+0.5
            idis=10.*dist(k)+0.5 !old 10.*(kmtonm*arcdis(x0(k),y0(k),xp,yp)+0.05)
@@ -234,9 +236,10 @@
            ENDDO
            ik=ik+1
            IF(arcdis(xstl, ystl, x0(k), y0(k) ) .LE. akrad) THEN
-              WRITE (62,9010) skpt(k), x0(k), y0(k), dir(k), dist(k)
+              WRITE (62,9010) skpt(k), x0(k), y0(k),
 !old     1        wdir  (-dxnm, -dynm, dummy),
 !old     2        kmtonm * arcdis(x0(k),y0(k),xp,yp)
+     1        dir(k), dist(k)
 
               idir=dir(k)+0.5 !old wdir(-dxnm,-dynm,dummy)+0.5
               idis=10.*dist(k)+0.5 !old 10.*(kmtonm*arcdis(x0(k),y0(k),xp,yp)+0.05)
@@ -256,11 +259,12 @@
       WRITE (61,9005) 
       WRITE (62,9005) 
 !
- 9001 FORMAT ('Point ',' Initial location ', '   Dir  Dist(nm)')
+ 9001 FORMAT ('Point ',' Initial location ',
+     1    '   Dir  Dist(nm)')
  9011 FORMAT ('Point ','  Dir   Dist(nm)')
 !
- 9010 FORMAT (I4,3X,2F8.3,2X,2F6.1)
- 9012 FORMAT (I4,3X,2F6.1)
+ 9010 FORMAT (I5,3X,2F8.3,2X,2F6.1)
+ 9012 FORMAT (I5,3X,2F6.1)
  9005 FORMAT (' ')
 
 !
@@ -531,7 +535,8 @@
       INTEGER i,ipt,idir,idis,incl1,incl2,incl3,incl4
       CHARACTER(1) copt(17),indx(10),pt,blnk
 !
-      DATA indx/'1','2','3','4','5','6','7','8','9','0'/,pt/'.'/, blnk/' '/
+      DATA indx/'1','2','3','4','5','6','7','8','9','0'/,pt/'.'/,
+     1     blnk/' '/
 !
 !         Convert point number from integer to character, and
 !           blank out leading zeros
@@ -624,7 +629,8 @@
       INTEGER i,ipt,ix,iy,idir,idis,in,incl1,incl2,incl3,incl4
       CHARACTER(1) cnpt(33),indx(10),pt,blnk,n,s,e,w
 !
-      DATA indx/'1','2','3','4','5','6','7','8','9','0'/,pt/'.'/, blnk/' '/,n/'N'/,s/'S'/,e/'E'/,w/'W'/
+      DATA indx/'1','2','3','4','5','6','7','8','9','0'/,pt/'.'/,
+     1     blnk/' '/,n/'N'/,s/'S'/,e/'E'/,w/'W'/
 !
 !         Convert point number from integer to character, and
 !           blank out leading zeros

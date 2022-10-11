@@ -18,7 +18,7 @@
 cd $DATA
 
 ########################################
-set +x
+set -x
 msg="HAS BEGUN!"
 postmsg "$jlogfile" "$msg"
 ###########################
@@ -49,20 +49,20 @@ ln -sf alpha     fort.90
 #get the ice line points
 #-----------------------------------------------------
 # For sidfex: get the drifter target locations
-YY=`echo $PDY | cut -c1-4`
-MM=`echo $PDY | cut -c5-6`
-DD=`echo $PDY | cut -c7-8`
-HH=$cyc
-python3 $USHsice/targets.py $YY $MM $DD $HH
-ln -sf seaice_edge.t00z.txt.${PDY}$HH  fort.48
+#YY=`echo $PDY | cut -c1-4`
+#MM=`echo $PDY | cut -c5-6`
+#DD=`echo $PDY | cut -c7-8`
+#HH=$cyc
+#python3 $USHsice/targets.py $YY $MM $DD $HH
+#ln -sf seaice_edge.t00z.txt.${PDY}$HH  fort.48
 
-#if [ -f $COMINice_analy/seaice_edge.t00z.txt ] ; then
-#  cp $COMINice_analy/seaice_edge.t00z.txt .
-#  ln -sf seaice_edge.t00z.txt fort.48
-#else
-#  echo Running with reference ice edge
-#  cp $FIXsice/seaice_edge.t00z.txt fort.48
-#fi
+if [ -f $COMINice_analy/seaice_edge.t00z.txt ] ; then
+  cp $COMINice_analy/seaice_edge.t00z.txt .
+  ln -sf seaice_edge.t00z.txt fort.48
+else
+  echo Running with reference ice edge
+  cp $FIXsice/seaice_edge.t00z.txt fort.48
+fi
 
 #-----------------------------------------------------
 #units for the gfs data
@@ -119,18 +119,12 @@ do
     #from WCOSS1
     ${WGRIB2:?} ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1  > index
 
-    grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1 -order we:ns -bin tmpu.${mem}.$h1.$PDY > /dev/null 2> /dev/null
-    grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1 -order we:ns -bin tmpv.${mem}.$h1.$PDY > /dev/null 2> /dev/null
+    grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1 -order we:ns -bin tmpu.${mem}.$h1.$PDY 
+    grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1 -order we:ns -bin tmpv.${mem}.$h1.$PDY 
 
-<<<<<<<< HEAD:scripts/exseaice_drift.sh
     ${WGRIB2:?} ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 > index
     grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 -order we:ns -bin tmpu.${mem}.$h2.$PDY
     grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 -order we:ns -bin tmpv.${mem}.$h2.$PDY
-========
-    $WGRIB2 ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 > index
-    grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 -order we:ns -bin tmpu.${mem}.$h2.$PDY > /dev/null 2> /dev/null
-    grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 -order we:ns -bin tmpv.${mem}.$h2.$PDY > /dev/null 2> /dev/null
->>>>>>>> main:scripts/exseaice_drift.sh.ecf
 
     #preaverage appends the info:
     $EXECsice/seaice_preaverage u.averaged.${mem}.$PDY tmpu.${mem}.$h1.$PDY tmpu.${mem}.${h2}.$PDY
@@ -195,9 +189,9 @@ time $EXECsice/seaice_reformat  >> $pgmout 2>> errfile
 err=$?; export err; err_chk
 
 #Generate SIDFEX forecast files
-time python3 $USHsice/sidfex.py seaice_edge.t00z.txt.${PDY}$HH $COMOUT_sidfex
-#upload -- 
-$USHsice/sidfex.sh
+#time python3 $USHsice/sidfex.py seaice_edge.t00z.txt.${PDY}$HH $COMOUT_sidfex
+##upload -- 
+#$USHsice/sidfex.sh
 
 #copy to old names:
 ln -sf fort.60 fl.out

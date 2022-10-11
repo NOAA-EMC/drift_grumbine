@@ -1,13 +1,13 @@
       SUBROUTINE getwin(ua, va, uunit, vunit, nlat, nlon) 
-!  Get the 10 m winds for use by the drift routine(s)
-!  This being a subroutine rather than embedded in the main 
-!    program is largely a matter of historical legacy, from
-!    the days when the drift program computed its own 
-!    geostrophic winds, rather than relying on an external
-!    program to manage the winds, and using 10 m winds.
-!  Flip winds from mrf convention to drift model convention 
-!    (S-N rather than N-S)
-!  Robert Grumbine 14 March 2007
+C  Get the 10 m winds for use by the drift routine(s)
+C  This being a subroutine rather than embedded in the main 
+C    program is largely a matter of historical legacy, from
+C    the days when the drift program computed its own 
+C    geostrophic winds, rather than relying on an external
+C    program to manage the winds, and using 10 m winds.
+C  Flip winds from mrf convention to drift model convention 
+C    (S-N rather than N-S)
+C  Robert Grumbine 14 March 2007
 
       IMPLICIT none
 
@@ -27,8 +27,8 @@
       ENDDO
       ENDDO
 
-!D      PRINT *,'maxwin u = ',maxwin(ua, nlon, nlat)
-!D      PRINT *,'maxwin v = ',maxwin(va, nlon, nlat)
+CD      PRINT *,'maxwin u = ',maxwin(ua, nlon, nlat)
+CD      PRINT *,'maxwin v = ',maxwin(va, nlon, nlat)
       RETURN
       END
 

@@ -22,31 +22,32 @@
 !C      cells.  Also flovel and movice.
       DO k = 1, npts
         IF (x(k) .LT. long1) THEN
-          IF (x(k) .LT. long1 - 0.5) PRINT *,'Floe too far west. x= ', k,x(k)
+          IF (x(k) .LT. long1 - 0.5) PRINT *,'Floe too far west. x= ',
+     1            k,x(k)
           xt = 360.+x(k)
           IF (xt .GE. long1 .AND. xt .LE. long2) THEN
-!CD            PRINT *,'Wrapping floe around grid',xt
+            PRINT *,'Wrapping floe around grid',xt
             x(k) = xt
            ELSE
-!CD            PRINT *,'Resetting to western bndy.',long1
+            PRINT *,'Resetting to western bndy.',long1
             x(k) = long1
           ENDIF
         ENDIF
         IF (x(k) .GE. long2) THEN
-!CD          PRINT *,'Floe too far east ',k,x(k)
+          PRINT *,'Floe too far east ',k,x(k)
           xt = AMOD(x(k),360.)
           IF (xt .GE. long1 .AND. xt .LT. long2) THEN
-!CD            PRINT *,'Wrapping floe around grid ',xt
+            PRINT *,'Wrapping floe around grid ',xt
             x(k) = xt
            ELSE
-!CD            PRINT *,'Resetting to eastern boundary ',long2
+            PRINT *,'Resetting to eastern boundary ',long2
             x(k) = long2
           ENDIF  
         ENDIF
 
         IF (y(k) .LT. lat1) THEN
-!CD          PRINT *,'Floe too far south. y= ',k,y(k)
-!CD          PRINT *,'Resetting to southern bndy.'
+          PRINT *,'Floe too far south. y= ',k,y(k)
+          PRINT *,'Resetting to southern bndy.'
           y(k) = lat1
         ENDIF
       ENDDO
@@ -70,7 +71,7 @@
 !       are in the half open interval [0,1)
       DO k = 1, npts
         IF (ig(k) .LT. 1) THEN
-!CD          PRINT *,'i-coordinate computed west of domain ',k,ig(k)
+          PRINT *,'i-coordinate computed west of domain ',k,ig(k)
 !BG          ig(k) = 1
           ig(k) = INT(360. - dlon*(ig(k)-1) + 0.5)
           IF (ig(k) .LT. 1) THEN 
@@ -79,27 +80,27 @@
           ENDIF
         ENDIF
         IF (jg(k) .LT. 1) THEN
-!CD          PRINT *,'j-coordinate computed south of domain ',k,jg(k)
+          PRINT *,'j-coordinate computed south of domain ',k,jg(k)
           jg(k) = 1
         ENDIF
         IF (eta(k) .LT. 0.) THEN
-!CD          PRINT *,'eta interpolation parameter estimated negative.'
-!CD          PRINT *,'Resetting to zero.'
+          PRINT *,'eta interpolation parameter estimated negative.'
+          PRINT *,'Resetting to zero.'
           eta(k) = 0.0
         ENDIF
         IF (lambda(k) .LT. 0.) THEN
-!CD          PRINT *,'lambda interpolation parameter estimated negative.'
-!CD          PRINT *,'Resetting to zero.'
+          PRINT *,'lambda interpolation parameter estimated negative.'
+          PRINT *,'Resetting to zero.'
           lambda(k) = 0.0
         ENDIF
         IF (eta(k) .GE. 1.) THEN
-!CD          PRINT *,'eta interpolation parameter estimated GE 1.0.'
-!CD          PRINT *,'Resetting to 0.9999.'
+          PRINT *,'eta interpolation parameter estimated GE 1.0.'
+          PRINT *,'Resetting to 0.9999.'
           eta(k) = 0.9999
         ENDIF
         IF (lambda(k) .GE. 1.) THEN
-!CD          PRINT *,'lambda interpolation parameter estimated GE 1.0.'
-!CD          PRINT *,'Resetting to 0.9999.'
+          PRINT *,'lambda interpolation parameter estimated negative.'
+          PRINT *,'Resetting to 0.9999.'
           lambda(k) = 0.9999
         ENDIF
       ENDDO

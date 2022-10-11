@@ -12,7 +12,7 @@ using namespace std;
 
 #define NMEMS    20
 #define MAXLINE 900
-#define MAXPTS 10240
+#define MAXPTS 102400
 #define NDAYS    16
 
 #define NSKILE 207

@@ -254,8 +254,8 @@ c
      1    '   Dir  Dist(nm)')
  9011 FORMAT ('Point ','  Dir   Dist(nm)')
 c
- 9010 FORMAT (I4,3X,2F8.3,2X,2F6.1)
- 9012 FORMAT (I4,3X,2F6.1)
+ 9010 FORMAT (I5,3X,2F8.3,2X,2F6.1)
+ 9012 FORMAT (I5,3X,2F6.1)
  9005 FORMAT (' ')
 
 C
