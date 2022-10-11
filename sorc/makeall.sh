@@ -25,7 +25,10 @@ else
   module list
 fi
 
-git clone https://github.com/rgrumbine/mmablib.git mmablib
+if [ ! -d mmablib ] ; then
+  git clone https://github.com/rgrumbine/mmablib.git mmablib
+fi
+
 cd mmablib
 git checkout operations
 make
