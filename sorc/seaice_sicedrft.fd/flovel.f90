@@ -1,5 +1,4 @@
-      SUBROUTINE flovel(ui, vi, nlong, nlat, 
-     1                  uf, vf, eta, lambda, ig, jg, npts)
+      SUBROUTINE flovel(ui, vi, nlong, nlat, uf, vf, eta, lambda, ig, jg, npts)
 !     Given the atmospheric velocity (uf), compute the air velocity
 !       at the virtual floe points.
 !     Robert Grumbine 4 April 1994.
@@ -69,35 +68,35 @@
 !     Operational code - compute the interpolated velocities. 
 !     Compute the velocity of the floes by bilinear interpolation.
       DO k = 1, npts
-        uf(k) = (1.-lambda(k))*( (1.-eta(k))*ui(ig(k)  ,jg(k)) +
-     1                               eta(k) *ui(ig(k)+1,jg(k)) )
-     2             +lambda(k) *( (1.-eta(k))*ui(ig(k)  ,jg(k)+1) +
-     3                               eta(k) *ui(ig(k)+1,jg(k)+1) )
-        vf(k) = (1.-lambda(k))*( (1.-eta(k))*vi(ig(k)  ,jg(k)) +
-     1                               eta(k) *vi(ig(k)+1,jg(k)) )
-     2             +lambda(k) *( (1.-eta(k))*vi(ig(k)  ,jg(k)+1) +
-     3                               eta(k) *vi(ig(k)+1,jg(k)+1) )
+        uf(k) = (1.-lambda(k))*( (1.-eta(k))*ui(ig(k)  ,jg(k)) +  &
+                                     eta(k) *ui(ig(k)+1,jg(k)) )  &
+                   +lambda(k) *( (1.-eta(k))*ui(ig(k)  ,jg(k)+1) + &
+                                     eta(k) *ui(ig(k)+1,jg(k)+1) )
+        vf(k) = (1.-lambda(k))*( (1.-eta(k))*vi(ig(k)  ,jg(k)) +  &
+                                     eta(k) *vi(ig(k)+1,jg(k)) )  &
+                   +lambda(k) *( (1.-eta(k))*vi(ig(k)  ,jg(k)+1) +  &
+                                     eta(k) *vi(ig(k)+1,jg(k)+1) )
       ENDDO
 
 !     Bullet-proofing -- verify that the interpolated velocity
 !       lies in the bounds of the four corner points.
       DO k = 1, npts
-        uimx = AMAX1(ui(ig(k)  , jg(k)  ), 
-     1               ui(ig(k)+1, jg(k)  ),
-     2               ui(ig(k)  , jg(k)+1),
-     3               ui(ig(k)+1, jg(k)+1)  ) 
-        uimn = AMIN1(ui(ig(k)  , jg(k)  ), 
-     1               ui(ig(k)+1, jg(k)  ),
-     2               ui(ig(k)  , jg(k)+1),
-     3               ui(ig(k)+1, jg(k)+1)  ) 
-        vimx = AMAX1(vi(ig(k)  , jg(k)  ), 
-     1               vi(ig(k)+1, jg(k)  ),
-     2               vi(ig(k)  , jg(k)+1),
-     3               vi(ig(k)+1, jg(k)+1)  ) 
-        vimn = AMIN1(vi(ig(k)  , jg(k)  ), 
-     1               vi(ig(k)+1, jg(k)  ),
-     2               vi(ig(k)  , jg(k)+1),
-     3               vi(ig(k)+1, jg(k)+1)  ) 
+        uimx = AMAX1(ui(ig(k)  , jg(k)  ),  & 
+                     ui(ig(k)+1, jg(k)  ),  &
+                     ui(ig(k)  , jg(k)+1),  &
+                     ui(ig(k)+1, jg(k)+1)  ) 
+        uimn = AMIN1(ui(ig(k)  , jg(k)  ),  & 
+                     ui(ig(k)+1, jg(k)  ),  &
+                     ui(ig(k)  , jg(k)+1),  &
+                     ui(ig(k)+1, jg(k)+1)  ) 
+        vimx = AMAX1(vi(ig(k)  , jg(k)  ),  & 
+                     vi(ig(k)+1, jg(k)  ),  &
+                     vi(ig(k)  , jg(k)+1),  &
+                     vi(ig(k)+1, jg(k)+1)  ) 
+        vimn = AMIN1(vi(ig(k)  , jg(k)  ),  & 
+                     vi(ig(k)+1, jg(k)  ),  &
+                     vi(ig(k)  , jg(k)+1),  &
+                     vi(ig(k)+1, jg(k)+1)  ) 
         IF (abs(uf(k)-uimx) .GT. epsilon) THEN
 !          PRINT *,'Interp failure-hi, ui ',uf(k),' reset to ',uimx, 
 !     1               'delta = ',uf(k)-uimx,' at ',k

@@ -164,7 +164,7 @@
       ij=1
       ik=1
       il=1
-      DO 1000 k = 1, npts
+      DO k = 1, npts
         xp = x0(k)+dx(k)
         yp = y0(k)+dy(k)
         dxnm = kmtonm * arcdis(x0(k), y0(k), xp, y0(k))
@@ -247,7 +247,7 @@
               il=il+1
            ENDIF
         ENDIF
- 1000 CONTINUE
+      ENDDO
 !
       WRITE (60,9005) 
       WRITE (61,9005) 
