@@ -1,3 +1,6 @@
+#!/bin/sh
+#Author: Robert Grumbine
+
 rm *.kml fort.6?
 
 if [ ! -f fort.11 ] ; then

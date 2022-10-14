@@ -120,17 +120,10 @@ do
     grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 -order we:ns -bin tmpv.${mem}.$h2.$PDY
 
     #preaverage appends the info:
-    time $EXECsice/seaice_preaverage u.averaged.${mem}.$PDY tmpu.${mem}.$h1.$PDY tmpu.${mem}.${h2}.$PDY
-    time $EXECsice/seaice_preaverage v.averaged.${mem}.$PDY tmpv.${mem}.$h1.$PDY tmpv.${mem}.${h2}.$PDY
+    $EXECsice/seaice_preaverage u.averaged.${mem}.$PDY tmpu.${mem}.$h1.$PDY tmpu.${mem}.${h2}.$PDY
+    $EXECsice/seaice_preaverage v.averaged.${mem}.$PDY tmpv.${mem}.$h1.$PDY tmpv.${mem}.${h2}.$PDY
   done
 done
-
-## The averaging is done inside the program, with single input of (appended) winds for each member
-#for mem in gep01 gep02 gep03 gep04 gep05 gep06 gep07 gep08 gep09 gep10 gep11 gep12 gep13 gep14 gep15 gep16 gep17 gep18 gep19 gep20
-#do
-#  time $EXECsice/seaice_preaverage u.averaged.${mem}.$PDY tmpu.${mem}.$PDY
-#  time $EXECsice/seaice_preaverage v.averaged.${mem}.$PDY tmpv.${mem}.$PDY
-#done
 
 echo done with pre-averaging
 

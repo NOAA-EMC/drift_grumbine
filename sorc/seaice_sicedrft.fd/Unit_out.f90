@@ -1,5 +1,7 @@
 PROGRAM unit_out
 ! check dummy outputs for being nonzero
+! Author: Robert Grumbine
+
   IMPLICIT none
   INCLUDE "sicedrft.inc"
 
