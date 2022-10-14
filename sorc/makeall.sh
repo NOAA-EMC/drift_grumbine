@@ -1,6 +1,8 @@
 #!/bin/sh
+
 #set -xe
 set -x
+#Author: Robert Grumbine
 
 . ../versions/build.ver
 

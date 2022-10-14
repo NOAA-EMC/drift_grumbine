@@ -4,6 +4,7 @@
 // find the centroid of a number of lat-lon points
 //   -- point that minimizes total distance from centroid and all other points
 // n.b., try also min squared distance
+// Author: Robert Grumbine
 
 void centroid(mvector<latpt> &x, latpt &center) ;
 void topseek(mvector<latpt> &x, latpt &center, double &y) ;

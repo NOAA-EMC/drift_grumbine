@@ -1,6 +1,7 @@
 # These are now set by calling environment:
 #COPTS= -Wall  -O2 -DLINUX 
 #MMAB_INC=$(BASE)/mmablib/$(mmablib_ver)/include/
+#Author: Robert Grumbine
 
 all : seaice_midpoints 
 

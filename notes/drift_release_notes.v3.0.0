@@ -64,3 +64,6 @@ Build the executables by going to seaice_drift_v3.0.0/sorc/
   and executing makeall.sh
 Move them to exec directory
 Changes as needed for sms, jobs scripts
+
+Robert Grumbine
+May 16, 2012

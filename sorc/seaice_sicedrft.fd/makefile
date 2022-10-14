@@ -5,37 +5,23 @@ SHELL=	/bin/sh
 CMD=	seaice_sicedrft
 JMAIN=	sicedrft.f
 JCODE=	sicedrft
-JPROG=	GRUMBINE
+JPROG=	Grumbine
 JORG=	NP21
 ################################################################################
-################################################################################
-#Linux 
-#FC=ifort
-#FOPTS=	
-#LIBS=-L/Users/rmg3/usrlocal/mmab/v3.5.0/ -L/Volumes/ncep/nceplibs/ -lombf_4  -lw3emc_4 -lw3nco_4 
-#LIBS=-L/Users/rmg3/usrlocal/mmab/v3.5.0/ -L/Volumes/ncep/nceplibs/ -lombf_4  
 LOPTS=
 OBJS= sicedrft.o uice.o movice.o fndflo.o getwin.o flovel.o sk2setup.o \
-        gridset.o sk2out.o kmlout.o
-OBJS90= convert.o
+        gridset.o sk2out.o kmlout.o convert.o
 INCS=	sicedrft.inc
 ################################################################################
 
 #--------------------------------------------------------------------------
 
-$(CMD):	$(OBJS) $(OBJS90) 
-	$(FC) $(LOPTS) $(OBJS) $(OBJS90) $(LIBS) -lombf_4  -o $(CMD)
+$(CMD):	$(OBJS) 
+	$(FC) $(LOPTS) $(OBJS) $(LIBS) -lombf_4  -o $(CMD)
 
 $(OBJS):	makefile $(INCS) 
-.f90.o:
-	$(FC) -c $(FOPTS) $<
 
-.f.o:
-	$(FC) -c $(FOPTS) $<
-
-$(OBJS90):	makefile
-
-%.o : %.f90
+%.o: %.f90
 	$(FC) -c $(FOPTS) $<
 
 #This may be needed for construction of the fixed file input:
