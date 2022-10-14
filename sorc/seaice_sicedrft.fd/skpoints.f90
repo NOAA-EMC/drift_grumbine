@@ -85,7 +85,7 @@
 ! FORM THE MAP FACTOR IN 'XMF' FOR THE SELECTED POINTS.
 !
         K=0
-        DO 20  M=1,2*npoint,2
+        DO M=1,2*npoint,2
           K=K+1
           I=IJSEL(M)
           J=IJSEL(M+1)
@@ -109,7 +109,7 @@
            ELSE
             WRITE (*,9001) K, lat, 360.+long 
           ENDIF
-   20   CONTINUE
+        ENDDO
 
  9001 FORMAT (I3, 3x, F8.5, 7x, F8.4)
 
