@@ -9,10 +9,10 @@ sys=`hostname`
 module list > /dev/null 2> /dev/null
 if [ $? -ne 0 ] ; then
   echo On a system without the module software
-  export BASE=${BASE:-/Users/rmg3/usrlocal/mmab}
+  export BASE=${BASE:-/Users/rmg3/usrlocal/mmablib}
   export FC=gfortran
   export FOPTS='-O2 -std=f2008'
-  export LIBS='-L/Volumes/ncep/nceplibs/ -L $(BASE)/$(mmablib_ver)/'
+  export LIBS='-L/Volumes/ncep/nceplibs/ -L $(BASE)/'
   export MMAB_VER=v3.5.0
 else
 #on a system with module software, such as wcoss
