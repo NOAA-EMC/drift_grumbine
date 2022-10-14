@@ -1,5 +1,7 @@
 PROGRAM unit
 ! generate dummy inputs for making tests of the program
+! Author: Robert Grumbine
+
   IMPLICIT none
   INCLUDE "sicedrft.inc"
 

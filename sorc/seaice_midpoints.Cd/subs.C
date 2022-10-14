@@ -4,6 +4,8 @@
 #include <cstring>
 using namespace std;
 
+// Author: Robert Grumbine
+
 void unbearing(latpt &initial, float dist, float dir, latpt &final);
 void bearing(latpt &x, latpt &y, float &dist, float &dir);
 void convert_bw(const float &bdir, float &wdir) ;
