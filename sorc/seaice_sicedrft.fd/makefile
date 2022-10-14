@@ -31,4 +31,4 @@ skpoints : skpoints.f
 	$(FC) skpoints.f -o skpoints
 
 clean:	
-	-rm -f $(OBJS) 
+	-rm -f $(OBJS)
