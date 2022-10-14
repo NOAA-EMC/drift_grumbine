@@ -21,7 +21,7 @@ $(CMD):	$(OBJS)
 
 $(OBJS):	makefile $(INCS) 
 
-%.o : %.f90
+%.o: %.f90
 	$(FC) -c $(FOPTS) $<
 
 #This may be needed for construction of the fixed file input:
