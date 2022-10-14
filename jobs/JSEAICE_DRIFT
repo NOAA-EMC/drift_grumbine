@@ -18,13 +18,13 @@ date
 ####################################
 echo cyc is ${cyc:?}
 echo envir is ${envir:?}
-echo code_ver is ${code_ver:?} #ensure code_ver is defined
+echo seaice_drift_ver is ${seaice_drift_ver:?} #ensure code_ver is defined
 export pid=$$
 export cycle=t${cyc}z
 
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
   #NCO
-  export BASEDIR=/tmpnwprd
+  export BASEDIR=${DATAROOT:-/lfs/f1/ops/$envir/tmp/}
 else
   #developer
   export BASEDIR=/lfs/h2/emc/ptmp/wx21rg/
@@ -41,13 +41,13 @@ export TMPDIR=$DATA
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
   #NCO
   if [ "$envir" = 'prod' ] ; then
-    export jlogfile=/com/logs/jlogfiles/jlogfile.${job}.$$
+    export jlogfile=""
   else
-    export jlogfile=/com/logs/${envir}/jlogfile
+    export jlogfile=""
   fi
 else
   #developer
-  export jlogfile=~/jlogfile
+  export jlogfile=$HOME/jlogfile
 fi
 
 
@@ -85,7 +85,7 @@ else
   fi
 fi
 
-export NET=mmab
+export NET=seaice_drift
 export RUN=seaice_drift
 
 #################################################
@@ -95,15 +95,14 @@ export RUN=seaice_drift
 #Path to home directory:
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
   #NCO
-  export HOMEbase=/nw${envir}
+  export HOMEbase=${HOMEseaice_drift}
 else
   #dev
-  export HOMEbase=$HOME/rgdev
+  export HOMEbase=${HOMEbase:-/u/robert.grumbine/rgdev}
 fi
 
-export HOMEsice=$HOMEbase/seaice_drift.${code_ver}
+export HOMEsice=$HOMEbase
 export EXECsice=$HOMEsice/exec
-#export FIXsice=$HOMEsice/bigfix
 export FIXsice=$HOMEsice/fix
 export PARMsice=$HOMEsice/parm
 export USHsice=$HOMEsice/ush
@@ -114,12 +113,7 @@ export USHsice=$HOMEsice/ush
 #Requires prod_util module to be established
 export utilscript=$UTILROOT/ush
 export utilexec=$UTILROOT/exec
-export utilparm=$UTILROOT/parm 
-
-##############################
-# Run setup to initialize working directory and utility scripts
-##############################
-#sh $utilscript/setup.sh
+export utilparm=$UTILROOT/parm
 
 ##############################
 # Run setpdy and initialize PDY variables
@@ -132,19 +126,18 @@ sh $utilscript/setpdy.sh
 # Define COM directories
 ##############################################
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
-  export COMbase=${COMROOTp2}/${NET}/${envir}
-  export pcom=/pcom/$RUN
-  #export COMIN=/com2/gens/prod/gefs.$PDY/$cyc/pgrb2a_bc
-  #export COMINice_analy=/com2/omb/prod/sice.${PDYm1}
-  #export COMIN=/gpfs/hps/nco/ops/com/naefs/prod/gefs.$PDY/$cyc/pgrb2a_bc
-  export COMIN=${COMROOThps}/naefs/prod/gfs.${PDY}
-  export COMINice_analy=`compath.py -e prod /seaice_analysis/v4.5.0/sice.${PDYm1}`
+  export COMbase=`compath.py ${NET}/${seaice_drift_ver?"version number missing"}`
+  err=$? err_chk
+  export COMIN=${COMIN:-$(compath.py naefs/${naefs_ver}/gefs.${PDY}/$cyc/pgrb2a_bc)} #used on WCOSS1
+  err=$? err_chk
+  export COMINice_analy=${COMINice_analy:-$(compath.py seaice_analysis/${seaice_analysis_ver}/seaice_analysis.${PDYm1})}
+  err=$? err_chk
+
 else
-  export COMbase=$HOME/noscrub/com/${NET}/${envir}/
-  export pcom=$HOME/noscrub/pcom/$RUN/
+  export COMbase=${HOMEbase}/noscrub/com/${NET}/${envir}/
+  export pcom=${HOMEbase}/noscrub/pcom/$RUN/
 
   export COMINice_analy=`compath.py -e prod /seaice_analysis/v4.5.0/seaice_analysis.${PDYm1}`
-  #export COMINice_analy=$HOME/rgdev/drift/bigfix/
   echo zzz COMINice_analy $COMINice_analy
 
   # For hindcast thinned runs
@@ -158,14 +151,12 @@ else
 fi
 
 if [ ! -d $COMIN ] ; then
-  echo Could not find the input directory $COMIN exiting
-  exit 1
+  err_exit Could not find the input directory $COMIN exiting
 fi
 export COMOUT=$COMbase/${RUN}.${PDY}${cyc}
-export COMOUT_sidfex=$COMbase/sidfex
+export pcom=${COMOUT}/wmo
 
 mkdir -m 775 -p $COMOUT
-mkdir -m 775 -p $COMOUT_sidfex
 mkdir -m 775 -p $pcom
 
 msg="HAS BEGUN on `hostname`"
@@ -176,7 +167,7 @@ env
 ##############################################
 # Execute the script
 set -e
-sh $HOMEsice/scripts/exseaice_drift.sh.ecf
+sh $HOMEsice/scripts/exseaice_drift.sh
 export err=$?
 err_chk
 ##############################################
