@@ -1,4 +1,6 @@
 SUBROUTINE convert(x0, y0, dx, dy, x, y, npts, dir, dist)
+!Author: Robert Grumbine
+
   IMPLICIT none
 
   INTEGER npts

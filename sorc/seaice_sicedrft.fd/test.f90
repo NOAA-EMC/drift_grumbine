@@ -1,4 +1,6 @@
 PROGRAM test
+!Author: Robert Grumbine
+
   IMPLICIT none
 
   INTEGER npts

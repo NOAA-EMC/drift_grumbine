@@ -1,4 +1,4 @@
-      SUBROUTINE SK2OUT(x0, y0, dir, dist, skpt, npts, time)
+      SUBROUTINE SK2OUT(x0, y0, dx, dy, skpt, npts, time)
 !
 !     Print out the forecasts for the skiles2 program virtual drift.
 !     Bob Grumbine 4 April 1994.
@@ -10,8 +10,6 @@
 !     Larry Burroughs 4 May 2001
 !     27 January 2010 Robert Grumbine: coldp and cnewp merged in to sk2out.f file 
 !     20 April 2012 Robert Grumbine: add call to kmlout 
-!      2 June 2014  Robert Grumbine: change to passing in direction and
-!      distance directly, rather than dx, dy.  Support of ensemble
 !
       IMPLICIT none
 !
@@ -28,49 +26,49 @@
       PARAMETER (xstl = -170.0)
       PARAMETER (ystl =  65.0 )
       PARAMETER (akrad = 2500.0)
-      CHARACTER(1) line1(21),line2(9),line3(40),line4(26),line5(41),
-     1            hdrfxp(23),hdrnfp(38),bln(4),indx(10),old(20),new(36),
-     2            line5a(42)
+      CHARACTER(1) line1(21),line2(9),line3(40),line4(26),line5(41),  &
+                  hdrfxp(23),hdrnfp(38),bln(4),indx(10),old(20),new(36), &
+                  line5a(42)
       INTEGER maxnewpts, maxaknewpts
       PARAMETER (maxnewpts   = 100000)
       PARAMETER (maxaknewpts =  20000)
-      CHARACTER(1) oldpts(207,20),newpts(maxnewpts,36),akoldp(160,20),
-     1     km,jn,Q, aknewp(maxaknewpts,36),lf,cr,eom,blk,B,C,D,E,F,G,H,
-     2     jI,jJ,jk,A, jL,O,P,R,S,X,W,glbmsg(1280,31),akmsg(1280,8),
-     3     ldr(40), T,z,aps,copt(17),cnpt(33)
+      CHARACTER(1) oldpts(207,20),newpts(maxnewpts,36),akoldp(160,20), &
+           km,jn,Q, aknewp(maxaknewpts,36),lf,cr,eom,blk,B,C,D,E,F,G,H, &
+           jI,jJ,jk,A, jL,O,P,R,S,X,W,glbmsg(1280,31),akmsg(1280,8), &
+           ldr(40), T,z,aps,copt(17),cnpt(33)
 !
-      INTEGER k,ii,ij,ik,il,idis,idir,igtot,iputg,iatot,iputa,i,j,
-     1        iy,im,id,ih,idate,jy,jm,jd,jh,jdate,left,inc1,inc2,
-     2        inc3,next,ix0(npts),iy0(npts),idat(8),jdat(8),jc
+      INTEGER k,ii,ij,ik,il,idis,idir,igtot,iputg,iatot,iputa,i,j, &
+              iy,im,id,ih,idate,jy,jm,jd,jh,jdate,left,inc1,inc2, &
+              inc3,next,ix0(npts),iy0(npts),idat(8),jdat(8),jc
 !
-      DATA line1/'F','Z','A','K','4','1',' ','K','W','N','O',' ',
-     1           '0','0','0','0','0','0','<','<','@'/
+      DATA line1/'F','Z','A','K','4','1',' ','K','W','N','O',' ', &
+                 '0','0','0','0','0','0','<','<','@'/
       DATA line2/'I','D','M','A','K','W','<','<','@'/
-      DATA line3/'P','A','R','T',' ','P','A','A',' ','A','L','A','S',
-     1           'K','A',' ','S','E','A',' ','I','C','E',' ',
-     2           'D','R','I','F','T',' ','V','E','C','T','O','R',
-     3           'S','<','<','@'/
-      DATA LINE4/'A','M','O','S','P','H','E','R','I','C',' ','D',
-     1           'R','I','V','I','N','G',' ','O','N','L','Y','<',
-     2           '<','@'/
-      DATA LINE5/'0','0','H','R',' ','F','O','R','E','C','A','S',
-     1           'T',' ','V','T',' ','0','0','/','0','0','/','0',
-     2           '0',' ','0','0','0','0',' ','U','T','C','<','<',
-     3           '@',' ','<','<','@'/
-      DATA LINE5a/'0','0','0','H','R',' ','F','O','R','E','C','A','S',
-     1           'T',' ','V','T',' ','0','0','/','0','0','/','0',
-     2           '0',' ','0','0','0','0',' ','U','T','C','<','<',
-     3           '@',' ','<','<','@'/
-      DATA HDRFXP/'P','O','I','N','T',' ',' ','D','I','R',' ',' ',
-     1            'D','I','S','T','(','N','M',')','<','<','@'/
-      DATA HDRNFP/'P','O','I','N','T',' ','I','N','I','T','I','A',
-     1            'L',' ','L','O','C','A','T','I','O','N',' ','D',
-     2            'I','R',' ','D','I','S','T','(','N','M',')','<',
-     3            '<','@'/
-      DATA CR/'<'/,LF/'@'/,EOM/'%'/,BLK/' '/,B/'B'/,C/'C'/,D/'D'/,
-     1     E/'E'/,F/'F'/,G/'G'/,H/'H'/,jI/'I'/,jJ/'J'/,A/'A'/,
-     2     jL/'L'/,O/'O'/,P/'P'/,R/'R'/,X/'X'/,W/'W'/,jk/'K'/,
-     3     S/'S'/,km/'M'/,jn/'N'/,Q/'Q'/,T/'T'/,z/'Z'/
+      DATA line3/'P','A','R','T',' ','P','A','A',' ','A','L','A','S', &
+                 'K','A',' ','S','E','A',' ','I','C','E',' ', &
+                 'D','R','I','F','T',' ','V','E','C','T','O','R', &
+                 'S','<','<','@'/
+      DATA LINE4/'A','M','O','S','P','H','E','R','I','C',' ','D', &
+                 'R','I','V','I','N','G',' ','O','N','L','Y','<', &
+                 '<','@'/
+      DATA LINE5/'0','0','H','R',' ','F','O','R','E','C','A','S', &
+                 'T',' ','V','T',' ','0','0','/','0','0','/','0', &
+                 '0',' ','0','0','0','0',' ','U','T','C','<','<', &
+                 '@',' ','<','<','@'/
+      DATA LINE5a/'0','0','0','H','R',' ','F','O','R','E','C','A','S', &
+                 'T',' ','V','T',' ','0','0','/','0','0','/','0', &
+                 '0',' ','0','0','0','0',' ','U','T','C','<','<', &
+                 '@',' ','<','<','@'/
+      DATA HDRFXP/'P','O','I','N','T',' ',' ','D','I','R',' ',' ', &
+                  'D','I','S','T','(','N','M',')','<','<','@'/
+      DATA HDRNFP/'P','O','I','N','T',' ','I','N','I','T','I','A', &
+                  'L',' ','L','O','C','A','T','I','O','N',' ','D', &
+                  'I','R',' ','D','I','S','T','(','N','M',')','<', &
+                  '<','@'/
+      DATA CR/'<'/,LF/'@'/,EOM/'%'/,BLK/' '/,B/'B'/,C/'C'/,D/'D'/, &
+           E/'E'/,F/'F'/,G/'G'/,H/'H'/,jI/'I'/,jJ/'J'/,A/'A'/, &
+           jL/'L'/,O/'O'/,P/'P'/,R/'R'/,X/'X'/,W/'W'/,jk/'K'/, &
+           S/'S'/,km/'M'/,jn/'N'/,Q/'Q'/,T/'T'/,z/'Z'/
       DATA indx/'1','2','3','4','5','6','7','8','9','0'/
 !
       IF (MOD(time,24) .NE. 0 ) RETURN
@@ -100,7 +98,8 @@
          IF (i.gt.2.and.i.lt.8)ldr(i)=indx(10)
          IF (i.ge.8)ldr(i)=blk
       ENDDO
-
+!     write(6,6010)ldr
+!6010 format(40a1)
       bln(1)=blk
       bln(2)=cr
       bln(3)=cr
@@ -164,7 +163,7 @@
       ij=1
       ik=1
       il=1
-      DO 1000 k = 1, npts
+      DO k = 1, npts
         xp = x0(k)+dx(k)
         yp = y0(k)+dy(k)
         dxnm = kmtonm * arcdis(x0(k), y0(k), xp, y0(k))
@@ -173,9 +172,9 @@
         dynm = SIGN(dynm, y0(k)-yp)
         IF (x0(k).gt.180.) THEN
            ix0(k)=10*(360.-x0(k))
-        ELSEIF(x0(k).lt.180.) THEN
+        ELSEIF (x0(k).lt.180.) THEN
            ix0(k)=10.*x0(k)
-        ELSEIF(x0(k).eq.180.) THEN
+        ELSEIF (x0(k).eq.180.) THEN
            ix0(k)=180
         ELSE
            ix0(k)=0
@@ -184,33 +183,29 @@
 !
 !       BG output file
 !
-        !old dir(k) = wdir  (-dxnm, -dynm, dummy)
-        !old dist(k) =  kmtonm * arcdis(x0(k),y0(k),xp,yp)
-        WRITE (60,9010) skpt(k), x0(k), y0(k),
-     2  dir(k), dist(k)
-! old 2  wdir  (-dxnm, -dynm, dummy),
-! old 3  kmtonm * arcdis(x0(k),y0(k),xp,yp)
+        dir(k) = wdir  (-dxnm, -dynm, dummy)
+        dist(k) =  kmtonm * arcdis(x0(k),y0(k),xp,yp)
+        WRITE (60,9010) skpt(k), x0(k), y0(k), &
+        wdir  (-dxnm, -dynm, dummy), &
+        kmtonm * arcdis(x0(k),y0(k),xp,yp)
 !
 !       Operational output file
 !
-        IF(k .LE. 207) THEN 
-!old WRITE (61,9012) skpt(k), wdir(-dxnm, -dynm, dummy),
-!old 1                     kmtonm * arcdis(x0(k),y0(k),xp,yp)
-           WRITE (61,9012) skpt(k), dir(k), dist(k)
-           idir=dir(k) + 0.5 !old wdir(-dxnm,-dynm,dummy)+0.5
-           idis=10.*dist(k)+0.5 !old *(kmtonm*arcdis(x0(k),y0(k),xp,yp)+0.05)
-
+        IF (k .LE. 207) THEN 
+           WRITE (61,9012) skpt(k), wdir(-dxnm, -dynm, dummy), &
+                           kmtonm * arcdis(x0(k),y0(k),xp,yp)
+           idir=wdir(-dxnm,-dynm,dummy)+0.5
+           idis=10.*(kmtonm*arcdis(x0(k),y0(k),xp,yp)+0.05)
            CALL coldp(skpt(k),idir,idis,copt)
            DO i=1,17
               oldpts(ii,i)=copt(i)
            ENDDO
            ii=ii+1
-           IF(arcdis(xstl, ystl, x0(k), y0(k) ) .LE. akrad) THEN
-!old              WRITE (62,9012) skpt(k), wdir(-dxnm, -dynm, dummy),
-!old     1        kmtonm * arcdis(x0(k),y0(k),xp,yp)
-              WRITE (62,9012) skpt(k), dir(k), dist(k)
-              idir=dir(k)+0.5 !old wdir(-dxnm,-dynm,dummy)+0.5
-              idis=10.*dist(k)+0.5 !old 10.*(kmtonm*arcdis(x0(k),y0(k),xp,yp)+0.05)
+           IF (arcdis(xstl, ystl, x0(k), y0(k) ) .LE. akrad) THEN
+              WRITE (62,9012) skpt(k), wdir(-dxnm, -dynm, dummy), &
+              kmtonm * arcdis(x0(k),y0(k),xp,yp)
+              idir=wdir(-dxnm,-dynm,dummy)+0.5
+              idis=10.*(kmtonm*arcdis(x0(k),y0(k),xp,yp)+0.05)
               CALL coldp(skpt(k),idir,idis,copt)
               DO i=1,17
                  akoldp(ij,i)=copt(i)
@@ -221,28 +216,22 @@
         ELSE
            IF (k .EQ. 208) WRITE (61,9001)
            IF (k .EQ. 208) WRITE (62,9001)
-!old           WRITE (61,9010) skpt(k), x0(k), y0(k),
-!old     1     wdir  (-dxnm, -dynm, dummy),
-!old     2     kmtonm * arcdis(x0(k),y0(k),xp,yp)
-           WRITE (61,9010) skpt(k), x0(k), y0(k),
-     1     dir(k), dist(k)
-
-           idir=dir(k)+0.5 !old wdir(-dxnm,-dynm,dummy)+0.5
-           idis=10.*dist(k)+0.5 !old 10.*(kmtonm*arcdis(x0(k),y0(k),xp,yp)+0.05)
-
+           WRITE (61,9010) skpt(k), x0(k), y0(k), &
+           wdir  (-dxnm, -dynm, dummy), &
+           kmtonm * arcdis(x0(k),y0(k),xp,yp)
+           idir=wdir(-dxnm,-dynm,dummy)+0.5
+           idis=10.*(kmtonm*arcdis(x0(k),y0(k),xp,yp)+0.05)
            CALL cnewp(skpt(k),ix0(k),iy0(k),idir,idis,cnpt)
            DO i=1,33
               newpts(ik,i)=cnpt(i)
            ENDDO
            ik=ik+1
-           IF(arcdis(xstl, ystl, x0(k), y0(k) ) .LE. akrad) THEN
-              WRITE (62,9010) skpt(k), x0(k), y0(k),
-!old     1        wdir  (-dxnm, -dynm, dummy),
-!old     2        kmtonm * arcdis(x0(k),y0(k),xp,yp)
-     1        dir(k), dist(k)
-
-              idir=dir(k)+0.5 !old wdir(-dxnm,-dynm,dummy)+0.5
-              idis=10.*dist(k)+0.5 !old 10.*(kmtonm*arcdis(x0(k),y0(k),xp,yp)+0.05)
+           IF (arcdis(xstl, ystl, x0(k), y0(k) ) .LE. akrad) THEN
+              WRITE (62,9010) skpt(k), x0(k), y0(k), &
+              wdir  (-dxnm, -dynm, dummy), &
+              kmtonm * arcdis(x0(k),y0(k),xp,yp)
+              idir=wdir(-dxnm,-dynm,dummy)+0.5
+              idis=10.*(kmtonm*arcdis(x0(k),y0(k),xp,yp)+0.05)
               CALL cnewp(skpt(k),ix0(k),iy0(k),idir,idis,cnpt)
               DO i=1,33
                  aknewp(il,i)=cnpt(i)
@@ -250,7 +239,7 @@
               il=il+1
            ENDIF
         ENDIF
- 1000 CONTINUE
+      ENDDO
 !
       WRITE (60,9005) 
       WRITE (61,9005) 
@@ -259,8 +248,7 @@
       WRITE (61,9005) 
       WRITE (62,9005) 
 !
- 9001 FORMAT ('Point ',' Initial location ',
-     1    '   Dir  Dist(nm)')
+ 9001 FORMAT ('Point ',' Initial location ', '   Dir  Dist(nm)')
  9011 FORMAT ('Point ','  Dir   Dist(nm)')
 !
  9010 FORMAT (I5,3X,2F8.3,2X,2F6.1)
@@ -450,17 +438,31 @@
 !D      write(06,7116)
  7116 format(//)
       IF (time.lt.100) THEN
+!        if(il.eq.999)then
+!           iatot=40+21+9+40+26+41+23+4+(ij-1)*20+1
+!           iputa=iatot/1280
+!           left=mod(iatot,1280)
+!           if(left.gt.0)iputa=iputa+1
+!        else
             iatot=40+21+9+40+26+41+23+4+(ij-1)*20+4+38+4+(il-1)*36+1
             iputa=iatot/1280
             left=mod(iatot,1280)
             IF (left.gt.0)iputa=iputa+1
+!        endif
 !D         write(06,7117)iatot,iputa
  7117    format(' iatot=',i5,' iputa=',i2/)
       ELSE
+!        if(il.eq.999)then
+!           iatot=40+21+9+40+26+42+23+4+(ij-1)*20+1
+!           iputa=iatot/1280
+!           left=mod(iatot,1280)
+!           if(left.gt.0)iputa=iputa+1
+!        else
             iatot=40+21+9+40+26+42+23+4+(ij-1)*20+4+38+4+(il-1)*36+1
             iputa=iatot/1280
             left=mod(iatot,1280)
             IF (left.gt.0)iputa=iputa+1
+!        endif
 !D         write(06,7117)iatot,iputa
       ENDIF
       next=0
@@ -483,7 +485,6 @@
       line3(15)=A
       CALL W3AI19(line3,40,akmsg,iatot,next)
       CALL W3AI19(line4,26,akmsg,iatot,next)
-
       IF (time.lt.100) THEN
          CALL W3AI19(line5,41,akmsg,iatot,next)
       ELSE
@@ -492,7 +493,6 @@
 
       CALL W3AI19(hdrfxp,23,akmsg,iatot,next)
       CALL W3AI19(bln,4,akmsg,iatot,next)
-
       DO i=1,ij-1
          DO j=1,20
             old(j)=akoldp(i,j)
@@ -509,6 +509,7 @@
          ENDDO
          CALL W3AI19(new,36,akmsg,iatot,next)
       ENDDO
+
       CALL W3AI19(eom,1,akmsg,iatot,next)
       DO i=1,iputa
 !        write(64)(akmsg(j,i),j=1,1280)
@@ -535,8 +536,8 @@
       INTEGER i,ipt,idir,idis,incl1,incl2,incl3,incl4
       CHARACTER(1) copt(17),indx(10),pt,blnk
 !
-      DATA indx/'1','2','3','4','5','6','7','8','9','0'/,pt/'.'/,
-     1     blnk/' '/
+      DATA indx/'1','2','3','4','5','6','7','8','9','0'/,pt/'.'/
+      DATA blnk/' '/
 !
 !         Convert point number from integer to character, and
 !           blank out leading zeros
@@ -629,8 +630,8 @@
       INTEGER i,ipt,ix,iy,idir,idis,in,incl1,incl2,incl3,incl4
       CHARACTER(1) cnpt(33),indx(10),pt,blnk,n,s,e,w
 !
-      DATA indx/'1','2','3','4','5','6','7','8','9','0'/,pt/'.'/,
-     1     blnk/' '/,n/'N'/,s/'S'/,e/'E'/,w/'W'/
+      DATA indx/'1','2','3','4','5','6','7','8','9','0'/,pt/'.'/
+      DATA blnk/' '/,n/'N'/,s/'S'/,e/'E'/,w/'W'/
 !
 !         Convert point number from integer to character, and
 !           blank out leading zeros
@@ -676,7 +677,7 @@
       cnpt(12)=indx(incl3)
       IF (iy.lt.0) THEN
          cnpt(13)=s
-      ELSEIF(iy.eq.0) THEN
+      ELSEIF (iy.eq.0) THEN
          cnpt(13)=blnk
       ELSE
          cnpt(13)=n
@@ -707,7 +708,7 @@
       cnpt(20)=indx(incl4)
       IF (iy.gt.-180.and.iy.lt.0) THEN
          cnpt(21)=e
-      ELSEIF(iy.eq.0.or.abs(iy).eq.180) THEN
+      ELSEIF (iy.eq.0.or.abs(iy).eq.180) THEN
          cnpt(21)=blnk
       ELSE
          cnpt(21)=w

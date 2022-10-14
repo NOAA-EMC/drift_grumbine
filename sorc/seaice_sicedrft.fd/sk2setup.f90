@@ -1,7 +1,6 @@
-      SUBROUTINE SK2SETUP(x, y, x0, y0, dx, dy, skpt, npts, nnpts,
-     1     minsep)
-C     Assign initial positions to the virtual floes.
-C     Bob Grumbine 4 April 1994.
+      SUBROUTINE SK2SETUP(x, y, x0, y0, dx, dy, skpt, npts, nnpts, minsep)
+!     Assign initial positions to the virtual floes.
+!     Bob Grumbine 4 April 1994.
 
       IMPLICIT none
       INCLUDE "sicedrft.inc"
@@ -11,21 +10,21 @@ C     Bob Grumbine 4 April 1994.
       INTEGER skpt(npts)
       INTEGER k
 
-C     Variables for iceline reads
+!     Variables for iceline reads
       REAL xo, yo, xi(maxpts), yi(maxpts)
       CHARACTER(1) ew(maxpts)
       CHARACTER(60) header
       INTEGER i, j, nuse, nuses
       REAL arcdis, minsep
 
-C     Bullet-proofing variables
+!     Bullet-proofing variables
       REAL rlat1, rlat2
       PARAMETER (rlat1 = lat1)
       PARAMETER (rlat2 = lat2)
       REAL dist
 
-C     Bullet-proofing code: verify that the lats and longs are
-C       set up correctly.
+!     Bullet-proofing code: verify that the lats and longs are
+!       set up correctly.
       IF (lat2 .LT. lat1) THEN
         PRINT *,'Latitudes are reversed.  FATAL error'
         STOP
@@ -51,7 +50,7 @@ C       set up correctly.
         STOP
       ENDIF
 
-C     Operational Code
+!     Operational Code
       k     = 0
       nnpts = 0
  1000 CONTINUE
@@ -63,7 +62,7 @@ C     Operational Code
 
  1020 CONTINUE
       IF (nnpts .LE. 1) THEN
-C       Use a default table setup.
+!       Use a default table setup.
 
         PRINT *,'Using the default skiles points table'
         nnpts = 18
@@ -126,18 +125,18 @@ C       Use a default table setup.
 
       ENDIF
 
-C     7 March 1997  Add point in the Cook Inlet for use by Anchorage 
-C       WSFO.  Robert Grumbine
+!     7 March 1997  Add point in the Cook Inlet for use by Anchorage 
+!       WSFO.  Robert Grumbine
       yi(1) = 360. - 152.
       xi(1) = 60.0
 
-C     i starts at 2 because of Cook Inlet pt.
-C     Now read in ice lines for extra use.
-C     Original (1997) was reading a NIC file which was dropped from
-C       their operations in 1999.  A fixed file was used in NCEP since
-C       then.  New implementation 2011 to read a locally-supported file.
-C     3 Nov 2011 Robert Grumbine
-C     Note that at this point, there is no antarctic edge 2011 
+!     i starts at 2 because of Cook Inlet pt.
+!     Now read in ice lines for extra use.
+!     Original (1997) was reading a NIC file which was dropped from
+!       their operations in 1999.  A fixed file was used in NCEP since
+!       then.  New implementation 2011 to read a locally-supported file.
+!     3 Nov 2011 Robert Grumbine
+!     Note that at this point, there is no antarctic edge 2011 
       i = 2
       OPEN(48,STATUS="OLD", ERR=9990)
 
@@ -147,7 +146,7 @@ C     Note that at this point, there is no antarctic edge 2011
  9002 FORMAT (A60)
  2000 CONTINUE
         READ (48, *, ERR=2009, END=2010) xi(i), yi(i)
-CD        WRITE (*,*) "ice edge pt",i,xi(i), yi(i)
+!D        WRITE (*,*) "ice edge pt",i,xi(i), yi(i)
         i = i + 1
         GO TO 2000
  2009 CONTINUE
@@ -158,9 +157,9 @@ CD        WRITE (*,*) "ice edge pt",i,xi(i), yi(i)
       nuses = i - 1
 
 
-C     Now go through ice line point list and transfer those which are
-C       more than 1/2 degree apart to the virtual floe list.
-C     Changed 3 November 2011 to being dlat*111 km apart
+!     Now go through ice line point list and transfer those which are
+!       more than 1/2 degree apart to the virtual floe list.
+!     Changed 3 November 2011 to being dlat*111 km apart
       x(nnpts+1) = yi(1)
       y(nnpts+1) = xi(1)
       skpt(nnpts+1) = nnpts+1
@@ -169,10 +168,10 @@ C     Changed 3 November 2011 to being dlat*111 km apart
       j = nnpts+2
       DO i = 2, nuses
         dist = arcdis(yo, xo, yi(i), xi(i) )
-CD        PRINT *,"dist = ",dist
+!D        PRINT *,"dist = ",dist
 
-        IF ( arcdis(yo, xo, yi(i), xi(i) ) .GT. minsep  .AND.
-     1        yi(i) .NE. 0.0 .AND. xi(i) .NE. 0.0 ) THEN
+        IF ( arcdis(yo, xo, yi(i), xi(i) ) .GT. minsep  .AND.   &
+              yi(i) .NE. 0.0 .AND. xi(i) .NE. 0.0 ) THEN
           yo = yi(i)
           xo = xi(i)
           x(j) = yi(i)
@@ -185,17 +184,17 @@ CD        PRINT *,"dist = ",dist
       nnpts = j - 1
       PRINT *,'There are ',nnpts,' points in the aggregate file.'
 
-C     Set up the initial location and drift positions.
-      DO 4000 k = 1, nnpts
+!     Set up the initial location and drift positions.
+      DO k = 1, nnpts
         x0(k) = x(k)
         y0(k) = y(k)
         dx(k) = 0.0
         dy(k) = 0.0
- 4000 CONTINUE
+      ENDDO
 
       RETURN
 
-C Error on trying to open the ice edge file
+! Error on trying to open the ice edge file
  9990 PRINT *,'Running without an ice edge file'
       GO TO 3000
 
