@@ -34,14 +34,13 @@ else
   #module avail 2> avail.2
 fi
 
-git clone https://github.com/rgrumbine/mmablib.git mmablib
+if [ ! -d mmablib ] ; then
+  git clone https://github.com/rgrumbine/mmablib.git mmablib
+fi
 cd mmablib
-git checkout acorn
+git checkout operations
 make
 cd ..
-
-#theia: export BASE=${BASE:-/home/Robert.Grumbine/save}
-#export BASE=${BASE:-/u/Robert.Grumbine/save/mmablib}
 
 export FC=ftn
 export FOPTS='-O2 '

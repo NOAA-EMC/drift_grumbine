@@ -27,7 +27,7 @@ if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; the
   export BASEDIR=${DATAROOT:-/lfs/f1/ops/$envir/tmp/}
 else
   #developer
-  export BASEDIR=/u/Robert.Grumbine/save/scratch
+  export BASEDIR=/lfs/h2/emc/stmp/wx21rg/
 fi
 
 export DATA=$BASEDIR/${jobid}
@@ -100,7 +100,10 @@ if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; the
   export HOMEbase=${HOMEseaice_drift}
 else
   #dev
-  export HOMEbase=${HOMEbase:-/u/Robert.Grumbine/save}
+  #export HOMEbase=${HOMEbase:-/u/robert.grumbine/rgdev/drift}
+  echo zzz Homebase on entry to J job: $HOMEbase
+  export HOMEbase=/u/robert.grumbine/rgdev/slush.drift/feature/
+  echo zzz Homebase as set in J job: $HOMEbase
 fi
 
 export HOMEsice=$HOMEbase
@@ -124,19 +127,28 @@ if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; the
   err=$? err_chk
   #export COMIN=${COMROOThps}/naefs/prod/gfs.${PDY}
   #export COMINice_analy=/com2/omb/prod/sice.${PDYm1}
-  #export COMIN=${COMIN:-$(compath.py naefs/${naefs_ver}/gefs.${PDY}/$cyc/pgrb2ap5_bc)}
   export COMIN=${COMIN:-$(compath.py naefs/${naefs_ver}/gefs.${PDY}/$cyc/pgrb2a_bc)} #used on WCOSS1
   err=$? err_chk
   export COMINice_analy=${COMINice_analy:-$(compath.py seaice_analysis/${seaice_analysis_ver}/seaice_analysis.${PDYm1})}
   err=$? err_chk
 else
-  export COMbase=${HOMEbase}/save/com/${NET}/${envir}/
-  export pcom=${HOMEbase}/save/pcom/$RUN/
+	echo zzz HOME is $HOME
+	#Developer
+  export COMbase=${HOME}/noscrub/com/${NET}/${envir}/
+  export pcom=${HOME}/noscrub/pcom/$RUN/
 
-  #export COMIN=${HOMEbase}/save/com/gefs.${PDY}/$cyc/pgrb2ap5_bc
-  #export COMINice_analy=${HOMEbase}/save/com/sice.${PDYm1}
-  export COMIN=`compath.py canned/naefs/v6.1/gefs.${PDY}/$cyc/pgrb2ap5_bc`
-  export COMINice_analy=`compath.py canned/omb/v4.4/sice.${PDYm1}`
+  # For NRT runs
+  #development: export COMIN=${COMIN:-$(compath.py -e prod /naefs/v6.1/gefs.${PDY})/$cyc/pgrb2ap5_bc}
+
+  echo zzz COMIN before compath: $COMIN
+  export COMIN=${COMIN:-$(compath.py -e prod /naefs/v6.1/gefs.${PDY})/$cyc/pgrb2a_bc}
+  echo zzz COMIN after compath: $COMIN
+
+  export COMINice_analy=${COMROOT}/seaice_analysis/v4.5/seaice_analysis.${PDYm1}
+
+  #for python:
+  export PYTHONPATH=$PYTHONPATH:$HOME/rgdev/ice_scoring/sidfex/:$HOME/rgdev/mmablib/py/
+
 fi
 
 if [ ! -d $COMIN ] ; then
@@ -155,7 +167,7 @@ env
 
 ##############################################
 # Execute the script
-set -e
+set -xe
 $HOMEsice/scripts/exseaice_drift.sh
 export err=$?
 err_chk

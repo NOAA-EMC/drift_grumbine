@@ -75,6 +75,8 @@ fi
 #  when files are 12 hours apart
 #Ensemble is 6 hours throughout v4.0.0 -- August 2013
 
+set -xe
+
 #Ensure that the output files don't already exist
 for fn in u.averaged.$PDY v.averaged.$PDY
 do
@@ -85,7 +87,6 @@ done
 base=$COMIN
 
 #Construct averages for 10m winds
-set -xe
 for hr in 0 12 24 36 48  60  72  84  96 108 120 132 144 156 168 180 192 204 216 \
                     228 240 252 264 276 288 300 312 324 336 348 360 372
 do
@@ -107,21 +108,23 @@ do
   for mem in gep01 gep02 gep03 gep04 gep05 gep06 gep07 gep08 gep09 gep10 gep11 gep12 gep13 gep14 gep15 gep16 gep17 gep18 gep19 gep20
   do
 
+    ## developer 0.5 degree
     #${WGRIB2:?} ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h1  > index
-
+#
+#
     #grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h1 -order we:ns -bin tmpu.${mem}.$h1.$PDY
     #grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h1 -order we:ns -bin tmpv.${mem}.$h1.$PDY
-
+#
     #${WGRIB2:?} ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h2 > index
     #grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h2 -order we:ns -bin tmpu.${mem}.$h2.$PDY
     #grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h2 -order we:ns -bin tmpv.${mem}.$h2.$PDY
 
-    #from WCOSS1
+    #for ops1degree
     ${WGRIB2:?} ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1  > index
-
+    
     grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1 -order we:ns -bin tmpu.${mem}.$h1.$PDY 
     grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1 -order we:ns -bin tmpv.${mem}.$h1.$PDY 
-
+    
     ${WGRIB2:?} ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 > index
     grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 -order we:ns -bin tmpu.${mem}.$h2.$PDY
     grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 -order we:ns -bin tmpv.${mem}.$h2.$PDY
