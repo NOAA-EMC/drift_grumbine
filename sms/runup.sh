@@ -19,23 +19,22 @@ module list
 
 set -xe
 
+. ../versions/seaice_drift.ver
+. ../versions/run.ver
 
-#export HOMEbase=$HOME/rgdev/drift/
-export HOMEbase=$HOME/rgdev/slush.drift/feature/
-
-cd $HOMEbase/sms/
 export cyc=${cyc:-00}
 export envir=developer
 export code_ver=v4.1.4
 export job=seaice_drift
 export SMSBIN=$HOMEbase
 
-. ../versions/seaice_drift.ver
-. ../versions/run.ver
+export HOMEbase=$HOME/rgdev/seaice_drift.$seaice_drift_ver/
+#export HOMEbase=$HOME/rgdev/slush.drift/feature/
 
+cd $HOMEbase/sms/
 
-tagm=20221016
-tag=20221017
+tagm=20221014
+tag=20221015
 end=`date +"%Y%m%d" `
 end=$tag
 while [ $tag -le $end ]

@@ -27,13 +27,14 @@ if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; the
   export BASEDIR=${DATAROOT:-/lfs/f1/ops/$envir/tmp/}
 else
   #developer
-  export BASEDIR=/lfs/h2/emc/stmp/wx21rg/
+  export BASEDIR=/lfs/h2/emc/stmp/wx21rg/beta/
 fi
 
 export DATA=$BASEDIR/${jobid}
 mkdir -p $DATA
 cd $DATA
 export TMPDIR=$DATA
+echo zzz basedir data tmpdir: $BASEDIR $DATA $TMPDIR
 
 ####################################
 # File To Log Msgs
@@ -102,7 +103,7 @@ else
   #dev
   #export HOMEbase=${HOMEbase:-/u/robert.grumbine/rgdev/drift}
   echo zzz Homebase on entry to J job: $HOMEbase
-  export HOMEbase=/u/robert.grumbine/rgdev/slush.drift/feature/
+  export HOMEbase=/u/robert.grumbine/rgdev/seaice_drift.${seaice_drift_ver}/
   echo zzz Homebase as set in J job: $HOMEbase
 fi
 
@@ -135,6 +136,7 @@ else
 	echo zzz HOME is $HOME
 	#Developer
   export COMbase=${HOME}/noscrub/com/${NET}/${envir}/
+  echo zzz COMbase is $COMbase NET=$NET envir=$envir
   export pcom=${HOME}/noscrub/pcom/$RUN/
 
   # For NRT runs
