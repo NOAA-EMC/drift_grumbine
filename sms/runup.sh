@@ -4,7 +4,7 @@
 #PBS -j oe
 #PBS -A ICE-DEV
 #PBS -q dev
-#PBS -l walltime=0:21:00
+#PBS -l walltime=0:41:00
 #PBS -l select=1:ncpus=1
 #
 #set -xe
@@ -19,9 +19,7 @@ export HOMEbase=$HOME/rgdev/seaice_drift.$seaice_drift_ver/
 export SMSBIN=$HOMEbase
 cd $HOMEbase/sms/
 
-#export HOMEbase=$HOME/rgdev/slush.drift/feature/
 # WCOSS2
-
 . ../versions/seaice_drift.ver
 . ../versions/run.ver
 
@@ -35,28 +33,26 @@ module load wgrib2/${wgrib2_ver}
 #module load cray-mpich/8.1.7
 #module load prod_envir/2.0.5
 
-# temporary:
-#export SENDDBN=NO
-#export SENDCANNEDDBN=YES
-
 # -- to check on a module's usage: module spider $m 
 # Show what happened:
 module list
 
 set -xe
 
-tagm=20221022
-tag=20221023
+tagm=20221025
+tag=20221026
 end=`date +"%Y%m%d" `
 #end=$tag
+#end=20221021
 while [ $tag -le $end ]
 do
   export PDY=$tag
   export PDYm1=$tagm
 
-    export KEEPDATA="NO"         #Normal runs
-    #export KEEPDATA="YES"        #debugging
-    time $HOMEbase/jobs/JSEAICE_DRIFT  > sms.${tag}${cyc}
+    #export KEEPDATA="NO"         #Normal runs
+    export KEEPDATA="YES"        #debugging
+
+  time $HOMEbase/jobs/JSEAICE_DRIFT  > sms.${tag}${cyc}
 
   tagm=$tag
   tag=`expr $tag + 1`

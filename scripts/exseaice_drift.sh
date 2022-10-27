@@ -48,13 +48,6 @@ ln -sf alpha     fort.90
 #-----------------------------------------------------
 #get the ice line points
 #-----------------------------------------------------
-# For sidfex: get the drifter target locations
-#YY=`echo $PDY | cut -c1-4`
-#MM=`echo $PDY | cut -c5-6`
-#DD=`echo $PDY | cut -c7-8`
-#HH=$cyc
-#python3 $USHsice/targets.py $YY $MM $DD $HH
-#ln -sf seaice_edge.t00z.txt.${PDY}$HH  fort.48
 
 if [ -f $COMINice_analy/seaice_edge.t00z.txt ] ; then
   cp $COMINice_analy/seaice_edge.t00z.txt .
@@ -111,7 +104,6 @@ do
     ## developer 0.5 degree
     #${WGRIB2:?} ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h1  > index
 #
-#
     #grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h1 -order we:ns -bin tmpu.${mem}.$h1.$PDY
     #grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a.0p50_bcf$h1 -order we:ns -bin tmpv.${mem}.$h1.$PDY
 #
@@ -122,8 +114,8 @@ do
     #for ops1degree
     ${WGRIB2:?} ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1  > index
     
-    grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1 -order we:ns -bin tmpu.${mem}.$h1.$PDY 
-    grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1 -order we:ns -bin tmpv.${mem}.$h1.$PDY 
+    grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1 -order we:ns -bin tmpu.${mem}.$h1.$PDY
+    grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1 -order we:ns -bin tmpv.${mem}.$h1.$PDY
     
     ${WGRIB2:?} ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 > index
     grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 -order we:ns -bin tmpu.${mem}.$h2.$PDY
@@ -135,14 +127,7 @@ do
   done
 done
 
-## The averaging is done inside the program, with single input of (appended) winds for each member
-#for mem in gep01 gep02 gep03 gep04 gep05 gep06 gep07 gep08 gep09 gep10 gep11 gep12 gep13 gep14 gep15 gep16 gep17 gep18 gep19 gep20
-#do
-#  time $EXECsice/seaice_preaverage u.averaged.${mem}.$PDY tmpu.${mem}.$PDY
-#  time $EXECsice/seaice_preaverage v.averaged.${mem}.$PDY tmpv.${mem}.$PDY
-#done
-
-echo done with pre-averaging
+echo zzz done with pre-averaging
 
 #-------------------------- loop over each member for forecast
 for mem in gep01 gep02 gep03 gep04 gep05 gep06 gep07 gep08 gep09 gep10 gep11 \
@@ -191,11 +176,6 @@ postmsg "$jlogfile" "$msg"
 time $EXECsice/seaice_reformat  >> $pgmout 2>> errfile
 err=$?; export err; err_chk
 
-#Generate SIDFEX forecast files
-#time python3 $USHsice/sidfex.py seaice_edge.t00z.txt.${PDY}$HH $COMOUT_sidfex
-##upload -- 
-#$USHsice/sidfex.sh
-
 #copy to old names:
 ln -sf fort.60 fl.out
 ln -sf fort.61 ops.out
@@ -207,7 +187,6 @@ ln -sf fort.64 alaska.tran
 #Distribute the output
 #-----------------------------------------------------
 if [ $SENDCOM = "YES" ] ; then
-#somewhere around here, SIDFEX upload 
   cp ops.out            $COMOUT/global.$PDY
   cp ak.out             $COMOUT/alaska.$PDY
   cp seaice_drift_*.kml $COMOUT
