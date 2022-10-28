@@ -1,4 +1,5 @@
 #!/bin/sh --login
+
 #PBS -N atest
 #PBS -o atest
 #PBS -j oe
@@ -44,15 +45,17 @@ tag=20221027
 end=`date +"%Y%m%d" `
 #end=$tag
 #end=20221021
+
 while [ $tag -le $end ]
 do
   export PDY=$tag
   export PDYm1=$tagm
 
-    #export KEEPDATA="NO"         #Normal runs
-    export KEEPDATA="YES"        #debugging
+    export KEEPDATA="NO"         #Normal runs
+    #export KEEPDATA="YES"        #debugging
 
   time $HOMEbase/jobs/JSEAICE_DRIFT  > sms.${tag}${cyc}
+
 
   tagm=$tag
   tag=`expr $tag + 1`

@@ -50,6 +50,7 @@ export FOPTS='-O2 -std95'
 
 #Common to all systems:
 export mmablib_ver=${mmablib_ver:-""}
+
 export MMAB_INC='$(BASE)/include'
 export INCDIR='$(BASE)/include'
 export MMAB_LIBF4=$BASE/$mmablib_ver/libombf_4.a

@@ -42,10 +42,8 @@ echo zzz basedir data tmpdir: $BASEDIR $DATA $TMPDIR
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
   #NCO
   if [ "$envir" = 'prod' ] ; then
-    #export jlogfile=/com/logs/jlogfiles/jlogfile.${job}.$$
     export jlogfile=""
   else
-    #export jlogfile=/com/logs/${envir}/jlogfile
     export jlogfile=""
   fi
 else
@@ -103,6 +101,7 @@ else
   #dev
   #export HOMEbase=${HOMEbase:-/u/robert.grumbine/rgdev/drift}
   export HOMEbase=/u/robert.grumbine/rgdev/seaice_drift.${seaice_drift_ver}/
+
 fi
 
 export HOMEsice=$HOMEbase
@@ -111,11 +110,19 @@ export FIXsice=$HOMEsice/fix
 export PARMsice=$HOMEsice/parm
 export USHsice=$HOMEsice/ush
 
+###################################
+# Set up the UTILITIES
+###################################
+#Requires prod_util module to be established
+export utilscript=$UTILROOT/ush
+export utilexec=$UTILROOT/exec
+export utilparm=$UTILROOT/parm
+
 ##############################
 # Run setpdy and initialize PDY variables
 ##############################
 #export PDY=20121022
-setpdy.sh
+sh $utilscript/setpdy.sh
 . ./PDY
 
 ##############################################
@@ -125,9 +132,11 @@ if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; the
   export COMbase=`compath.py ${NET}/${seaice_drift_ver?"version number missing"}`
   err=$? err_chk
   export COMIN=${COMIN:-$(compath.py naefs/${naefs_ver}/gefs.${PDY}/$cyc/pgrb2a_bc)} 
+
   err=$? err_chk
   export COMINice_analy=${COMINice_analy:-$(compath.py seaice_analysis/${seaice_analysis_ver}/seaice_analysis.${PDYm1})}
   err=$? err_chk
+
 else
   #Developer
   export COMbase=${HOME}/noscrub/com/${NET}/${envir}/
@@ -149,7 +158,7 @@ fi
 if [ ! -d $COMIN ] ; then
   err_exit Could not find the input directory $COMIN exiting
 fi
-export COMOUT=$COMbase/${RUN}.${PDY}
+export COMOUT=$COMbase/${RUN}.${PDY}${cyc}
 export pcom=${COMOUT}/wmo
 
 mkdir -m 775 -p $COMOUT
@@ -163,6 +172,7 @@ env
 ##############################################
 # Execute the script
 set -xe
+
 sh $HOMEsice/scripts/exseaice_drift.sh
 export err=$?
 err_chk
@@ -176,6 +186,7 @@ postmsg "$jlogfile" "$msg"
 ##############################
 date
 
+cd $BASEDIR
 ##############################################
 # Remove temp directories
 ##############################################

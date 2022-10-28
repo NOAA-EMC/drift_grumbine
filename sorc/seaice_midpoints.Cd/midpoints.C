@@ -12,7 +12,9 @@ using namespace std;
 
 #define NMEMS    20
 #define MAXLINE 900
-// read from fort.73 #define MAXPTS 102400
+
+// read from fort.70 #define MAXPTS 102400
+
 #define NDAYS    16
 
 #define NSKILE 207
@@ -30,6 +32,7 @@ int main(int argc, char *argv[]) {
   mvector<latpt> x[NMEMS];
   mvector<float> dist[NMEMS], dir[NMEMS];
   mvector<float> avg_dist, avg_dir, init_lon, init_lat;
+
   FILE *fin[NMEMS], *fout, *akout, *fpts;
   int i, j, npts, nnpts;
 
@@ -51,6 +54,7 @@ int main(int argc, char *argv[]) {
        x[i-1].resize(nnpts*2);
      dir[i-1].resize(nnpts*2);
     dist[i-1].resize(nnpts*2); 
+
   }
   fout  = fopen(argv[NMEMS+1],"w");
   akout = fopen(argv[NMEMS+2],"w");

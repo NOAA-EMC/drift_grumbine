@@ -117,7 +117,7 @@ do
     
     grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1 -order we:ns -bin tmpu.${mem}.$h1.$PDY
     grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h1 -order we:ns -bin tmpv.${mem}.$h1.$PDY
-    
+ 
     ${WGRIB2:?} ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 > index
     grep 'UGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 -order we:ns -bin tmpu.${mem}.$h2.$PDY
     grep 'VGRD:10 m above ground:' index | $WGRIB2 -i ${base}/$mem.t${cyc}z.pgrb2a_bcf$h2 -order we:ns -bin tmpv.${mem}.$h2.$PDY
