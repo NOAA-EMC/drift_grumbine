@@ -183,6 +183,7 @@
       END DO
       nnpts = j - 1
       PRINT *,'There are ',nnpts,' points in the aggregate file.'
+      WRITE (70,*) nnpts
 
 !     Set up the initial location and drift positions.
       DO k = 1, nnpts

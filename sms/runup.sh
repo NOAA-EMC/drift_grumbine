@@ -1,48 +1,61 @@
 #!/bin/sh --login
 
-#set -e
+#PBS -N atest
+#PBS -o atest
+#PBS -j oe
+#PBS -A ICE-DEV
+#PBS -q dev
+#PBS -l walltime=0:41:00
+#PBS -l select=1:ncpus=1
+#
+#set -xe
+set -e
 
-module purge
-module load craype-x86-rome
-module load libfabric/1.11.0.0
-module load craype-network-ofi
+export cyc=${cyc:-00}
+export envir=developer
+export seaice_drift_ver=v4.1.4
+export job=seaice_drift
+
+export HOMEbase=$HOME/rgdev/seaice_drift.$seaice_drift_ver/
+export SMSBIN=$HOMEbase
+cd $HOMEbase/sms/
+
+# WCOSS2
+. ../versions/seaice_drift.ver
+. ../versions/run.ver
+
+module reset
 module load envvar/1.0
-module load PrgEnv-intel/8.2.0
-module load intel/19.1.3.304
-module load craype/2.7.8
-module load cray-mpich/8.1.7
-#module load prod_envir/2.0.6
-module load prod_util/2.0.13
-module load wgrib2/2.0.8
-#for sidfex
-module load python/3.8.6
+module load prod_util/${prod_util_ver}
+module load intel/${intel_ver}
+module load wgrib2/${wgrib2_ver}
+
+#module load craype/2.7.8
+#module load cray-mpich/8.1.7
+#module load prod_envir/2.0.5
+
 # -- to check on a module's usage: module spider $m 
 # Show what happened:
 module list
 
-export cyc=${cyc:-00}
-export envir=developer
-export code_ver=v4.1.3
-export job=seaice_drift
-export SMSBIN=$HOME/rgdev/${job}.${code_ver}/sms/
-
-cd $HOME/rgdev/drift/sms/
-
 set -xe
-tagm=20220824
-tag=20220825
+
+tagm=20221026
+tag=20221027
 end=`date +"%Y%m%d" `
-end=$tag
+#end=$tag
+#end=20221021
 
 while [ $tag -le $end ]
 do
   export PDY=$tag
   export PDYm1=$tagm
 
-  if [ ! -d $HOME/noscrub/com/mmab/developer/seaice_drift.${tag}${cyc} ] ; then
-    export KEEPDATA="YES"
-    time $HOME/rgdev/${job}.${code_ver}/jobs/JSEAICE_DRIFT > sms.${tag}${cyc}
-  fi
+    export KEEPDATA="NO"         #Normal runs
+    #export KEEPDATA="YES"        #debugging
+
+  time $HOMEbase/jobs/JSEAICE_DRIFT  > sms.${tag}${cyc}
+
 
   tagm=$tag
   tag=`expr $tag + 1`

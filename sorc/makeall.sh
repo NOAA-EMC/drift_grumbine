@@ -1,7 +1,6 @@
 #!/bin/sh
 
 #set -xe
-set -x
 #Author: Robert Grumbine
 
 . ../versions/build.ver
@@ -32,6 +31,8 @@ else
   export LIBS='-L $(BASE)/ $(W3NCO_LIB4) $(W3EMC_LIB4) $(BACIO_LIB4)'
 fi
 
+set -x
+
 if [ ! -d mmablib ] ; then
   git clone https://github.com/rgrumbine/mmablib.git mmablib
 fi
@@ -39,6 +40,7 @@ fi
 cd mmablib
 git checkout operations
 make
+export BASE=`pwd`
 cd ..
 
 #The ftn, CC aliases require craype
@@ -48,7 +50,7 @@ export FOPTS='-O2 -std95'
 
 #Common to all systems:
 export mmablib_ver=${mmablib_ver:-""}
-export BASE=./mmablib
+
 export MMAB_INC='$(BASE)/include'
 export INCDIR='$(BASE)/include'
 export MMAB_LIBF4=$BASE/$mmablib_ver/libombf_4.a
