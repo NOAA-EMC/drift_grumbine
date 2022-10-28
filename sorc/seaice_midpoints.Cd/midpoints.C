@@ -12,7 +12,7 @@ using namespace std;
 
 #define NMEMS    20
 #define MAXLINE 900
-#define MAXPTS 102400
+// read from fort.73 #define MAXPTS 102400
 #define NDAYS    16
 
 #define NSKILE 207
@@ -30,8 +30,17 @@ int main(int argc, char *argv[]) {
   mvector<latpt> x[NMEMS];
   mvector<float> dist[NMEMS], dir[NMEMS];
   mvector<float> avg_dist, avg_dir, init_lon, init_lat;
-  FILE *fin[NMEMS], *fout, *akout;
-  int i, j, npts;
+  FILE *fin[NMEMS], *fout, *akout, *fpts;
+  int i, j, npts, nnpts;
+
+  fpts = fopen("fort.70","r");
+  if (fpts == (FILE*) NULL) {
+    printf("could not open file with number of points %s\n","fort.70");
+    exit(1);
+  }
+  fscanf(fpts, "%d",&nnpts);
+  printf("nnpts = %d\n",nnpts);
+  fclose(fpts);
 
   for (i = 1; i <= NMEMS; i++) {
     fin[i-1] = fopen(argv[i],"r");
@@ -39,9 +48,9 @@ int main(int argc, char *argv[]) {
       printf("failed to open %s\n",argv[i]);
       return 1;
     }
-       x[i-1].resize(MAXPTS);
-     dir[i-1].resize(MAXPTS);
-    dist[i-1].resize(MAXPTS); 
+       x[i-1].resize(nnpts*2);
+     dir[i-1].resize(nnpts*2);
+    dist[i-1].resize(nnpts*2); 
   }
   fout  = fopen(argv[NMEMS+1],"w");
   akout = fopen(argv[NMEMS+2],"w");

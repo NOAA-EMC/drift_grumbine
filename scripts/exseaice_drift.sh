@@ -50,10 +50,11 @@ ln -sf alpha     fort.90
 #-----------------------------------------------------
 
 if [ -f $COMINice_analy/seaice_edge.t00z.txt ] ; then
+  echo zzz running with yesterdays analyzed ice edge
   cp $COMINice_analy/seaice_edge.t00z.txt .
   ln -sf seaice_edge.t00z.txt fort.48
 else
-  echo Running with reference ice edge
+  echo zzz Running with reference ice edge
   cp $FIXsice/seaice_edge.t00z.txt fort.48
 fi
 

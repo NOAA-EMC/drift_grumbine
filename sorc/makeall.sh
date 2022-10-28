@@ -1,7 +1,6 @@
 #!/bin/sh
 
 #set -xe
-set -x
 #Author: Robert Grumbine
 
 . ../versions/build.ver
@@ -31,6 +30,8 @@ else
   export BASE=${BASE:-$HOME/rgdev/mmablib}
   export LIBS='-L $(BASE)/ $(W3NCO_LIB4) $(W3EMC_LIB4) $(BACIO_LIB4)'
 fi
+
+set -x
 
 if [ ! -d mmablib ] ; then
   git clone https://github.com/rgrumbine/mmablib.git mmablib

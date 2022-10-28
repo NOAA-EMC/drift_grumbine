@@ -39,8 +39,8 @@ module list
 
 set -xe
 
-tagm=20221025
-tag=20221026
+tagm=20221026
+tag=20221027
 end=`date +"%Y%m%d" `
 #end=$tag
 #end=20221021

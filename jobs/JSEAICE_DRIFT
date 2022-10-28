@@ -137,7 +137,9 @@ else
   #development: export COMIN=${COMIN:-$(compath.py -e prod /naefs/v6.1/gefs.${PDY})/$cyc/pgrb2ap5_bc}
 
   export COMIN=${COMIN:-$(compath.py -e prod /naefs/v6.1/gefs.${PDY})/$cyc/pgrb2a_bc}
-  export COMINice_analy=${COMROOT}/seaice_analysis/v4.5/seaice_analysis.${PDYm1}
+  #export COMINice_analy=${COMROOT}/seaice_analysis/v4.5/seaice_analysis.${PDYm1}
+  export COMINice_analy=$(compath.py -e prod /seaice_analysis/v4.5/seaice_analysis.${PDYm1})
+  echo zzz cominice_analy = $COMINice_analy
 
   #for python:
   export PYTHONPATH=$PYTHONPATH:$HOME/rgdev/ice_scoring/sidfex/:$HOME/rgdev/mmablib/py/
