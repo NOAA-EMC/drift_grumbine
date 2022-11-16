@@ -33,6 +33,9 @@ fi
 
 set -x
 
+#GM SPA add
+. ../versions/seaice_drift.ver
+
 if [ ! -d mmablib ] ; then
   git clone https://github.com/rgrumbine/mmablib.git mmablib
 fi

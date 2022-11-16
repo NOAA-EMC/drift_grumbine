@@ -38,21 +38,23 @@ module load wgrib2/${wgrib2_ver}
 # Show what happened:
 module list
 
-set -xe
+set -x
+set +e
 
-tagm=20221026
-tag=20221027
+tagm=20221112
+tag=20221113
 end=`date +"%Y%m%d" `
 #end=$tag
 #end=20221021
 
 while [ $tag -le $end ]
 do
+  export jobid=seaice_drift.$$
   export PDY=$tag
   export PDYm1=$tagm
 
-    export KEEPDATA="NO"         #Normal runs
-    #export KEEPDATA="YES"        #debugging
+    #export KEEPDATA="NO"         #Normal runs
+    export KEEPDATA="YES"        #debugging
 
   time $HOMEbase/jobs/JSEAICE_DRIFT  > sms.${tag}${cyc}
 

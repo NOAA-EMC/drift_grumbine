@@ -30,7 +30,11 @@ else
   export BASEDIR=/lfs/h2/emc/ptmp/wx21rg/
 fi
 
-export DATA=$BASEDIR/${job}.${pid}
+#Change to:
+export DATA=$BASEDIR/${jobid}
+
+#change from 
+#export DATA=$BASEDIR/${job}.${pid}
 mkdir -p $DATA
 cd $DATA
 export TMPDIR=$DATA
@@ -55,8 +59,6 @@ fi
 ####################################
 # Determine Job Output Name on System
 ####################################
-export outid="LL$job"
-export jobid="${outid}.o${pid}"
 export pgmout="OUTPUT.${pid}"
 export pgmerr=errfile
 
