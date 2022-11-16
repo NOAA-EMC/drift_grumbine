@@ -46,10 +46,11 @@ tag=20221113
 end=`date +"%Y%m%d" `
 #end=$tag
 #end=20221021
+pid=$$
 
 while [ $tag -le $end ]
 do
-  export jobid=seaice_drift.$$
+  export jobid=seaice_drift.$pid
   export PDY=$tag
   export PDYm1=$tagm
 
@@ -58,7 +59,7 @@ do
 
   time $HOMEbase/jobs/JSEAICE_DRIFT  > sms.${tag}${cyc}
 
-
+  pid=`expr $pid + 1`
   tagm=$tag
   tag=`expr $tag + 1`
   tag=`$HOME/bin/dtgfix3 $tag`
