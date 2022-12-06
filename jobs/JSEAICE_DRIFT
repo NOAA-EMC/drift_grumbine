@@ -30,10 +30,15 @@ else
   export BASEDIR=/lfs/h2/emc/ptmp/wx21rg/
 fi
 
-export DATA=$BASEDIR/${job}.${pid}
+#Change to:
+export DATA=$BASEDIR/${jobid}
+
+#change from 
+#export DATA=$BASEDIR/${job}.${pid}
 mkdir -p $DATA
 cd $DATA
 export TMPDIR=$DATA
+echo zzz basedir data tmpdir: $BASEDIR $DATA $TMPDIR
 
 ####################################
 # File To Log Msgs
@@ -54,8 +59,6 @@ fi
 ####################################
 # Determine Job Output Name on System
 ####################################
-export outid="LL$job"
-export jobid="${outid}.o${pid}"
 export pgmout="OUTPUT.${pid}"
 export pgmerr=errfile
 
@@ -98,7 +101,9 @@ if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; the
   export HOMEbase=${HOMEseaice_drift}
 else
   #dev
-  export HOMEbase=${HOMEbase:-/u/robert.grumbine/rgdev}
+  #export HOMEbase=${HOMEbase:-/u/robert.grumbine/rgdev/drift}
+  export HOMEbase=/u/robert.grumbine/rgdev/seaice_drift.${seaice_drift_ver}/
+
 fi
 
 export HOMEsice=$HOMEbase
@@ -128,26 +133,28 @@ sh $utilscript/setpdy.sh
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
   export COMbase=`compath.py ${NET}/${seaice_drift_ver?"version number missing"}`
   err=$? err_chk
-  export COMIN=${COMIN:-$(compath.py naefs/${naefs_ver}/gefs.${PDY}/$cyc/pgrb2a_bc)} #used on WCOSS1
+  export COMIN=${COMIN:-$(compath.py naefs/${naefs_ver}/gefs.${PDY}/$cyc/pgrb2a_bc)} 
+
   err=$? err_chk
   export COMINice_analy=${COMINice_analy:-$(compath.py seaice_analysis/${seaice_analysis_ver}/seaice_analysis.${PDYm1})}
   err=$? err_chk
 
 else
-  export COMbase=${HOMEbase}/noscrub/com/${NET}/${envir}/
-  export pcom=${HOMEbase}/noscrub/pcom/$RUN/
+  #Developer
+  export COMbase=${HOME}/noscrub/com/${NET}/${envir}/
+  export pcom=${HOME}/noscrub/pcom/$RUN/
 
-  export COMINice_analy=`compath.py -e prod /seaice_analysis/v4.5.0/seaice_analysis.${PDYm1}`
-  echo zzz COMINice_analy $COMINice_analy
-
-  # For hindcast thinned runs
-  # export COMIN=$HOME/noscrub/gefs/
   # For NRT runs
-  #   look under $COMROOT if needed
-  export COMIN=${COMIN:-$(compath.py -e prod /naefs/v6.1/gefs.${PDY}/$cyc/pgrb2ap5_bc)}
-  echo zzz COMIN = $COMIN
+  #development: export COMIN=${COMIN:-$(compath.py -e prod /naefs/v6.1/gefs.${PDY})/$cyc/pgrb2ap5_bc}
 
+  export COMIN=${COMIN:-$(compath.py -e prod /naefs/v6.1/gefs.${PDY})/$cyc/pgrb2a_bc}
+  #export COMINice_analy=${COMROOT}/seaice_analysis/v4.5/seaice_analysis.${PDYm1}
+  export COMINice_analy=$(compath.py -e prod /seaice_analysis/v4.5/seaice_analysis.${PDYm1})
+  echo zzz cominice_analy = $COMINice_analy
+
+  #for python:
   export PYTHONPATH=$PYTHONPATH:$HOME/rgdev/ice_scoring/sidfex/:$HOME/rgdev/mmablib/py/
+
 fi
 
 if [ ! -d $COMIN ] ; then
@@ -166,7 +173,8 @@ env
 
 ##############################################
 # Execute the script
-set -e
+set -xe
+
 sh $HOMEsice/scripts/exseaice_drift.sh
 export err=$?
 err_chk

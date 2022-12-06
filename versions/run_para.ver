@@ -8,3 +8,6 @@ export seaice_analysis_ver=v4.5
 # temporary:
 #export SENDDBN=NO
 #export SENDCANNEDDBN=YES
+
+#para testing
+export COMPATH=/lfs/h1/ops/prod/com/naefs:/lfs/h1/ops/prod/com/seaice_analysis

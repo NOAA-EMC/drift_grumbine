@@ -95,7 +95,7 @@
 !Limit the frequency of ice edge points to being 'minsep' apart from
 !  each other
       REAL minsep
-      PARAMETER (minsep = 111.1*dlat/2.) !in units of arcdis -> km
+      PARAMETER (minsep = 111.1*dlat) !in units of arcdis -> km
 
       INTEGER i
       INTEGER time, nfor
