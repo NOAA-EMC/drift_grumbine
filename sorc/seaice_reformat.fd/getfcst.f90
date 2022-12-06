@@ -30,8 +30,7 @@
         READ (funit2,9020, END=9200, ERR=9200) header 
         READ (funit2,9020, END=9200, ERR=9200) header 
         DO i = 1, 207
-          READ (funit2, *, END=9200, ERR=9200) skpt2, dir(i,fday), 
-     1           dist(i,fday)
+          READ (funit2, *, END=9200, ERR=9200) skpt2, dir(i,fday), dist(i,fday)
           count = count + 1
         ENDDO
         i = 207
@@ -44,8 +43,7 @@
         count = count + 1
 !CD        PRINT *,'starting to loop in getfcst'
         READ (funit2,9020, END=9200, ERR=9200) header
-        READ ( header, 9007, ERR=1002) skpt2, x0(i), y0(i), 
-     1           dir(i,fday), dist(i,fday)
+        READ ( header, 9007, ERR=1002) skpt2, x0(i), y0(i), dir(i,fday), dist(i,fday)
         !WRITE (*,*) skpt2, x0(i), y0(i), dir(i,fday), dist(i,fday)
         IF (skpt2 .NE. 0) GO TO 1001
 

@@ -27,13 +27,18 @@ if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; the
   export BASEDIR=${DATAROOT:-/lfs/f1/ops/$envir/tmp/}
 else
   #developer
-  export BASEDIR=/u/Robert.Grumbine/save/scratch
+  export BASEDIR=/lfs/h2/emc/ptmp/wx21rg/
 fi
 
+#Change to:
 export DATA=$BASEDIR/${jobid}
+
+#change from 
+#export DATA=$BASEDIR/${job}.${pid}
 mkdir -p $DATA
 cd $DATA
 export TMPDIR=$DATA
+echo zzz basedir data tmpdir: $BASEDIR $DATA $TMPDIR
 
 ####################################
 # File To Log Msgs
@@ -41,23 +46,19 @@ export TMPDIR=$DATA
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
   #NCO
   if [ "$envir" = 'prod' ] ; then
-    #export jlogfile=/com/logs/jlogfiles/jlogfile.${job}.$$
     export jlogfile=""
   else
-    #export jlogfile=/com/logs/${envir}/jlogfile
     export jlogfile=""
   fi
 else
   #developer
-  export jlogfile=~/jlogfile
+  export jlogfile=$HOME/jlogfile
 fi
 
 
 ####################################
 # Determine Job Output Name on System
 ####################################
-export outid="LL$job"
-export jobid="${outid}.o${pid}"
 export pgmout="OUTPUT.${pid}"
 export pgmerr=errfile
 
@@ -100,7 +101,9 @@ if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; the
   export HOMEbase=${HOMEseaice_drift}
 else
   #dev
-  export HOMEbase=${HOMEbase:-/u/Robert.Grumbine/save}
+  #export HOMEbase=${HOMEbase:-/u/robert.grumbine/rgdev/drift}
+  export HOMEbase=/u/robert.grumbine/rgdev/seaice_drift.${seaice_drift_ver}/
+
 fi
 
 export HOMEsice=$HOMEbase
@@ -109,11 +112,19 @@ export FIXsice=$HOMEsice/fix
 export PARMsice=$HOMEsice/parm
 export USHsice=$HOMEsice/ush
 
+###################################
+# Set up the UTILITIES
+###################################
+#Requires prod_util module to be established
+export utilscript=$UTILROOT/ush
+export utilexec=$UTILROOT/exec
+export utilparm=$UTILROOT/parm
+
 ##############################
 # Run setpdy and initialize PDY variables
 ##############################
 #export PDY=20121022
-setpdy.sh
+sh $utilscript/setpdy.sh
 . ./PDY
 
 ##############################################
@@ -122,27 +133,34 @@ setpdy.sh
 if [ "$envir" = 'prod' ] || [ "$envir" = 'para' ] || [ "$envir" = 'test' ] ; then
   export COMbase=`compath.py ${NET}/${seaice_drift_ver?"version number missing"}`
   err=$? err_chk
-  #export COMIN=${COMROOThps}/naefs/prod/gfs.${PDY}
-  #export COMINice_analy=/com2/omb/prod/sice.${PDYm1}
-  #export COMIN=${COMIN:-$(compath.py naefs/${naefs_ver}/gefs.${PDY}/$cyc/pgrb2ap5_bc)}
-  export COMIN=${COMIN:-$(compath.py naefs/${naefs_ver}/gefs.${PDY}/$cyc/pgrb2a_bc)} #used on WCOSS1
+  export COMIN=${COMIN:-$(compath.py naefs/${naefs_ver}/gefs.${PDY}/$cyc/pgrb2a_bc)} 
+
   err=$? err_chk
   export COMINice_analy=${COMINice_analy:-$(compath.py seaice_analysis/${seaice_analysis_ver}/seaice_analysis.${PDYm1})}
   err=$? err_chk
-else
-  export COMbase=${HOMEbase}/save/com/${NET}/${envir}/
-  export pcom=${HOMEbase}/save/pcom/$RUN/
 
-  #export COMIN=${HOMEbase}/save/com/gefs.${PDY}/$cyc/pgrb2ap5_bc
-  #export COMINice_analy=${HOMEbase}/save/com/sice.${PDYm1}
-  export COMIN=`compath.py canned/naefs/v6.1/gefs.${PDY}/$cyc/pgrb2ap5_bc`
-  export COMINice_analy=`compath.py canned/omb/v4.4/sice.${PDYm1}`
+else
+  #Developer
+  export COMbase=${HOME}/noscrub/com/${NET}/${envir}/
+  export pcom=${HOME}/noscrub/pcom/$RUN/
+
+  # For NRT runs
+  #development: export COMIN=${COMIN:-$(compath.py -e prod /naefs/v6.1/gefs.${PDY})/$cyc/pgrb2ap5_bc}
+
+  export COMIN=${COMIN:-$(compath.py -e prod /naefs/v6.1/gefs.${PDY})/$cyc/pgrb2a_bc}
+  #export COMINice_analy=${COMROOT}/seaice_analysis/v4.5/seaice_analysis.${PDYm1}
+  export COMINice_analy=$(compath.py -e prod /seaice_analysis/v4.5/seaice_analysis.${PDYm1})
+  echo zzz cominice_analy = $COMINice_analy
+
+  #for python:
+  export PYTHONPATH=$PYTHONPATH:$HOME/rgdev/ice_scoring/sidfex/:$HOME/rgdev/mmablib/py/
+
 fi
 
 if [ ! -d $COMIN ] ; then
   err_exit Could not find the input directory $COMIN exiting
 fi
-export COMOUT=$COMbase/${RUN}.${PDY}
+export COMOUT=$COMbase/${RUN}.${PDY}${cyc}
 export pcom=${COMOUT}/wmo
 
 mkdir -m 775 -p $COMOUT
@@ -155,8 +173,9 @@ env
 
 ##############################################
 # Execute the script
-set -e
-$HOMEsice/scripts/exseaice_drift.sh
+set -xe
+
+sh $HOMEsice/scripts/exseaice_drift.sh
 export err=$?
 err_chk
 ##############################################
@@ -169,11 +188,10 @@ postmsg "$jlogfile" "$msg"
 ##############################
 date
 
+cd $BASEDIR
 ##############################################
 # Remove temp directories
 ##############################################
 if [ "$KEEPDATA" != "YES" ] ; then
   rm -rf $DATA
 fi
-
-date

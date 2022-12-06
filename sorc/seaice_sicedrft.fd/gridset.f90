@@ -1,8 +1,8 @@
       SUBROUTINE gridset(lats, lons, lats0, lons0, dx, dy)
-C     Assign initial positions to the virtual floes.
-C     Robert Grumbine 4 April 1994.
-C     Variant for assigning points on a lat-long grid
-C     Robert Grumbine 7 May 2012 
+!     Assign initial positions to the virtual floes.
+!     Robert Grumbine 4 April 1994.
+!     Variant for assigning points on a lat-long grid
+!     Robert Grumbine 7 May 2012 
 
       IMPLICIT none
       INCLUDE "sicedrft.inc"
@@ -31,8 +31,8 @@ C     Robert Grumbine 7 May 2012
         lons0(k) = lons(k)
         lats(k)  = tlat
         lats0(k) = lats(k)
-CD        PRINT *,"grid ",i,j,tlon, tlat, lons(k), lats(k), 
-CD     1            lons0(k), lats0(k)
+!D        PRINT *,"grid ",i,j,tlon, tlat, lons(k), lats(k), 
+!D     1            lons0(k), lats0(k)
       ENDDO
       ENDDO
 
@@ -55,10 +55,10 @@ CD     1            lons0(k), lats0(k)
         ENDIF
       ENDDO
     
-CD      PRINT *,'max lon = ', MINVAL(lons), MAXVAL(lons)
-CD      PRINT *,'max lat = ', MINVAL(lats), MAXVAL(lats)
-CD      PRINT *,'max lon0 = ', MINVAL(lons0), MAXVAL(lons0)
-CD      PRINT *,'max lat0 = ', MINVAL(lats0), MAXVAL(lats0)
+!D      PRINT *,'max lon = ', MINVAL(lons), MAXVAL(lons)
+!D      PRINT *,'max lat = ', MINVAL(lats), MAXVAL(lats)
+!D      PRINT *,'max lon0 = ', MINVAL(lons0), MAXVAL(lons0)
+!D      PRINT *,'max lat0 = ', MINVAL(lats0), MAXVAL(lats0)
       IF (MAXVAL(lats) .GT. 90.0 .OR. MINVAL(lats) .LT. -90.0 ) THEN 
         PRINT *,'lats off planet, according to maxval, minval'
       ENDIF

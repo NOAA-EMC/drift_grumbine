@@ -1,5 +1,7 @@
 #!/bin/sh
 
+#Author: Robert Grumbine
+
 #mmablib -- arcdis, wdir
 #w3lib -- w3utcdat, w3movdat, w3ai19
 

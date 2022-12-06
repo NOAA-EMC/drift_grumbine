@@ -1,50 +1,65 @@
 #!/bin/sh --login
 
+#PBS -N atest
+#PBS -o atest
+#PBS -j oe
+#PBS -A ICE-DEV
+#PBS -q dev
+#PBS -l walltime=0:41:00
+#PBS -l select=1:ncpus=1
+#
 #set -xe
 set -e
 
-# Phase 3
-#module purge
-#module load prod_envir/1.0.2
-#module load EnvVars/1.0.2 ips/18.0.1.163
-#module load grib_util/1.1.0
-#module load prod_util/1.1.0
-#module load util_shared/1.1.0 #a guess
-#module load w3nco/2.0.6 impi/18.0.1 w3emc/2.3.0
-#module load bufr/11.2.0 bacio/2.0.2
-# Acorn
-#source /apps/prod/lmodules/startLmod
-module purge
+export cyc=${cyc:-00}
+export envir=developer
+export seaice_drift_ver=v4.1.4
+export job=seaice_drift
+
+export HOMEbase=$HOME/rgdev/seaice_drift.$seaice_drift_ver/
+export SMSBIN=$HOMEbase
+cd $HOMEbase/sms/
+
+# WCOSS2
+. ../versions/seaice_drift.ver
+. ../versions/run.ver
+
+module reset
 module load envvar/1.0
-module load intel/19.1.3.304
-module load craype//2.7.8
-module load cray-mpich/8.1.7
-module load prod_envir/2.0.5
-module load prod_util/2.0.8
-module load wgrib2/2.0.8
+module load prod_util/${prod_util_ver}
+module load intel/${intel_ver}
+module load wgrib2/${wgrib2_ver}
+
+#module load craype/2.7.8
+#module load cray-mpich/8.1.7
+#module load prod_envir/2.0.5
 
 # -- to check on a module's usage: module spider $m 
 # Show what happened:
 module list
 
-export HOMEbase=/lfs/h2/emc/couple/noscrub/Robert.Grumbine
-cd $HOMEbase/drift/sms/
+set -x
+set +e
 
-set -xe
-tagm=20210823
-tag=20210824
+tagm=20221112
+tag=20221113
 end=`date +"%Y%m%d" `
-end=$tag
-#while [ $tag -le $end ]
-#do
+#end=$tag
+#end=20221021
+
+while [ $tag -le $end ]
+do
+  export jobid=seaice_drift.$$
   export PDY=$tag
   export PDYm1=$tagm
 
-  if [ ! -d $HOMEbase/com/mmab/developer/seaice_drift.$tag ] ; then
-    time ./sms.fake > sms.$tag
-  fi
+    #export KEEPDATA="NO"         #Normal runs
+    export KEEPDATA="YES"        #debugging
+
+  time $HOMEbase/jobs/JSEAICE_DRIFT  > sms.${tag}${cyc}
+
 
   tagm=$tag
   tag=`expr $tag + 1`
-#  tag=`/u/Robert.Grumbine/bin/dtgfix3 $tag`
-#done
+  tag=`$HOME/bin/dtgfix3 $tag`
+done
