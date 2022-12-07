@@ -160,7 +160,7 @@ fi
 if [ ! -d $COMIN ] ; then
   err_exit Could not find the input directory $COMIN exiting
 fi
-export COMOUT=$COMbase/${RUN}.${PDY}${cyc}
+export COMOUT=$COMbase/${RUN}.${PDY}
 export pcom=${COMOUT}/wmo
 
 mkdir -m 775 -p $COMOUT
