@@ -210,7 +210,7 @@ if [ $SIDFEX == "YES" ] ; then
   echo zzz time python3 $USHsice/sidfex.py seaice_edge.t00z.txt.${PDY}$HH $COMOUT_sidfex
   time python3 $USHsice/sidfex.py seaice_edge.t00z.txt.${PDY}$HH $COMOUT_sidfex
   #upload -- 
-  $USHsice/sidfex.sh
+  #$USHsice/sidfex.sh
 fi
 
 #exit

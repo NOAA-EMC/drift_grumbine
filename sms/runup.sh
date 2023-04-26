@@ -4,7 +4,7 @@
 #PBS -j oe
 #PBS -A ICE-DEV
 #PBS -q dev
-#PBS -l walltime=0:41:00
+#PBS -l walltime=4:41:00
 #PBS -l select=1:ncpus=1
 #
 set -xe
@@ -36,10 +36,11 @@ module list
 
 set -xe
 
-tagm=20230402
-tag=20230401
+tag=20230330
+tagm=20230329
+
 #end=`date +"%Y%m%d" `
-end=$tag
+end=20230402
 
 pid=$$
 

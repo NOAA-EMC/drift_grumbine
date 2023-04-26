@@ -37,7 +37,7 @@ dayback=15         #how many days to go back for late data
 
 set -x
 tag=`date +"%Y%m%d" `
-tag=20230301
+tag=20230214
 tagm=`expr $tag - 1`
 tagm=`$HOME/bin/dtgfix3 $tagm`
 
