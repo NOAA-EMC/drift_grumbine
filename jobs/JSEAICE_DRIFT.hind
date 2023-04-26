@@ -140,7 +140,7 @@ else
 
   export COMINice_analy=${COMROOT}/seaice_analysis/v4.5/seaice_analysis.${PDYm1}
   # For NRT runs
-  export COMIN=${COMIN:-$(compath.py -e prod /naefs/v6.1/gefs.${PDY})/$cyc/pgrb2ap5_bc}
+  #export COMIN=${COMIN:-$(compath.py -e prod /naefs/v6.1/gefs.${PDY})/$cyc/pgrb2ap5_bc}
   # For hindcast thinned runs 
   export COMIN=$HOME/noscrub/gefs/
 

@@ -1,5 +1,5 @@
 #!/bin/bash --login
-#BSUB -J drift1905
+#BSUB -J sidfex
 #BSUB -q "dev"
 #BSUB -P RTO-T2O
 #BSUB -W 5:59
@@ -10,7 +10,6 @@
 
 #set -x
 set -e
-
 
 module purge
 module load craype-x86-rome
@@ -38,10 +37,9 @@ dayback=15         #how many days to go back for late data
 
 set -x
 tag=`date +"%Y%m%d" `
+tag=20230301
 tagm=`expr $tag - 1`
 tagm=`$HOME/bin/dtgfix3 $tagm`
-#tag=20220830
-#tagm=20220829
 
 # Run the drifter history tables and put in fix/$yy
 cd $HOME/rgdev/drift/ush/
@@ -61,7 +59,7 @@ dd=`expr $dd + 0`
 if [ -f SIDFEx_targettable.txt ] ; then
   rm *.txt
 fi
-python3 hist2.py $yy $mm $dd $cyc
+python3 $HOME/rgdev/drift/ush/hist2.py $yy $mm $dd $cyc
 
 if [ -d ../fix/$yy ] ; then
   mv seaice_edge* ../fix/$yy
@@ -70,27 +68,3 @@ else
   mv seaice_edge* ../fix/$yy
 fi
 
-exit
-
-
-# Now do the run-up from today back 'dayback' days
-cd $HOME/rgdev/drift/sms/
-days=0
-while [ $days -lt $dayback ]
-do
-  export cyc=00
-  export PDY=$tag
-  export PDYm1=$tagm
-
-  #if [ ! -d $HOME/noscrub/com/mmab/developer/seaice_drift.${tag}${cyc} ] ; then
-    #Now call J job, which will call the ex
-    #export KEEPDATA="YES"
-    export KEEPDATA="NO"
-    time $HOME/rgdev/${job}.${code_ver}/jobs/JSEAICE_DRIFT.hind > sms.${tag}${cyc}
-  #fi
-
-  days=`expr $days + 1`
-  tag=$tagm
-  tagm=`expr $tagm - 1`
-  tagm=`$HOME/bin/dtgfix3 $tagm`
-done

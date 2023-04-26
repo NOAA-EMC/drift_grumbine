@@ -1,5 +1,4 @@
-#!/bin/sh --login
-
+#!/bin/bash 
 #PBS -N atest
 #PBS -o atest
 #PBS -j oe
@@ -8,8 +7,8 @@
 #PBS -l walltime=0:41:00
 #PBS -l select=1:ncpus=1
 #
-#set -xe
-set -e
+set -xe
+#set -e
 
 export cyc=${cyc:-00}
 export envir=developer
@@ -24,28 +23,24 @@ cd $HOMEbase/sms/
 . ../versions/seaice_drift.ver
 . ../versions/run.ver
 
+set +x
 module reset
 module load envvar/1.0
 module load prod_util/${prod_util_ver}
 module load intel/${intel_ver}
 module load wgrib2/${wgrib2_ver}
 
-#module load craype/2.7.8
-#module load cray-mpich/8.1.7
-#module load prod_envir/2.0.5
-
 # -- to check on a module's usage: module spider $m 
 # Show what happened:
 module list
 
-set -x
-set +e
+set -xe
 
-tagm=20221112
-tag=20221113
-end=`date +"%Y%m%d" `
-#end=$tag
-#end=20221021
+tagm=20230402
+tag=20230401
+#end=`date +"%Y%m%d" `
+end=$tag
+
 pid=$$
 
 while [ $tag -le $end ]
@@ -57,7 +52,7 @@ do
     #export KEEPDATA="NO"         #Normal runs
     export KEEPDATA="YES"        #debugging
 
-  time $HOMEbase/jobs/JSEAICE_DRIFT  > sms.${tag}${cyc}
+  time $HOMEbase/jobs/JSEAICE_DRIFT.hind  > sms.${tag}${cyc}
 
   pid=`expr $pid + 1`
   tagm=$tag
