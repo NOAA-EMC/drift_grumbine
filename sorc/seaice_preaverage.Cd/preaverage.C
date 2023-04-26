@@ -12,44 +12,26 @@
 // Modify/update: quarter degree output, more consistent with
 //   intended drift model resolution and GFS T574 resolution.
 // 3 November 2011
-// 30 April 2014 quater degree grid now in mmablib
+// 30 April 2014 quarter degree grid now in mmablib
 
 void cleanup(grid2<float> &x, float nonval) ;
 
 template <class T>
 int show(grid2<T> &x) ;
 
-// These might be suitable for inclusion in gaussian class?
-#define T574 1548800 
-#define T382  663552
-#define T254  294912
-#define T190  165888
-#define T170  131072
-#define T126   72960
-#define T62    18048
 
 int main(int argc, char *argv[]) {
   FILE *fin, *fout;
 
-  //float *ftmp;
   int npts;
-  gaussian<float> t574(574);
-  gaussian<float> t382(382), t254(254), t170(170), t190(190);
-  gaussian<float> t126(126), t62(62);
 
-// Using 1 degree GEFS files, not gaussian grids:
-  mrf1deg<float> ftmp;
+// Using 0.5 degree GEFS files, not gaussian grids:
+  //mrf1deg<float> ftmp;
+  gfs_half<float> ftmp;
   gfs_quarter<float> tmp, avg;
   int i, k;
   float nonval = -9.e20, tmax = 0, tmin = 0;
 
-//debug  show(t574); show(t382); show(t254); show(t190); show(t170);
-  #ifdef VERBOSE
-    int maxpts;
-    maxpts = t574.xpoints() * t574.ypoints();
-    printf("maxpts = %d\n",maxpts); fflush(stdout);
-  //ftmp = new float[maxpts];
-  #endif
   avg.set((float) 0.0);
 
   for (i = 0; i < ftmp.xpoints()*ftmp.ypoints() ; i++) {
@@ -71,62 +53,6 @@ int main(int argc, char *argv[]) {
     if (tmin < -3000.) { nonval = tmin; printf("new nonval = %f\n",nonval); }
     //printf("nonval = %f\n",nonval); fflush(stdout);
     tmp.fromall(ftmp, nonval, nonval);
-#ifdef GAUSSIAN
-    switch(npts) {
-       case T574 :
-         printf("t574\n");
-         for (k = 0; k < T574; k++) {
-           t574[k] = ftmp[k];
-         }
-         tmp.fromall(t574, nonval, nonval);
-         break;
-       case T382 :
-         printf("t382\n");
-         for (k = 0; k < T382; k++) {
-           t382[k] = ftmp[k];
-         }
-         tmp.fromall(t382, nonval, nonval);
-         break;
-       case T254 :
-         printf("t254\n");
-         for (k = 0; k < T254; k++) {
-           t254[k] = ftmp[k];
-         }
-         tmp.fromall(t254, nonval, nonval);
-         break;
-       case T190 :
-         printf("t190\n");
-         for (k = 0; k < T190; k++) {
-           t190[k] = ftmp[k];
-         }
-         tmp.fromall(t190, nonval, nonval);
-         break;
-       case T170 :
-         printf("t170\n");
-         for (k = 0; k < T170; k++) {
-           t170[k] = ftmp[k];
-         }
-         tmp.fromall(t170, nonval, nonval);
-         break;
-       case T126 :
-         printf("t126\n");
-         for (k = 0; k < T126; k++) {
-           t126[k] = ftmp[k];
-         }
-         tmp.fromall(t126, nonval, nonval);
-         break;
-       case T62 :
-         printf("t62\n");
-         for (k = 0; k < T62; k++) {
-           t62[k] = ftmp[k];
-         }
-         tmp.fromall(t62, nonval, nonval);
-         break;
-       default :
-         printf("Encountered an unknown size grid! %d points\n",npts);
-         fflush(stdout);
-    } // end of switch
-#endif
 
     cleanup(tmp, nonval);
     avg += tmp;
