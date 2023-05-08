@@ -1,10 +1,10 @@
 #!/bin/bash 
-#PBS -N atest
-#PBS -o atest
+#PBS -N dr202207
+#PBS -o dr202207
 #PBS -j oe
 #PBS -A ICE-DEV
 #PBS -q dev
-#PBS -l walltime=4:41:00
+#PBS -l walltime=5:41:00
 #PBS -l select=1:ncpus=1
 #
 set -xe
@@ -36,11 +36,11 @@ module list
 
 set -xe
 
-tag=20230330
-tagm=20230329
+tag=20221001
+tagm=20220930
 
 #end=`date +"%Y%m%d" `
-end=20230402
+end=20221231
 
 pid=$$
 
@@ -50,8 +50,8 @@ do
   export PDY=$tag
   export PDYm1=$tagm
 
-    #export KEEPDATA="NO"         #Normal runs
-    export KEEPDATA="YES"        #debugging
+    export KEEPDATA="NO"         #Normal runs
+    #export KEEPDATA="YES"        #debugging
 
   time $HOMEbase/jobs/JSEAICE_DRIFT.hind  > sms.${tag}${cyc}
 
