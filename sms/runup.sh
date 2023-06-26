@@ -1,14 +1,22 @@
 #!/bin/bash 
-#PBS -N dr202207
-#PBS -o dr202207
+#PBS -N dr202304
+#PBS -o dr202304
 #PBS -j oe
 #PBS -A ICE-DEV
 #PBS -q dev
-#PBS -l walltime=5:41:00
+#PBS -l walltime=7:41:00
 #PBS -l select=1:ncpus=1
 #
 set -xe
 #set -e
+
+
+tag=20230401
+tagm=20211231
+
+#end=`date +"%Y%m%d" `
+end=20230531
+
 
 export cyc=${cyc:-00}
 export envir=developer
@@ -35,12 +43,6 @@ module load wgrib2/${wgrib2_ver}
 module list
 
 set -xe
-
-tag=20221001
-tagm=20220930
-
-#end=`date +"%Y%m%d" `
-end=20221231
 
 pid=$$
 

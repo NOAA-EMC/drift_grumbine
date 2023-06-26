@@ -2,7 +2,7 @@
 #BSUB -J sidfex
 #BSUB -q "dev"
 #BSUB -P RTO-T2O
-#BSUB -W 5:59
+#BSUB -W 0:59:00
 #BSUB -o drift.out.%J
 #BSUB -e drift.err.%J
 #BSUB -R "affinity[core(1)]"
@@ -38,6 +38,11 @@ dayback=15         #how many days to go back for late data
 set -x
 tag=`date +"%Y%m%d" `
 tag=20220401
+
+#for tag in 20220316 20220301 20220216 20220201 20220116 20220101 20211216 20211201
+for tag in 20230401
+do
+
 tagm=`expr $tag - 1`
 tagm=`$HOME/bin/dtgfix3 $tagm`
 
@@ -61,10 +66,9 @@ if [ -f SIDFEx_targettable.txt ] ; then
 fi
 python3 $HOME/rgdev/drift/ush/hist2.py $yy $mm $dd $cyc
 
-if [ -d ../fix/$yy ] ; then
-  mv seaice_edge* ../fix/$yy
-else
+if [ ! -d ../fix/$yy ] ; then
   mkdir -p ../fix/$yy
-  mv seaice_edge* ../fix/$yy
 fi
+mv seaice_edge* ../fix/$yy
 
+done
