@@ -10,13 +10,11 @@
 set -xe
 #set -e
 
-
 tag=20230401
-tagm=20211231
+tagm=20230331
 
 #end=`date +"%Y%m%d" `
 end=20230531
-
 
 export cyc=${cyc:-00}
 export envir=developer
