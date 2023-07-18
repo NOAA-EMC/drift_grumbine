@@ -37,9 +37,9 @@ dayback=15         #how many days to go back for late data
 
 set -x
 tag=`date +"%Y%m%d" `
-tag=20220401
+tag=20220501
 
-for tag in 20230401
+for tag in 20230501
 do
 
 tagm=`expr $tag - 1`
@@ -65,9 +65,9 @@ if [ -f SIDFEx_targettable.txt ] ; then
 fi
 python3 $HOME/rgdev/drift/ush/hist2.py $yy $mm $dd $cyc
 
-if [ ! -d ../fix/$yy ] ; then
-  mkdir -p ../fix/$yy
-fi
-mv seaice_edge* ../fix/$yy
+#if [ ! -d ../fix/$yy ] ; then
+#  mkdir -p ../fix/$yy
+#fi
+#mv seaice_edge* ../fix/$yy
 
 done
