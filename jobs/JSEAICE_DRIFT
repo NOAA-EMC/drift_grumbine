@@ -147,7 +147,9 @@ else
   # For NRT runs
   #development: export COMIN=${COMIN:-$(compath.py -e prod /naefs/v6.1/gefs.${PDY})/$cyc/pgrb2ap5_bc}
 
-  export COMIN=${COMIN:-$(compath.py -e prod /naefs/v6.1/gefs.${PDY})/$cyc/pgrb2a_bc}
+  export COMIN=/lfs/h2/emc/vpppg/noscrub/bo.cui/sample_naefs.v7.0/com/naefs/v7.0/gefs.${PDY}/$cyc/pgrb2a_bc
+
+  #export COMIN=${COMIN:-$(compath.py -e prod /naefs/v6.1/gefs.${PDY})/$cyc/pgrb2a_bc}
   #export COMINice_analy=${COMROOT}/seaice_analysis/v4.5/seaice_analysis.${PDYm1}
   export COMINice_analy=$(compath.py -e prod /seaice_analysis/v4.5/seaice_analysis.${PDYm1})
   echo zzz cominice_analy = $COMINice_analy

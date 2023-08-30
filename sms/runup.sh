@@ -41,10 +41,10 @@ module list
 set -x
 set +e
 
-tagm=20221112
-tag=20221113
+tagm=20230423
+tag=20230424
 end=`date +"%Y%m%d" `
-#end=$tag
+end=$tag
 #end=20221021
 pid=$$
 
