@@ -1,6 +1,6 @@
 #!/bin/bash 
-#PBS -N dr202304
-#PBS -o dr202304
+#PBS -N v3
+#PBS -o v3
 #PBS -j oe
 #PBS -A ICE-DEV
 #PBS -q dev
@@ -10,14 +10,14 @@
 set -xe
 #set -e
 
-tag=20230401
-tagm=20230331
+tag=20230701
+tagm=20230630
 
 #end=`date +"%Y%m%d" `
-end=20230531
+end=20230702
 
 export cyc=${cyc:-00}
-export envir=developer
+export envir=v3
 export seaice_drift_ver=v4.1.4
 export job=seaice_drift
 

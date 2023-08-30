@@ -48,7 +48,7 @@ if ( not os.path.exists(sidfex_base) ):
 
 #----------------------------------------
 GroupID="ncep001"
-MethodID="freedrift-ensmeanv2"
+MethodID="freedrift-ensmeanv3"
 EnsMemNum=1
 
 ll = latpt()

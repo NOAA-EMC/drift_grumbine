@@ -23,10 +23,16 @@
 !OLD      PARAMETER (beta1  = 8.0)
 !OLD      PARAMETER (alpha2 = 0.0303)
 !OLD      PARAMETER (beta2  = -23.4)
-      PARAMETER (alpha1 = 0.01468)
-      PARAMETER (beta1  = 28.0)
-      PARAMETER (alpha2 = 0.01468)
-      PARAMETER (beta2  = -28.0)
+! Up through sidfex v2  2023 July 21
+!v2      PARAMETER (alpha1 = 0.01468)
+!v2      PARAMETER (beta1  = 28.0)
+!v2      PARAMETER (alpha2 = 0.01468)
+!v2      PARAMETER (beta2  = -28.0)
+! Sidfex v3 bias correction
+      PARAMETER (alpha1 = 0.01468/0.65)
+      PARAMETER (beta1  = 28.0-10.5)
+      PARAMETER (alpha2 = 0.01468/0.65)
+      PARAMETER (beta2  = -28.0+10.5)
 
       PARAMETER (pi    = 3.141592654)
 
